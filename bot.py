@@ -1,10 +1,12 @@
 import os
 import discord
 import logging
+import aiohttp
 
 from discord.ext import commands
 from dotenv import load_dotenv
 from agent import MistralAgent
+from agent_generate import OpenAIAgent
 
 PREFIX = "!"
 
@@ -21,6 +23,10 @@ bot = commands.Bot(command_prefix=PREFIX, intents=intents)
 
 # Import the Mistral agent from the agent.py file
 agent = MistralAgent()
+
+
+# Import the OpenAI agent from the updated agent.py file
+agent_openai = OpenAIAgent()
 
 
 # Get the token from the environment variables
@@ -52,27 +58,44 @@ async def on_message(message: discord.Message):
     if message.author.bot or message.content.startswith("!"):
         return
 
-    # Process the message with the agent you wrote
-    # Open up the agent.py file to customize the agent
-    logger.info(f"Processing message from {message.author}: {message.content}")
-    response = await agent.run(message)
-
-    # Send the response back to the channel
-    await message.reply(response)
+    # Just add message to chat history, but don't respond to every message
+    agent_openai.add_to_history(message)
+    logger.info(f"Added message from {message.author} to history: {message.content}")
 
 
 # Commands
-
-
-# This example command is here to show you how to add commands to the bot.
-# Run !ping with any number of arguments to see the command in action.
-# Feel free to delete this if your project will not need commands.
-@bot.command(name="ping", help="Pings the bot.")
-async def ping(ctx, *, arg=None):
-    if arg is None:
-        await ctx.send("Pong!")
-    else:
-        await ctx.send(f"Pong! Your argument was {arg}")
+# New command for generating memes based on chat history
+@bot.command(name="generate", help="Generate a meme based on recent chat history.")
+async def generate_meme(ctx):
+    """
+    Generate a meme based on the chat history in the current channel.
+    """
+    # Let the user know we're working on it
+    processing_msg = await ctx.send("Generating a meme based on your conversation... 🧠")
+    
+    try:
+        # Call the agent to generate a meme
+        image_url, meme_concept = await agent_openai.generate_meme(ctx.channel.id)
+        
+        if not image_url:
+            await processing_msg.edit(content=f"Couldn't generate a meme: {meme_concept}")
+            return
+            
+        # Create an embed to display the meme with its concept
+        embed = discord.Embed(title="Generated Meme", color=discord.Color.blue())
+        embed.description = f"**Concept**: {meme_concept}"
+        embed.set_image(url=image_url)
+        embed.set_footer(text=f"Requested by {ctx.author.display_name}")
+        
+        # Send the meme
+        await ctx.send(embed=embed)
+        
+        # Delete the processing message
+        await processing_msg.delete()
+        
+    except Exception as e:
+        logger.error(f"Error generating meme: {e}")
+        await processing_msg.edit(content=f"Sorry, I encountered an error while generating the meme: {str(e)}")
 
 
 # Start the bot, connecting it to the gateway
