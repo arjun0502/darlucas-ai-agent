@@ -6,7 +6,7 @@ import aiohttp
 from discord.ext import commands
 from dotenv import load_dotenv
 from agent import MistralAgent
-from agent_generate import OpenAIAgent
+from agent import OpenAIAgent
 
 PREFIX = "!"
 
