@@ -138,3 +138,53 @@ I NEED to test how the tool works with extremely simple prompts. DO NOT add any 
         
         # Return the image URL and the concept used
         return image_response.data[0].url, meme_concept
+
+    def decide_spontaneous_meme(self, channel_id: int) -> tuple:
+        """
+        Generate a meme spontaneously based on the chat history.
+        """
+        # Get the chat history for this channel
+        history = self.chat_history.get(channel_id, [])
+
+        if not history:
+            return False, "No chat history available to create a meme from."
+        
+        # Format the chat history for the AI
+        history_text = "\n".join([
+            f"{msg['author']}: {msg['content']}" 
+            for msg in history 
+        ])
+        
+        # Create a prompt for the AI to decide if a meme should be generated
+        decision_prompt_messages = [
+            {"role": "system", "content": "You are an assistant that decides whether to generate a meme based on chat context. You should be conservative and only suggest memes when truly appropriate. Spontaneous memes should be rare (less than 10% of conversations)."},
+            {"role": "user", "content": f"""Here is the recent chat history:
+
+{history_text}
+
+Based ONLY on this conversation, decide if it's appropriate to generate a meme. 
+Consider:
+1. Is there a clear joke or reference that would make a good meme?
+2. Is the conversation light-hearted enough for a meme?
+3. Has enough context been established for a meme to make sense?
+4. Would a meme add value to this conversation?
+
+IMPORTANT: Spontaneous memes should be RARE - only generate them for truly meme-worthy conversations.
+
+Respond with ONLY "YES" or "NO".
+"""}
+        ]
+        
+        # Get decision from OpenAI
+        decision_response = self.client.chat.completions.create(
+            model="gpt-4o",
+            messages=decision_prompt_messages
+        )
+        
+        decision = decision_response.choices[0].message.content.strip().upper()
+        
+        # If the AI decides to generate a meme, call the generate_meme method
+        if decision == "YES":
+            return True, "Decided to generate a meme for this conversation."
+        else:
+            return False, "Decided not to generate a meme for this conversation."

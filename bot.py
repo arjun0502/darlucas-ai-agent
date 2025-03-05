@@ -57,11 +57,22 @@ async def on_message(message: discord.Message):
     # Ignore messages from self or other bots to prevent infinite loops.
     if message.author.bot or message.content.startswith("!"):
         return
+    
 
     # Just add message to chat history, but don't respond to every message
     agent_openai.add_to_history(message)
     logger.info(f"Added message from {message.author} to history: {message.content}")
 
+    try:
+        spontaneous_meme_decision, spontaneous_meme_reason = await agent.decide_spontaneous_meme(message.channel.id)
+        logger.info(f"Spontaneous meme decision: {spontaneous_meme_decision}, reason: {spontaneous_meme_reason}")
+
+        if spontaneous_meme_decision:
+            await generate_spontaneous_meme(message)
+    except Exception as e:
+        logger.error(f"Error deciding spontaneous meme: {e}")
+
+        
 
 # Commands
 # New command for generating memes based on chat history
@@ -97,6 +108,38 @@ async def generate_meme(ctx):
         logger.error(f"Error generating meme: {e}")
         await processing_msg.edit(content=f"Sorry, I encountered an error while generating the meme: {str(e)}")
 
+# Function for spontaneous meme generation (called from on_message)
+async def generate_spontaneous_meme(message):
+    """
+    Generate a spontaneous meme based on the chat history in the current channel.
+    Similar to the command version but works with a message object instead of ctx.
+    """
+    # Let the user know we're working on it
+    processing_msg = await message.channel.send("I've decided this conversation deserves a meme... 🧠")
+    
+    try:
+        # Call the agent to generate a meme
+        image_url, meme_concept = await agent_openai.generate_meme(message.channel.id)
+        
+        if not image_url:
+            await processing_msg.edit(content=f"Couldn't generate a meme: {meme_concept}")
+            return
+            
+        # Create an embed to display the meme with its concept
+        embed = discord.Embed(title="Spontaneous Meme", color=discord.Color.green())
+        embed.description = f"**Concept**: {meme_concept}"
+        embed.set_image(url=image_url)
+        embed.set_footer(text=f"Generated spontaneously based on your conversation")
+        
+        # Send the meme
+        await message.channel.send(embed=embed)
+        
+        # Delete the processing message
+        await processing_msg.delete()
+        
+    except Exception as e:
+        logger.error(f"Error generating spontaneous meme: {e}")
+        await processing_msg.edit(content=f"Sorry, I encountered an error while generating the meme: {str(e)}")
 
 # Start the bot, connecting it to the gateway
 bot.run(token)
