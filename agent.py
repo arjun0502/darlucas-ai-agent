@@ -11,7 +11,7 @@ class MistralAgent:
         MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
         self.client = Mistral(api_key=MISTRAL_API_KEY)
         self.chat_history = []
-        self.max_chat_length = 5
+        self.max_chat_length = 15
 
     def add_to_chat_history(self, message: discord.Message):
          self.chat_history.append({"author": message.author.name, "content": message.content})
@@ -63,7 +63,7 @@ The meme should reference the conversation in a humorous way."""}
         
         # Create a prompt for the AI to decide if a meme should be generated
         decision_prompt_messages = [
-            {"role": "system", "content": "You are an assistant that decides whether to generate a meme based on chat context. You should be conservative and only suggest memes when truly appropriate. Spontaneous memes should be rare (less than 10% of conversations)."},
+            {"role": "system", "content": "You are an assistant that decides whether to generate a meme based on chat context. You should be conservative and only suggest memes when truly appropriate. Spontaneous memes should be rare (less than 10% of messages)."},
             {"role": "user", "content": f"""Here is the recent chat history:
 
 {history_text}
@@ -75,9 +75,9 @@ Consider:
 3. Has enough context been established for a meme to make sense?
 4. Would a meme add value to this conversation?
 
-IMPORTANT: Spontaneous memes should be RARE - only generate them for truly meme-worthy conversations.
+IMPORTANT: Spontaneous memes should be RARE - only generate them for truly meme-worthy conversations. Also, make sure not to generate too many memes in a short period of time, unless it's a really good opportunity.
 
-Respond with ONLY "YES" or "NO".
+Respond with ONLY "YES" or "NO" followed by a concise yet informative explanation of your reasoning
 """}
         ]
         
@@ -87,12 +87,13 @@ Respond with ONLY "YES" or "NO".
         )
 
         decision = decision_response.choices[0].message.content.strip().upper()
+        print(decision.split()[0].strip("."))
         
-        # If the AI decides to generate a meme, call the generate_meme method
-        if decision == "YES":
-            return True, "Decided to generate a meme for this conversation."
+        # If the AI decides to generate a meme, call the generate_meme methçod
+        if decision.split()[0].strip(".") == "YES":
+            return True, "Decided to generate a meme for this conversation:" + decision
         else:
-            return False, "Decided not to generate a meme for this conversation."
+            return False, "Decided not to generate a meme for this conversation:" + decision
 
 
 class OpenAIAgent:
