@@ -124,8 +124,13 @@ class OpenAIAgent:
 1. IMAGE: {image_description}
 2. TEXT: "{meme_text}" - PLACEMENT: {text_placement}
 
-The text must be must be used and displayed exactly with no typos.
-
+CRITICAL REQUIREMENTS:
+- The text must be used and displayed EXACTLY with no typos
+- PLEASE double-check spelling of words and ensure the phrase is coherent
+- DO NOT change, rephrase, or omit any part of the text
+- Use the EXACT words: "{meme_text}"
+- The text must be clearly visible and readable
+ 
 I NEED to test how the tool works with extremely simple prompts. DO NOT add any detail, just use it AS-IS:"""
         
         # Generate the meme with DALL-E
@@ -138,4 +143,4 @@ I NEED to test how the tool works with extremely simple prompts. DO NOT add any 
         )
         
         # Return the image URL
-        return image_response.data[0].url
+        return image_response.data[0].url, meme_text

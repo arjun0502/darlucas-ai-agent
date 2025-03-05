@@ -82,7 +82,7 @@ async def generate_meme(ctx):
         # Call Mistral agent to generate meme concept (text)
         meme_concept = await agent_mistral.generate_meme_concept_from_chat_history()
         # Call OpenAI agent (Dall-E) to generate meme (image)
-        image_url = await agent_openai.generate_meme_from_concept(meme_concept)
+        image_url, image_text = await agent_openai.generate_meme_from_concept(meme_concept)
         
         if not image_url:
             await processing_msg.edit(content=f"Couldn't generate a meme: {meme_concept}")
@@ -91,6 +91,7 @@ async def generate_meme(ctx):
         # Create an embed to display the meme
         embed = discord.Embed(title="Generated Meme", color=discord.Color.blue())
         embed.set_image(url=image_url)
+        embed.add_field(name="Caption", value=image_text, inline=False)
         embed.set_footer(text=f"Requested by {ctx.author.display_name}")
         
         # Send the meme
@@ -116,7 +117,7 @@ async def generate_spontaneous_meme(message):
         # Call Mistral agent to generate meme concept (text)
         meme_concept = await agent_mistral.generate_meme_concept_from_chat_history()
         # Call OpenAI agent (Dall-E) to generate meme (image)
-        image_url = await agent_openai.generate_meme_from_concept(meme_concept)
+        image_url, image_text = await agent_openai.generate_meme_from_concept(meme_concept)
         
         if not image_url:
             await processing_msg.edit(content=f"Couldn't generate a meme: {meme_concept}")
@@ -125,6 +126,7 @@ async def generate_spontaneous_meme(message):
         # Create an embed to display the meme
         embed = discord.Embed(title="Spontaneous Meme", color=discord.Color.green())
         embed.set_image(url=image_url)
+        embed.add_field(name="Caption", value=image_text, inline=False)
         embed.set_footer(text=f"Generated spontaneously based on your conversation")
         
         # Send the meme
