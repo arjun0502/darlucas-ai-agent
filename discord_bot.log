@@ -728,3 +728,36 @@ CAPTION: When you're playing Mario Kart on 150cc and suddenly realize you're act
 2025-03-05 18:54:27,494 - agent - INFO - Caption: When you're playing Mario Kart on 150cc and suddenly realize you're actually Lightning McQueen vrooooooooom
 2025-03-05 18:54:27,495 - agent - INFO - DALL-E Prompt: Create a meme image given this description: A screenshot of Mario Kart with characters racing at high speeds, with a superimposed image of Lightning McQueen from the movie "Cars" in the middle of the ...
 2025-03-05 18:54:41,645 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-05 19:01:54,294 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-05 19:01:55,806 - discord.client - INFO - logging in using static token
+2025-03-05 19:01:56,736 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 50c0d3373470cc42fb86f4b01e5bbc09).
+2025-03-05 19:01:58,858 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-05 19:01:59,318 - discord_bot - INFO - Added message from arjunj4528 to history: bruh lebron is my goat
+2025-03-05 19:01:59,879 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-05 19:01:59,888 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-05 19:02:16,571 - discord_bot - INFO - Added message from arjunj4528 to history: If I had a kid, I will name him LePookie
+2025-03-05 19:02:17,039 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-05 19:02:17,046 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-05 19:02:37,152 - discord_bot - INFO - Added message from arjunj4528 to history: If I met Lebron, I think I would explode
+2025-03-05 19:02:37,688 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-05 19:02:37,700 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-05 19:02:46,167 - discord_bot - INFO - Added message from arjunj4528 to history: #lepookie for life
+2025-03-05 19:02:46,677 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-05 19:02:46,684 - discord_bot - INFO - Spontaneous meme decision: True, reason: Decided to generate a meme for this conversation.
+2025-03-05 19:02:47,087 - agent - INFO - Generating meme concept from history: arjunj4528: bruh lebron is my goat
+arjunj4528: If I had a kid, I will name him LePookie
+arjunj4528: If I met Lebron, I think I would explode
+arjunj4528: #lepookie for life...
+2025-03-05 19:02:48,827 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-05 19:02:48,837 - agent - INFO - Generated meme concept: IMAGE DESCRIPTION: A person holding a baby with a confused expression, while a photoshopped image of LeBron James is looking at them from above with a smirk.
+
+CAPTION: When you name your kid LePookie and LeBron shows up to say hello but your kid does not understand your explosion of joy.
+2025-03-05 19:02:48,839 - agent - INFO - Raw meme concept: IMAGE DESCRIPTION: A person holding a baby with a confused expression, while a photoshopped image of LeBron James is looking at them from above with a smirk.
+
+CAPTION: When you name your kid LePookie and LeBron shows up to say hello but your kid does not understand your explosion of joy.
+2025-03-05 19:02:48,841 - agent - INFO - Image Description: A person holding a baby with a confused expression, while a photoshopped image of LeBron James is looking at them from above with a smirk.
+2025-03-05 19:02:48,844 - agent - INFO - Caption: When you name your kid LePookie and LeBron shows up to say hello but your kid does not understand your explosion of joy.
+2025-03-05 19:02:48,847 - agent - INFO - DALL-E Prompt: Create a meme image given this description: A person holding a baby with a confused expression, while a photoshopped image of LeBron James is looking at them from above with a smirk.
+    
+    I NEED a...
+2025-03-05 19:03:06,340 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"

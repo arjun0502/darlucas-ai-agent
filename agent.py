@@ -43,10 +43,11 @@ class MistralAgent:
 {history_text}
 
 Structure your response exactly as follows:
+
 IMAGE DESCRIPTION: [Describe the visual scene or background]
 CAPTION: [A piece of text that captions the image]
 
-The meme should reference the conversation in a humorous way. IMPORTANT: Do not use markdown formatting like asterisks or bold text. Just use plain text with the exact labels above.
+The meme should reference the conversation in a humorous way. IMPORTANT: Do not use markdown formatting like asterisks or bold text. Just use plain text with the exact labels above. Also, do not use any contractions in the caption. 
 """}
             ]
 

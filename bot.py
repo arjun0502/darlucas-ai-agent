@@ -310,7 +310,6 @@ async def generate_spontaneous_meme(message):
             # Fallback to sending the image without text overlay
             embed = discord.Embed(title="Spontaneous Meme", color=discord.Color.green())
             embed.set_image(url=image_url)
-            embed.add_field(name="Caption", value=meme_text, inline=False)
             embed.set_footer(text=f"Generated spontaneously based on your conversation")
             
             # Let the user know we had to fall back
