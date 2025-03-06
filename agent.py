@@ -4,6 +4,10 @@ import discord
 from openai import OpenAI
 from collections import defaultdict
 from typing import List, Dict
+import logging
+
+# Setup logging
+logger = logging.getLogger(__name__)
 
 MISTRAL_MODEL = "mistral-large-latest"
 class MistralAgent:
@@ -12,59 +16,97 @@ class MistralAgent:
         self.client = Mistral(api_key=MISTRAL_API_KEY)
         self.chat_history = []
         self.max_chat_length = 5
+        self.model = MISTRAL_MODEL
 
     def add_to_chat_history(self, message: discord.Message):
          self.chat_history.append({"author": message.author.name, "content": message.content})
          if len(self.chat_history) > self.max_chat_length:
             self.chat_history.pop(0)
  
-
     async def generate_meme_concept_from_chat_history(self):
         """
         Generate a concept for a meme based on recent chat history
         """
-        history_text = "\n".join([
-            f"{msg['author']}: {msg['content']}" 
-            for msg in self.chat_history 
-        ])
+        try:
+            history_text = "\n".join([
+                f"{msg['author']}: {msg['content']}" 
+                for msg in self.chat_history 
+            ])
 
-        generate_meme_concept_messages = [
-        {"role": "system", "content": "You are a creative meme generator. Create simple, funny memes with a single piece of text."},
-        {"role": "user", "content": f"""Here is the recent chat history:
+            # Log the history being sent to the model
+            logger.info(f"Generating meme concept from history: {history_text[:200]}...")
 
+            generate_meme_concept_messages = [
+            {"role": "system", "content": "You are a creative meme generator."},
+            {"role": "user", "content": f"""Create a concept for a funny meme based on this conversation:
+             
 {history_text}
 
-Create a funny meme concept based on this conversation. Structure your response exactly as follows:
+Structure your response exactly as follows:
+IMAGE DESCRIPTION: [Describe the visual scene or background]
+CAPTION: [A piece of text that captions the image]
 
-IMAGE DESCRIPTION: [Describe the visual scene or background clearly without including any text]
-TEXT: [The single piece of text that should appear in the meme]
-PLACEMENT: [Where exactly the text should appear]
+The meme should reference the conversation in a humorous way. IMPORTANT: Do not use markdown formatting like asterisks or bold text. Just use plain text with the exact labels above.
+"""}
+            ]
 
-The meme should reference the conversation in a humorous way."""}
-        ]
+            response = await self.client.chat.complete_async(
+                model=MISTRAL_MODEL,
+                messages=generate_meme_concept_messages,
+            )
 
-        response = await self.client.chat.complete_async(
-            model=MISTRAL_MODEL,
-            messages=generate_meme_concept_messages,
-        )
-
-        return response.choices[0].message.content
+            meme_concept = response.choices[0].message.content
+            logger.info(f"Generated meme concept: {meme_concept}")
+            return meme_concept
+            
+        except Exception as e:
+            logger.error(f"Error in generating meme concept: {str(e)}")
+            raise Exception(f"Failed to generate meme concept: {str(e)}")
     
+    async def handle_content_policy_violation(self):
+        """
+        Generate a humorous message when content policy violation occurs
+        """
+        try:            
+            humor_response_messages = [
+                {"role": "system", "content": "You are a witty, humorous AI assistant."},
+                {"role": "user", "content": f"""
+                Write a short, humorous message (2-3 sentences max) explaining why a meme couldn't be 
+                generated due to content policy. Make it funny, like the AI is slightly embarrassed.
+                
+                Don't use phrases like "I apologize" or "I'm sorry" - just be light and humorous.
+                Don't mention specific content policies - keep it vague and funny.
+                
+                Example: "Well, this chat was a little too spicy for me to generate a meme. Better luck next time hehe :)"
+                """} 
+            ]
+            
+            response = await self.client.chat.complete_async(
+                model=MISTRAL_MODEL,
+                messages=humor_response_messages,
+            )
+            
+            return response.choices[0].message.content
+            
+        except Exception as e:
+            logger.error(f"Error generating humorous response: {e}")
+            return "Well, this chat was a little too spicy for me to generate a meme. Better luck next time hehe :)"
 
     async def decide_spontaneous_meme(self):
         """
         Decide whether to generate a meme spontaneously based on the chat history
         """
-        # Format the chat history for the AI
-        history_text = "\n".join([
-            f"{msg['author']}: {msg['content']}" 
-            for msg in self.chat_history 
-        ])
-        
-        # Create a prompt for the AI to decide if a meme should be generated
-        decision_prompt_messages = [
-            {"role": "system", "content": "You are an assistant that decides whether to generate a meme based on chat context. You should be conservative and only suggest memes when truly appropriate. Spontaneous memes should be rare (less than 10% of conversations)."},
-            {"role": "user", "content": f"""Here is the recent chat history:
+        try:
+            # Format the chat history for the AI
+            history_text = "\n".join([
+                f"{msg['author']}: {msg['content']}" 
+                for msg in self.chat_history 
+            ])
+            
+            # Create a prompt for the AI to decide if a meme should be generated
+            decision_prompt_messages = [
+                {"role": "system", "content": "You are an assistant that decides whether to generate a meme based on chat context. You should be conservative and only suggest memes when truly appropriate. Spontaneous memes should be rare (less than 10% of conversations)."},
+                {"role": "user", "content": f"""Here is the recent chat history:
 
 {history_text}
 
@@ -79,20 +121,24 @@ IMPORTANT: Spontaneous memes should be RARE - only generate them for truly meme-
 
 Respond with ONLY "YES" or "NO".
 """}
-        ]
-        
-        decision_response = await self.client.chat.complete_async(
-            model=MISTRAL_MODEL,
-            messages=decision_prompt_messages,
-        )
+            ]
+            
+            decision_response = await self.client.chat.complete_async(
+                model=MISTRAL_MODEL,
+                messages=decision_prompt_messages,
+            )
 
-        decision = decision_response.choices[0].message.content.strip().upper()
-        
-        # If the AI decides to generate a meme, call the generate_meme method
-        if decision == "YES":
-            return True, "Decided to generate a meme for this conversation."
-        else:
-            return False, "Decided not to generate a meme for this conversation."
+            decision = decision_response.choices[0].message.content.strip().upper()
+            
+            # If the AI decides to generate a meme, call the generate_meme method
+            if decision == "YES":
+                return True, "Decided to generate a meme for this conversation."
+            else:
+                return False, "Decided not to generate a meme for this conversation."
+                
+        except Exception as e:
+            logger.error(f"Error in decide_spontaneous_meme: {str(e)}")
+            return False, f"Error deciding whether to generate meme: {str(e)}"
 
 
 class OpenAIAgent:
@@ -103,44 +149,79 @@ class OpenAIAgent:
     async def generate_meme_from_concept(self, meme_concept):
         """
         Generate a meme based on recent chat history in the specified channel.
-        Returns image url
+        Returns image url without text and the text info separately
         """
-        # Parse the structured meme concept
-        image_description = ""
-        meme_text = ""
-        text_placement = ""
-        
-        for line in meme_concept.split('\n'):
-            if line.startswith("IMAGE DESCRIPTION:"):
-                image_description = line.replace("IMAGE DESCRIPTION:", "").strip()
-            elif line.startswith("TEXT:"):
-                meme_text = line.replace("TEXT:", "").strip()
-            elif line.startswith("PLACEMENT:"):
-                text_placement = line.replace("PLACEMENT:", "").strip()
-        
-        # Prompt for generating meme from DALL-E
-        dalle_prompt = f"""Create a meme image with this exact specification:
-
-1. IMAGE: {image_description}
-2. TEXT: "{meme_text}" - PLACEMENT: {text_placement}
-
-CRITICAL REQUIREMENTS:
-- The text must be used and displayed EXACTLY with no typos
-- PLEASE double-check spelling of words and ensure the phrase is coherent
-- DO NOT change, rephrase, or omit any part of the text
-- Use the EXACT words: "{meme_text}"
-- The text must be clearly visible and readable
- 
-I NEED to test how the tool works with extremely simple prompts. DO NOT add any detail, just use it AS-IS:"""
-        
-        # Generate the meme with DALL-E
-        image_response = self.client.images.generate(
-            model="dall-e-3",
-            prompt=dalle_prompt,
-            size="1024x1024",
-            quality="standard",
-            n=1,
-        )
-        
-        # Return the image URL
-        return image_response.data[0].url, meme_text
+        try:
+            # Parse the structured meme concept
+            image_description = ""
+            meme_text = ""
+            
+            # Log the raw concept for debugging
+            logger.info(f"Raw meme concept: {meme_concept}")
+            
+            # Handle Markdown formatting in the response
+            clean_concept = meme_concept.replace("**", "")
+            
+            for line in clean_concept.split('\n'):
+                # Use case-insensitive check and handle different variations
+                if "IMAGE DESCRIPTION:" in line.upper():
+                    image_description = line.replace("IMAGE DESCRIPTION:", "", 1).strip()
+                elif "CAPTION:" in line.upper():
+                    meme_text = line.replace("CAPTION:", "", 1).strip()
+                        
+            # Log the parsed components
+            logger.info(f"Image Description: {image_description}")
+            logger.info(f"Caption: {meme_text}")
+            
+            # Check if we have valid content
+            if not image_description:
+                logger.error("Failed to parse image description")
+                # Try a fallback approach - take everything between IMAGE DESCRIPTION and CAPTION
+                parts = clean_concept.upper().split("IMAGE DESCRIPTION:")
+                if len(parts) > 1:
+                    caption_parts = parts[1].split("CAPTION:")
+                    if len(caption_parts) > 1:
+                        image_description = caption_parts[0].strip()
+                        logger.info(f"Fallback Image Description: {image_description}")
+            
+            if not meme_text:
+                logger.error("Failed to parse caption")
+                # Try a fallback approach
+                parts = clean_concept.upper().split("CAPTION:")
+                if len(parts) > 1:
+                    meme_text = parts[1].strip()
+                    logger.info(f"Fallback Caption: {meme_text}")
+                        
+            # Modified prompt for generating image WITHOUT text
+            dalle_prompt = f"""Create a meme image given this description: {image_description}
+    
+    I NEED a simple, clean image with NO TEXT whatsoever."""
+            
+            # Log the prompt
+            logger.info(f"DALL-E Prompt: {dalle_prompt[:200]}...")
+            
+            # Generate the meme with DALL-E
+            image_response = self.client.images.generate(
+                model="dall-e-3",
+                prompt=dalle_prompt,
+                size="1024x1024",
+                quality="standard",
+                n=1,
+            )
+            
+            # Return the image URL and the caption
+            return {
+                "image_url": image_response.data[0].url,
+                "text": meme_text,
+            }
+                
+        except Exception as e:
+            logger.error(f"Error in generate_meme_from_concept: {str(e)}")
+            
+            # Check if this is a content policy violation and return None with the error
+            if "content_policy_violation" in str(e):
+                logger.warning(f"Content policy violation in meme generation: {meme_concept}")
+                return None, str(e)
+            
+            # Re-raise for other types of errors
+            raise Exception(f"Failed to generate meme image: {str(e)}")
