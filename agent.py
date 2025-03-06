@@ -158,11 +158,11 @@ I NEED to test how the tool works with extremely simple prompts. DO NOT add any 
             return "No chat history available to react to."
         
         # Get the latest message (Using queue, first is oldest)
-        latest_message = history[1]
+        latest_message = history[-1]
         
         # Create a prompt for the AI to generate a reaction
         reaction_prompt_messages = [
-            {"role": "system", "content": "You are a helpful assistant that reacts to messages with appropriate emojis and brief comments."},
+            {"role": "system", "content": "You are a helpful assistant that reacts to messages with relevant emojis and brief comments."},
             {"role": "user", "content": f"""This is the latest message from {latest_message['author']}:
             
     "{latest_message['content']}"
@@ -171,7 +171,7 @@ I NEED to test how the tool works with extremely simple prompts. DO NOT add any 
     1. An appropriate emoji or set of emojis
     3. A brief comment (1-2 sentences) about the message
 
-    {'Also, please have your reaction be with the following sentiment: {sentiment}' if sentiment else ''}
+    {f'Also, please have your reaction be with the following sentiment which was specified by the user: {sentiment}' if sentiment else ''}
     """}
         ]
         
