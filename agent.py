@@ -37,18 +37,28 @@ class MistralAgent:
             logger.info(f"Generating meme concept from history: {history_text[:200]}...")
 
             generate_meme_concept_messages = [
-            {"role": "system", "content": "You are a creative meme generator."},
-            {"role": "user", "content": f"""Create a concept for a funny meme based on this conversation:
-             
-{history_text}
+                {
+                    "role": "system", 
+                    "content": "You are a creative meme generator."
+                },
+                {
+                    "role": "user", 
+                    "content": f"""Come up with a concept for a funny meme based on the following chat history:
 
-Structure your response exactly as follows:
+                    {history_text} 
+                    
+                    Structure your response exactly as follows:
 
-IMAGE DESCRIPTION: [Describe the visual scene or background]
-CAPTION: [A piece of text that captions the image]
+                    IMAGE DESCRIPTION: [Describe a visual scene that exaggerates or creates an unexpected twist on something from the chat]
+                    CAPTION: [A clever or ironic caption that delivers a punchline]
 
-The meme should reference the conversation in a humorous way. IMPORTANT: Do not use markdown formatting like asterisks or bold text. Just use plain text with the exact labels above. Also, do not use any contractions in the caption. 
-"""}
+                    You MUST follow these guidelines for the caption:
+                    - Keep it simple and concise
+                    - Do not use any contractions
+                    - Make sure it reads naturally and makes logical sense
+                    - Do not use markdown formatting like asterisks or bold text
+                    """
+                }
             ]
 
             response = await self.client.chat.complete_async(
