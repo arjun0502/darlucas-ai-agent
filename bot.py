@@ -253,6 +253,38 @@ async def generate_meme(ctx):
             
         await processing_msg.edit(content=error_message)
 
+# New command to have the bot react to the memes        
+@bot.command(name="react", help="React to the latest message in the chat. Use optional sentiment type (happy, sad, angry, etc.)")
+async def react_to_message(ctx, *args):
+    """
+    React to the latest message in the current channel.
+    Optional argument for sentiment (e.g., happy, sad, angry, surprised).
+    Usage: !react [sentiment]
+    """
+    sentiment = None
+    if args:
+        sentiment = " ".join(args)  # Join all sentiment descriptors, discord bot ignores command by default
+    
+    # Let the user know we're working on it
+    processing_msg = await ctx.send("Generating a reaction to the latest message... 🤔")
+    
+    try:
+        reaction = await agent_openai.react_to_latest(ctx.channel.id, sentiment)
+        
+        # Display the reaction
+        embed = discord.Embed(title="Reaction to Latest Message", color=discord.Color.green())
+        embed.description = reaction
+        embed.set_footer(text=f"Requested by {ctx.author.display_name}")
+        
+        # Send the reaction
+        await ctx.send(embed=embed)
+        
+        # Delete the processing message
+        await processing_msg.delete()
+        
+    except Exception as e:
+        logger.error(f"Error generating reaction: {e}")
+        await processing_msg.edit(content=f"Sorry, I encountered an error while generating the reaction: {str(e)}")
 
 # Function for spontaneous meme generation (called from on_message)
 async def generate_spontaneous_meme(message):

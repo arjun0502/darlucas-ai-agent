@@ -236,3 +236,48 @@ class OpenAIAgent:
             
             # Re-raise for other types of errors
             raise Exception(f"Failed to generate meme image: {str(e)}")
+
+    async def react_to_latest(self, channel_id: int, sentiment: str) -> str:
+        """
+        React to the latest message in the chat history for the specified channel.
+        Optionally analyze the sentiment of the message if provided.
+        
+        Args:
+            channel_id: The Discord channel ID
+            sentiment: (optional) string of sentiment to react with
+            
+        Returns:
+            A string with the reaction and optional sentiment analysis
+        """
+        # Get the chat history for this channel
+        history = self.chat_history.get(channel_id, [])
+        
+        if not history:
+            return "No chat history available to react to."
+        
+        # Get the latest message (Using queue, first is oldest)
+        latest_message = history[-1]
+        
+        # Create a prompt for the AI to generate a reaction
+        reaction_prompt_messages = [
+            {"role": "system", "content": "You are a helpful assistant that reacts to messages with relevant emojis and brief comments."},
+            {"role": "user", "content": f"""This is the latest message from {latest_message['author']}:
+            
+    "{latest_message['content']}"
+            
+    Please generate a reaction to this message. Your reaction should include:
+    1. An appropriate emoji or set of emojis
+    3. A brief comment (1-2 sentences) about the message
+
+    {f'Also, please have your reaction be with the following sentiment which was specified by the user: {sentiment}' if sentiment else ''}
+    """}
+        ]
+        
+        # Get reaction from OpenAI
+        reaction_response = self.client.chat.completions.create(
+            model="gpt-4o",
+            messages=reaction_prompt_messages
+        )
+        
+        reaction = reaction_response.choices[0].message.content
+        return reaction
