@@ -22,6 +22,50 @@ class MistralAgent:
          self.chat_history.append({"author": message.author.name, "content": message.content})
          if len(self.chat_history) > self.max_chat_length:
             self.chat_history.pop(0)
+    
+    async def react_to_latest(self, sentiment: str) -> str:
+        """
+        React to the latest message in the chat history
+        Optionally analyze the sentiment of the message if provided.
+        
+        Args:
+            sentiment: (optional) string of sentiment to react with
+            
+        Returns:
+            A string with the reaction and optional sentiment analysis
+        """
+        # Get the chat history
+        history = self.chat_history
+        
+        if not history:
+            return "No chat history available to react to."
+        
+        # Get the latest message (Using queue, first is oldest)
+        latest_message = history[-1]
+        
+        # Create a prompt for the AI to generate a reaction
+        reaction_prompt_messages = [
+            {"role": "system", "content": "You are a helpful assistant that reacts to messages with relevant emojis and brief comments."},
+            {"role": "user", "content": f"""This is the latest message from {latest_message['author']}:
+            
+    "{latest_message['content']}"
+            
+    Please generate a reaction to this message. Your reaction should include:
+    1. An appropriate emoji or set of emojis
+    3. A brief comment (1-2 sentences) about the message
+
+    {f'Also, please have your reaction be with the following sentiment which was specified by the user: {sentiment}' if sentiment else ''}
+    """}
+        ]
+        
+        # Get reaction from Mistral
+        reaction_response = await self.client.chat.complete_async(
+            model=self.model,
+            messages=reaction_prompt_messages
+        )
+        
+        reaction = reaction_response.choices[0].message.content
+        return reaction
  
     async def generate_meme_concept_from_chat_history(self):
         """
@@ -159,7 +203,7 @@ class OpenAIAgent:
         
     async def generate_meme_from_concept(self, meme_concept):
         """
-        Generate a meme based on recent chat history in the specified channel.
+        Generate a meme based on recent chat history
         Returns image url without text and the text info separately
         """
         try:

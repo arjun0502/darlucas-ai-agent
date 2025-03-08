@@ -1556,3 +1556,104 @@ CAPTION: When lucadollar tries to identify the stripe-wearing suspect, but it ba
 2025-03-07 15:08:14,898 - agent - INFO - Caption: When lucadollar tries to identify the stripe-wearing suspect, but it backfires.
 2025-03-07 15:08:14,899 - agent - INFO - DALL-E Prompt: Create a meme image given this description: A confused Spiderman in his classic pointing pose, but he is now wearing a striped prison uniform. He is surrounded by a lineup of identical stripe-wearing ...
 2025-03-07 15:08:29,020 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-07 15:30:55,805 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-07 15:30:57,223 - discord.client - INFO - logging in using static token
+2025-03-07 15:30:58,190 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 8e425babd12d0b5cd03608cd643e880c).
+2025-03-07 15:31:00,260 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-07 15:31:19,069 - agent - INFO - Generating meme concept from history: ...
+2025-03-07 15:31:21,019 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 15:31:21,025 - agent - INFO - Generated meme concept: IMAGE DESCRIPTION: A cartoon office where every piece of furniture, including chairs, desks, and computers, is made entirely of colorful, squishy stress balls. An employee is seen trying to type on a wobbly stress ball keyboard, looking utterly confused.
+
+CAPTION: When the boss takes 'creating a stress-free environment' too literally.
+2025-03-07 15:31:21,026 - agent - INFO - Raw meme concept: IMAGE DESCRIPTION: A cartoon office where every piece of furniture, including chairs, desks, and computers, is made entirely of colorful, squishy stress balls. An employee is seen trying to type on a wobbly stress ball keyboard, looking utterly confused.
+
+CAPTION: When the boss takes 'creating a stress-free environment' too literally.
+2025-03-07 15:31:21,030 - agent - INFO - Image Description: A cartoon office where every piece of furniture, including chairs, desks, and computers, is made entirely of colorful, squishy stress balls. An employee is seen trying to type on a wobbly stress ball keyboard, looking utterly confused.
+2025-03-07 15:31:21,030 - agent - INFO - Caption: When the boss takes 'creating a stress-free environment' too literally.
+2025-03-07 15:31:21,031 - agent - INFO - DALL-E Prompt: Create a meme image given this description: A cartoon office where every piece of furniture, including chairs, desks, and computers, is made entirely of colorful, squishy stress balls. An employee is ...
+2025-03-07 15:31:32,690 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-07 15:39:25,209 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-07 15:39:26,363 - discord.client - INFO - logging in using static token
+2025-03-07 15:39:27,282 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: a63befd4fc80ae46c301bb0a727f5a35).
+2025-03-07 15:39:29,433 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-07 15:39:53,742 - discord_bot - INFO - Added message from lucadollar to history: omg did you see dan slip on a banana peel last night
+2025-03-07 15:39:54,244 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 15:39:54,252 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 15:39:59,716 - discord_bot - ERROR - Error generating reaction: 'OpenAIAgent' object has no attribute 'chat_history'
+2025-03-07 15:40:00,185 - discord_bot - INFO - Added message from arjunj4528 to history: yeah dude he was twirling
+2025-03-07 15:40:00,695 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 15:40:00,702 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 15:40:19,999 - discord_bot - INFO - Added message from arjunj4528 to history: and sliding
+2025-03-07 15:40:20,563 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 15:40:20,572 - discord_bot - INFO - Spontaneous meme decision: True, reason: Decided to generate a meme for this conversation.
+2025-03-07 15:40:20,972 - agent - INFO - Generating meme concept from history: lucadollar: omg did you see dan slip on a banana peel last night
+arjunj4528: yeah dude he was twirling
+arjunj4528: and sliding...
+2025-03-07 15:40:22,398 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 15:40:22,408 - agent - INFO - Generated meme concept: IMAGE DESCRIPTION: A banana peel dressed in a fancy top hat and cane, leading a conga line of dancing bananas, with Dan enthusiastically sliding in from the left, trying to join the party.
+
+CAPTION: Dan finally finds his dancing partners.
+2025-03-07 15:40:22,412 - agent - INFO - Raw meme concept: IMAGE DESCRIPTION: A banana peel dressed in a fancy top hat and cane, leading a conga line of dancing bananas, with Dan enthusiastically sliding in from the left, trying to join the party.
+
+CAPTION: Dan finally finds his dancing partners.
+2025-03-07 15:40:22,415 - agent - INFO - Image Description: A banana peel dressed in a fancy top hat and cane, leading a conga line of dancing bananas, with Dan enthusiastically sliding in from the left, trying to join the party.
+2025-03-07 15:40:22,418 - agent - INFO - Caption: Dan finally finds his dancing partners.
+2025-03-07 15:40:22,419 - agent - INFO - DALL-E Prompt: Create a meme image given this description: A banana peel dressed in a fancy top hat and cane, leading a conga line of dancing bananas, with Dan enthusiastically sliding in from the left, trying to jo...
+2025-03-07 15:40:34,285 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-07 15:49:25,935 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-07 15:49:27,041 - discord.client - INFO - logging in using static token
+2025-03-07 15:49:28,102 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: ab8c197a96399bf24d0ccc58dc8c7698).
+2025-03-07 15:49:30,198 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-07 15:49:48,843 - discord_bot - ERROR - Error generating meme: 'MistralAgent' object has no attribute 'generate_meme_concept_from_chat_history'
+2025-03-07 15:49:53,258 - discord_bot - ERROR - Error generating meme: 'MistralAgent' object has no attribute 'generate_meme_concept_from_chat_history'
+2025-03-07 15:54:20,636 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-07 15:54:21,805 - discord.client - INFO - logging in using static token
+2025-03-07 15:54:22,814 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: ba7227bd34918751b785cbd4adb7c418).
+2025-03-07 15:54:24,845 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-07 15:54:30,172 - discord_bot - INFO - Added message from lucadollar to history: Yo crazy game last night
+2025-03-07 15:54:30,697 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 15:54:30,703 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 15:54:33,616 - discord.ext.commands.bot - ERROR - Ignoring exception in command None
+discord.ext.commands.errors.CommandNotFound: Command "react" is not found
+2025-03-07 15:56:26,969 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-07 15:56:28,235 - discord.client - INFO - logging in using static token
+2025-03-07 15:56:29,211 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 24fb088993960a79a42cf77378738e7e).
+2025-03-07 15:56:31,272 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-07 15:56:37,226 - discord_bot - INFO - Added message from lucadollar to history: Lebron went absolutely crazy
+2025-03-07 15:56:37,743 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 15:56:37,752 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 15:56:41,481 - discord_bot - ERROR - Error generating reaction: 'OpenAIAgent' object has no attribute 'react_to_latest'
+2025-03-07 15:57:23,684 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-07 15:57:24,682 - discord.client - INFO - logging in using static token
+2025-03-07 15:57:25,510 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: e2291e24001e985f2904485388aebf93).
+2025-03-07 15:57:27,626 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-07 15:57:45,982 - discord_bot - INFO - Added message from arjunj4528 to history: lebron was absolutetely nuts yesterday
+2025-03-07 15:57:46,451 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 15:57:46,459 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 15:57:48,345 - discord_bot - ERROR - Error generating reaction: 'list' object has no attribute 'get'
+2025-03-07 17:18:30,841 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-07 17:18:32,007 - discord.client - INFO - logging in using static token
+2025-03-07 17:18:32,664 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: ca9bc141a6d4e15384e248219db5a5fd).
+2025-03-07 17:18:34,724 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-07 17:19:53,502 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-07 17:19:54,364 - discord.client - INFO - logging in using static token
+2025-03-07 17:19:55,060 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: b8a12cd6af14eb325f0d6f73c00c41ac).
+2025-03-07 17:19:57,119 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-07 17:20:04,674 - discord_bot - INFO - Added message from arjunj4528 to history: when dan does not show up in-person at the meeting
+2025-03-07 17:20:05,261 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 17:20:05,269 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 17:20:08,316 - discord_bot - INFO - Added message from arjunj4528 to history: dude so sad
+2025-03-07 17:20:08,726 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 17:20:08,734 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 17:20:14,878 - discord_bot - INFO - Added message from arjunj4528 to history: wish he was there rip
+2025-03-07 17:20:15,810 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 17:20:15,814 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 17:20:17,080 - discord_bot - ERROR - Error generating reaction: 'Chat' object has no attribute 'completions'
+2025-03-07 17:25:10,413 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-07 17:25:11,553 - discord.client - INFO - logging in using static token
+2025-03-07 17:25:12,276 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: f31b1dadb498e1128a60bd7caafc99aa).
+2025-03-07 17:25:14,349 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-07 17:25:27,336 - discord_bot - INFO - Added message from arjunj4528 to history: lebron has been so good these last few games #LEKING
+2025-03-07 17:25:27,759 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 17:25:27,764 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 17:25:30,625 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
