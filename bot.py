@@ -356,5 +356,81 @@ async def react_to_message(ctx, *args):
         logger.error(f"Error generating reaction: {e}")
         await processing_msg.edit(content=f"Sorry, I encountered an error while generating the reaction: {str(e)}")
 
+# New command to search for a relevant meme
+@bot.command(name="search", help="Search for a relevant meme.")
+async def search_meme(ctx, *, query):
+    """
+    Search for a relevant meme based on a query.
+    """
+    # Let the user know we're working on it
+    processing_msg = await ctx.send("Searching for a relevant meme....")
+
+    try:
+        # Call the Mistral agent to search for memes
+        result = await agent_mistral.search_memes(query)
+        
+        if not result["success"]:
+            # Check if this is a content policy violation
+            if "sorry" in result["error"].lower():
+                # This is likely a rejected inappropriate query
+                await processing_msg.edit(content=f"🚫 {result['error']}")
+                
+                # Log the rejected query
+                logger.warning(f"Rejected meme search query from {ctx.author.name}: '{query}'")
+                
+                # React to the message with a warning emoji
+                try:
+                    await ctx.message.add_reaction("⚠️")
+                except:
+                    pass
+            else:
+                # This is some other error
+                await processing_msg.edit(content=f"😕 {result['error']}")
+            return
+            
+        # Get the single meme from the result
+        meme = result["meme"]
+        available_count = result["available"]
+        
+        # Get the description (or use a default if not available)
+        description = meme.get("description", "No description available")
+        
+        # Create an embed to display the meme
+        embed = discord.Embed(
+            title=f"Found Meme for '{query}'", 
+            description=f"**{description}**", 
+            color=discord.Color.purple()
+        )
+        
+        # Add the meme as the main image
+        embed.set_image(url=meme["url"])
+        
+        # Add additional meme details if available
+        if meme.get("width") and meme.get("height"):
+            embed.add_field(
+                name="Dimensions", 
+                value=f"{meme['width']}×{meme['height']}", 
+                inline=True
+            )
+        
+        if meme.get("type"):
+            embed.add_field(
+                name="Type", 
+                value=meme["type"].replace("image/", ""), 
+                inline=True
+            )
+        
+        embed.set_footer(text=f"Requested by {ctx.author.display_name}")
+        
+        # Send the meme
+        await ctx.send(embed=embed)
+        
+        # Delete the processing message
+        await processing_msg.delete()
+        
+    except Exception as e:
+        logger.error(f"Error searching for memes: {e}")
+        await processing_msg.edit(content=f"Sorry, I encountered an error while searching for memes: {str(e)}")
+
 # Start the bot, connecting it to the gateway
 bot.run(token)

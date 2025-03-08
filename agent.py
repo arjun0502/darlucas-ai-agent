@@ -5,6 +5,9 @@ from openai import OpenAI
 from collections import defaultdict
 from typing import List, Dict
 import logging
+import aiohttp
+import urllib.parse
+import random
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -17,6 +20,7 @@ class MistralAgent:
         self.chat_history = []
         self.max_chat_length = 5
         self.model = MISTRAL_MODEL
+        self.humor_api_key = os.getenv("HUMOR_API_KEY")
 
     def add_to_chat_history(self, message: discord.Message):
          self.chat_history.append({"author": message.author.name, "content": message.content})
@@ -194,6 +198,151 @@ Respond with ONLY "YES" or "NO", followed by a concise yet informative explanati
         except Exception as e:
             logger.error(f"Error in decide_spontaneous_meme: {str(e)}")
             return False, f"Error deciding whether to generate meme: {str(e)}"
+
+    async def is_query_appropriate(self, query: str) -> tuple:
+        """
+        Check if a search query is appropriate and safe for meme search.
+        Uses Mistral to evaluate if the query could lead to NSFW content.
+        
+        Args:
+            query: The search query to evaluate
+            
+        Returns:
+            tuple: (is_appropriate, reason) where is_appropriate is a boolean and reason is a string
+        """
+        logger.info(f"Checking if query is appropriate: {query}")
+        
+        # Create a prompt for Mistral to evaluate the query
+        system_prompt = """You are a content safety assistant. Your job is to determine if a search query is appropriate for a general audience Discord bot that searches for memes.
+
+You must be very strict about this. Reject any query that:
+1. Contains explicit sexual content or innuendo
+2. Contains hate speech, slurs, or discriminatory language
+3. Promotes violence or illegal activities
+4. Could reasonably lead to disturbing, gory, or shocking content
+5. References adult topics in a way inappropriate for minors
+6. Contains drug references that aren't educational
+7. Uses coded language or euphemisms for inappropriate content
+
+When in doubt, reject the query. Safety is the priority."""
+        
+        user_prompt = f"""Please evaluate this meme search query: "{query}"
+
+Is this query appropriate for a general audience Discord bot that will search for memes?
+Respond with ONLY "YES" if the query is completely appropriate, or "NO" followed by a brief explanation if it's not appropriate."""
+        
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ]
+        
+        try:
+            # Get decision from Mistral
+            response = await self.client.chat.complete_async(
+                model=self.model,
+                messages=messages,
+            )
+            
+            decision = response.choices[0].message.content.strip()
+            
+            # Check if the response starts with YES
+            if decision.upper().startswith("YES"):
+                return True, "Query is appropriate"
+            else:
+                # Extract the reason (everything after "NO")
+                reason = decision[2:].strip() if decision.upper().startswith("NO") else "Query may not be appropriate"
+                return False, reason
+                
+        except Exception as e:
+            logger.error(f"Error in is_query_appropriate: {str(e)}")
+            # Default to allowing the query if there's an error checking it
+            return True, f"Error checking query appropriateness: {str(e)}"
+            
+    async def search_memes(self, query: str, number: int = 3) -> dict:
+        """
+        Search for memes using the Humor API based on user query.
+        Returns a randomly selected meme from the results.
+        
+        Args:
+            query: The search query/keywords from the user
+            
+        Returns:
+            A dictionary containing a single randomly selected meme or error information
+        """
+        logger.info(f"Searching for memes with query: {query}")
+        
+        # Clean and prepare the query
+        # Split the query into keywords
+        keywords = [k.strip() for k in query.split() if k.strip()]
+        
+        if not keywords:
+            return {"success": False, "error": "No keywords provided for meme search."}
+        
+        # First, check if the query is appropriate
+        is_appropriate, reason = await self.is_query_appropriate(query)
+        
+        if not is_appropriate:
+            logger.warning(f"Rejected inappropriate query: '{query}'. Reason: {reason}")
+            return {
+                "success": False, 
+                "error": f"Sorry, I can't search for that. {reason}"
+            }
+        
+        try:
+            # Prepare the API URL with parameters
+            base_url = "https://api.humorapi.com/memes/search"
+            
+            params = {
+                "keywords": ",".join(keywords),
+                "keywords-in-image": "false",  # Default to searching in meme text
+                "media-type": "image",         # Only return images
+                "number": 10,
+                "min-rating": 5,               # Only higher-rated memes
+                "exclude-tags": "nsfw,dark,racist,sexist,homophobic,transphobic,ableist,ageist,misogynistic,misandric,fatphobic,gay,lgbtq",  # Explicitly exclude problematic content
+                "api-key": self.humor_api_key
+            }
+            
+            # Build the URL with parameters
+            query_string = "&".join([f"{k}={urllib.parse.quote(str(v))}" for k, v in params.items()])
+            url = f"{base_url}?{query_string}"
+            
+            # Make the API request
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        logger.info(f"Humor API response: {data}")
+                        
+                        # Check if we got any memes
+                        memes = data.get("memes", [])
+                        if not memes:
+                            return {
+                                "success": False, 
+                                "error": f"No memes found for '{query}'. Try different keywords."
+                            }
+                        
+                        # Randomly select one meme from the results
+                        selected_meme = random.choice(memes)
+                        
+                        # Return the successful response with just one meme
+                        return {
+                            "success": True,
+                            "meme": selected_meme,
+                            "available": data.get("available", 0),
+                            "query": query
+                        }
+                    else:
+                        error_text = await response.text()
+                        logger.error(f"Humor API error: {response.status} - {error_text}")
+                        return {
+                            "success": False,
+                            "error": f"Error from Humor API: {response.status}",
+                            "details": error_text
+                        }
+                        
+        except Exception as e:
+            logger.error(f"Error in search_memes: {str(e)}")
+            return {"success": False, "error": f"Failed to search for memes: {str(e)}"}
 
 
 class OpenAIAgent:
