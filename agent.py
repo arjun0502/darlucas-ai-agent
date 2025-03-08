@@ -174,7 +174,7 @@ Consider:
 
 IMPORTANT: Spontaneous memes should be RARE - only generate them for truly meme-worthy conversations.
 
-Respond with ONLY "YES" or "NO".
+Respond with ONLY "YES" or "NO", followed by a concise yet informative explanation of your reasoning.
 """}
             ]
             
@@ -186,7 +186,7 @@ Respond with ONLY "YES" or "NO".
             decision = decision_response.choices[0].message.content.strip().upper()
             
             # If the AI decides to generate a meme, call the generate_meme method
-            if decision == "YES":
+            if "YES" in decision.split(" ")[0]:
                 return True, "Decided to generate a meme for this conversation."
             else:
                 return False, "Decided not to generate a meme for this conversation."
