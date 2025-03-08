@@ -1679,3 +1679,29 @@ CAPTION: Priorities.
     I NEED a simple, clean i...
 2025-03-07 17:53:04,987 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
 2025-03-07 17:53:05,980 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-08 11:10:28,888 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-08 11:10:29,889 - discord.client - INFO - logging in using static token
+2025-03-08 11:10:30,772 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 9296974f26388fdff5e9de6f41e4b24e).
+2025-03-08 11:10:32,836 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-08 11:12:03,468 - agent - INFO - Searching for memes with query: mario kart
+2025-03-08 11:12:03,470 - agent - INFO - Checking if query is appropriate: mario kart
+2025-03-08 11:12:03,921 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-08 11:12:04,548 - agent - ERROR - Humor API error: 401 - {"status":"failure", "code":401,"message":"You are not authorized. Please read https://humorapi.com/docs/#Authentication"}
+2025-03-08 11:29:11,363 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-08 11:29:12,236 - discord.client - INFO - logging in using static token
+2025-03-08 11:29:12,883 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: fab3b66d5a19689ba850780889d0f934).
+2025-03-08 11:29:14,947 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-08 11:34:46,540 - agent - INFO - Generating meme concept from user input: cats in space...
+2025-03-08 11:34:48,052 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-08 11:34:48,059 - agent - INFO - Generated meme concept from user input: IMAGE DESCRIPTION: An astronaut cat floating in space, holding a sign that says "I should have asked for tuna, not the moon."
+
+CAPTION: Cats in space. Because who needs a can of tuna when you can have a whole universe?
+2025-03-08 11:34:48,062 - agent - INFO - Raw meme concept: IMAGE DESCRIPTION: An astronaut cat floating in space, holding a sign that says "I should have asked for tuna, not the moon."
+
+CAPTION: Cats in space. Because who needs a can of tuna when you can have a whole universe?
+2025-03-08 11:34:48,064 - agent - INFO - Image Description: An astronaut cat floating in space, holding a sign that says "I should have asked for tuna, not the moon."
+2025-03-08 11:34:48,066 - agent - INFO - Caption: Cats in space. Because who needs a can of tuna when you can have a whole universe?
+2025-03-08 11:34:48,068 - agent - INFO - DALL-E Prompt: Create a meme image given this description: An astronaut cat floating in space, holding a sign that says "I should have asked for tuna, not the moon."
+    
+    I NEED a simple, clean image with NO TEX...
+2025-03-08 11:34:59,017 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"

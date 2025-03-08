@@ -181,17 +181,29 @@ async def on_message(message: discord.Message):
         
 # Commands
 # New command for generating memes based on chat history
-@bot.command(name="generate", help="Generate a meme based on recent chat history.")
-async def generate_meme(ctx):
+@bot.command(name="generate", help="Generate a meme. Use !generate for chat history or !generate [your idea] for custom meme.")
+async def generate_meme(ctx, *, user_input=None):
     """
-    Generate a meme based on the chat history in the current channel.
+    Generate a meme based on either:
+    1. User provided input if specified
+    2. Chat history in the current channel if no input is provided
+    
+    Args:
+        ctx: The Discord context
+        user_input: Optional - specific input for the meme
     """
     # Let the user know we're working on it
-    processing_msg = await ctx.send("Generating a meme based on your conversation....")
+    if user_input:
+        processing_msg = await ctx.send(f"Generating a meme based on your input: '{user_input}'...")
+    else:
+        processing_msg = await ctx.send("Generating a meme based on your conversation....")
     
     try:
         # Call Mistral agent to generate meme concept (text)
-        meme_concept = await agent_mistral.generate_meme_concept_from_chat_history()
+        if user_input:
+            meme_concept = await agent_mistral.generate_meme_concept_from_input(user_input)
+        else:
+            meme_concept = await agent_mistral.generate_meme_concept_from_chat_history()
         
         # Call OpenAI agent (Dall-E) to generate meme image without text
         result = await agent_openai.generate_meme_from_concept(meme_concept)
@@ -201,7 +213,7 @@ async def generate_meme(ctx):
             logger.warning(f"Content policy violation during meme generation: {result}")
             
             # Generate a humorous response
-            humor_response = await agent_mistral.handle_content_policy_violation(meme_concept)
+            humor_response = await agent_mistral.handle_content_policy_violation()
             await processing_msg.edit(content=humor_response)
             return
             
@@ -225,7 +237,12 @@ async def generate_meme(ctx):
             # Create an embed with the attached file
             embed = discord.Embed(title="Generated Meme", color=discord.Color.blue())
             embed.set_image(url="attachment://meme.png")
-            embed.set_footer(text=f"Requested by {ctx.author.display_name}")
+            
+            # Add info about whether this was from user input or chat history
+            if user_input:
+                embed.set_footer(text=f"Based on input from {ctx.author.display_name}")
+            else:
+                embed.set_footer(text=f"Based on chat history • Requested by {ctx.author.display_name}")
             
             # Send the meme
             await ctx.send(file=file, embed=embed)
@@ -236,7 +253,14 @@ async def generate_meme(ctx):
             # Fallback to sending the image without text overlay
             embed = discord.Embed(title="Generated Meme", color=discord.Color.blue())
             embed.set_image(url=image_url)
-            embed.set_footer(text=f"Requested by {ctx.author.display_name}")
+            
+            if user_input:
+                embed.set_footer(text=f"Based on input from {ctx.author.display_name}")
+            else:
+                embed.set_footer(text=f"Based on chat history • Requested by {ctx.author.display_name}")
+                
+            # Add the caption as a field since we couldn't overlay it
+            embed.add_field(name="Caption", value=meme_text, inline=False)
                     
             await ctx.send(embed=embed)
             
@@ -252,6 +276,7 @@ async def generate_meme(ctx):
             error_message += f"\n\nError details: {str(e)}"
             
         await processing_msg.edit(content=error_message)
+        
 
 # Function for spontaneous meme generation (called from on_message)
 async def generate_spontaneous_meme(message):
@@ -274,7 +299,7 @@ async def generate_spontaneous_meme(message):
             logger.warning(f"Content policy violation during spontaneous meme generation: {result}")
             
             # Generate a humorous response
-            humor_response = await agent_mistral.handle_content_policy_violation(meme_concept)
+            humor_response = await agent_mistral.handle_content_policy_violation()
             await processing_msg.edit(content=humor_response)
             return
             

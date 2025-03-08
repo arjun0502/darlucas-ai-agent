@@ -12,14 +12,13 @@ import random
 # Setup logging
 logger = logging.getLogger(__name__)
 
-MISTRAL_MODEL = "mistral-large-latest"
 class MistralAgent:
     def __init__(self):
         MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
         self.client = Mistral(api_key=MISTRAL_API_KEY)
         self.chat_history = []
         self.max_chat_length = 5
-        self.model = MISTRAL_MODEL
+        self.model =  "mistral-large-latest"
         self.humor_api_key = os.getenv("HUMOR_API_KEY")
 
     def add_to_chat_history(self, message: discord.Message):
@@ -70,7 +69,60 @@ class MistralAgent:
         
         reaction = reaction_response.choices[0].message.content
         return reaction
- 
+
+
+    async def generate_meme_concept_from_input(self, user_input: str):
+        """
+        Generate a concept for a meme based on user-provided input
+        
+        Args:
+            user_input: The user input to base the meme on
+            
+        Returns:
+            A structured meme concept with image description and caption
+        """
+        try:
+            # Log the user input being sent to the model
+            logger.info(f"Generating meme concept from user input: {user_input[:200]}...")
+
+            generate_meme_concept_messages = [
+                {
+                    "role": "system", 
+                    "content": "You are a creative meme generator."
+                },
+                {
+                    "role": "user", 
+                    "content": f"""Come up with a concept for a funny meme based on the following user input:
+
+                    "{user_input}"
+                    
+                    Structure your response exactly as follows:
+
+                    IMAGE DESCRIPTION: [Describe a visual scene that exaggerates or creates an unexpected twist on something from the input]
+                    CAPTION: [A clever or ironic caption that delivers a punchline]
+
+                    You MUST follow these guidelines for the caption:
+                    - Keep it simple and concise
+                    - Do not use any contractions
+                    - Make sure it reads naturally and makes logical sense
+                    - Do not use markdown formatting like asterisks or bold text
+                    """
+                }
+            ]
+
+            response = await self.client.chat.complete_async(
+                model=self.model,
+                messages=generate_meme_concept_messages,
+            )
+
+            meme_concept = response.choices[0].message.content
+            logger.info(f"Generated meme concept from user input: {meme_concept}")
+            return meme_concept
+            
+        except Exception as e:
+            logger.error(f"Error in generating meme concept from user input: {str(e)}")
+            raise Exception(f"Failed to generate meme concept from user input: {str(e)}")
+    
     async def generate_meme_concept_from_chat_history(self):
         """
         Generate a concept for a meme based on recent chat history
@@ -110,7 +162,7 @@ class MistralAgent:
             ]
 
             response = await self.client.chat.complete_async(
-                model=MISTRAL_MODEL,
+                model=self.model,
                 messages=generate_meme_concept_messages,
             )
 
@@ -141,7 +193,7 @@ class MistralAgent:
             ]
             
             response = await self.client.chat.complete_async(
-                model=MISTRAL_MODEL,
+                model=self.model,
                 messages=humor_response_messages,
             )
             
@@ -183,7 +235,7 @@ Respond with ONLY "YES" or "NO", followed by a concise yet informative explanati
             ]
             
             decision_response = await self.client.chat.complete_async(
-                model=MISTRAL_MODEL,
+                model=self.model,
                 messages=decision_prompt_messages,
             )
 
