@@ -1657,3 +1657,45 @@ discord.ext.commands.errors.CommandNotFound: Command "react" is not found
 2025-03-07 17:25:27,759 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
 2025-03-07 17:25:27,764 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
 2025-03-07 17:25:30,625 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 17:48:51,202 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-07 17:48:52,292 - discord.client - INFO - logging in using static token
+2025-03-07 17:48:52,999 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 720acee5e3627e50842efb5bf2e9eb21).
+2025-03-07 17:48:55,059 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-07 17:49:02,989 - discord_bot - INFO - Added message from arjunj4528 to history: yo yo the music outside mars is fire
+2025-03-07 17:49:03,580 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 17:49:03,589 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 17:49:06,172 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 17:49:25,460 - discord_bot - INFO - Added message from arjunj4528 to history: mario kart is so hard
+2025-03-07 17:49:25,886 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 17:49:25,892 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 17:49:32,910 - discord_bot - INFO - Added message from arjunj4528 to history: bro I be always slipping on bananas
+2025-03-07 17:49:33,453 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 17:49:33,458 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 17:49:34,114 - discord_bot - INFO - Added message from arjunj4528 to history: yeah same
+2025-03-07 17:49:34,506 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 17:49:34,511 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 17:49:52,182 - discord_bot - INFO - Added message from arjunj4528 to history: dude i hate when you slip on a banana and then everyone just passes you
+2025-03-07 17:49:52,577 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 17:49:52,584 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-07 17:49:52,884 - discord_bot - INFO - Added message from arjunj4528 to history: smh
+2025-03-07 17:49:53,084 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-07 17:49:53,086 - agent - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-07 17:49:53,087 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-07 17:49:55,167 - agent - INFO - Generating meme concept from history: arjunj4528: mario kart is so hard
+arjunj4528: bro I be always slipping on bananas
+arjunj4528: yeah same
+arjunj4528: dude i hate when you slip on a banana and then everyone just passes you
+arjunj4528: ...
+2025-03-07 17:49:56,651 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-07 17:49:56,657 - agent - INFO - Generated meme concept: IMAGE DESCRIPTION: A frustrated Mario standing on a race track covered in an absurdly large number of banana peels, with every other character from Mario Kart speeding past him, waving cheerfully.
+
+CAPTION: Meanwhile, every other racer on the track.
+2025-03-07 17:49:56,659 - agent - INFO - Raw meme concept: IMAGE DESCRIPTION: A frustrated Mario standing on a race track covered in an absurdly large number of banana peels, with every other character from Mario Kart speeding past him, waving cheerfully.
+
+CAPTION: Meanwhile, every other racer on the track.
+2025-03-07 17:49:56,660 - agent - INFO - Image Description: A frustrated Mario standing on a race track covered in an absurdly large number of banana peels, with every other character from Mario Kart speeding past him, waving cheerfully.
+2025-03-07 17:49:56,662 - agent - INFO - Caption: Meanwhile, every other racer on the track.
+2025-03-07 17:49:56,662 - agent - INFO - DALL-E Prompt: Create a meme image given this description: A frustrated Mario standing on a race track covered in an absurdly large number of banana peels, with every other character from Mario Kart speeding past hi...
+2025-03-07 17:50:11,730 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
