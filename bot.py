@@ -485,7 +485,7 @@ async def show_leaderboard(ctx, action=None):
     # Create an embed for the leaderboard
     embed = discord.Embed(
         title="🏆 Certified Funny™ Rankings 🏆",
-        description="Got jokes? Prove it by triggering spontaneous memes",
+        description="Got jokes? Let's hear them, if they're good, I'll make a meme for you.",
         color=discord.Color.gold()
     )
     
