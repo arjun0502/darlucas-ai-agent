@@ -8,8 +8,8 @@ import textwrap
 
 from discord.ext import commands
 from dotenv import load_dotenv
-from agent import MistralAgent
-from agent import OpenAIAgent
+from agent_mistral import MistralAgent
+from agent_openai import OpenAIAgent
 
 PREFIX = "!"
 
