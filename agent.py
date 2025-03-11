@@ -8,6 +8,7 @@ import logging
 import aiohttp
 import urllib.parse
 import random
+import json
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -20,11 +21,103 @@ class MistralAgent:
         self.max_chat_length = 5
         self.model =  "mistral-large-latest"
         self.humor_api_key = os.getenv("HUMOR_API_KEY")
+        self.scores_file = "user_funny_scores.json"
+        self.user_scores = self.load_user_scores()
 
     def add_to_chat_history(self, message: discord.Message):
          self.chat_history.append({"author": message.author.name, "content": message.content})
          if len(self.chat_history) > self.max_chat_length:
             self.chat_history.pop(0)
+    
+    def load_user_scores(self) -> Dict[str, int]:
+        """Load user scores from the JSON file, or create a new dictionary if file doesn't exist"""
+        try:
+            if os.path.exists(self.scores_file):
+                with open(self.scores_file, 'r') as f:
+                    return json.load(f)
+            else:
+                return {}
+        except Exception as e:
+            logger.error(f"Error loading user scores: {e}")
+            return {}
+    
+    def save_user_scores(self):
+        """Save user scores to the JSON file"""
+        try:
+            with open(self.scores_file, 'w') as f:
+                json.dump(self.user_scores, f)
+        except Exception as e:
+            logger.error(f"Error saving user scores: {e}")
+    
+    def add_score_to_user(self, username: str, points: int = 1):
+        """Add points to a user's score"""
+        if username not in self.user_scores:
+            self.user_scores[username] = 0
+        self.user_scores[username] += points
+        self.save_user_scores()
+        logger.info(f"Added {points} point(s) to {username}. New score: {self.user_scores[username]}")
+    
+    def reset_all_scores(self):
+        """Reset all user scores to zero"""
+        self.user_scores = {}
+        self.save_user_scores()
+        logger.info("All user scores have been reset")
+        return "All scoreboard scores have been reset!"
+    
+    def get_leaderboard(self) -> List[tuple]:
+        """Get sorted leaderboard data (username, score)"""
+        sorted_scores = sorted(self.user_scores.items(), key=lambda x: x[1], reverse=True)
+        return sorted_scores
+    
+    async def evaluate_message_humor(self, message: discord.Message) -> bool:
+        """
+        Evaluate if a message is funny enough to earn a point
+        
+        Args:
+            message: The Discord message to evaluate
+            
+        Returns:
+            bool: True if the message is funny, False otherwise
+        """
+        try:
+            # Skip very short messages
+            if len(message.content.strip()) < 5:
+                return False
+                
+            # Create a prompt for the AI to evaluate humor
+            humor_evaluation_messages = [
+                {"role": "system", "content": """You are a humor evaluator with a very high standard. 
+                Your job is to evaluate if a message is genuinely funny and deserves a point on a humor leaderboard.
+                
+                Only truly funny, clever, or witty messages should get points. Boring, generic, or mildly amusing messages should not.
+                Be strict and objective. No more than 1 in 4 messages should qualify as funny.
+                
+                Assess messages as if they were in a social setting like a Discord server.
+                Use your knowledge of gen z internet culture as a standard for if a meme is funny.
+                """},
+                {"role": "user", "content": f"""Here is a message from a user named {message.author.name}:
+                
+                "{message.content}"
+                
+                Is this message genuinely funny, clever, or witty enough to earn a point on the funny leaderboard?
+                Respond with ONLY "YES" or "NO". Be strict and selective - only truly funny content should get points.
+                """}
+            ]
+            
+            humor_response = await self.client.chat.complete_async(
+                model=self.model,
+                messages=humor_evaluation_messages
+            )
+            
+            evaluation = humor_response.choices[0].message.content.strip().upper()
+            is_funny = "YES" in evaluation
+            
+            logger.info(f"Humor evaluation for message from {message.author.name}: {evaluation}")
+            return is_funny
+                
+        except Exception as e:
+            logger.error(f"Error in evaluating message humor: {str(e)}")
+            return False
     
     async def react_to_latest(self, sentiment: str) -> str:
         """
