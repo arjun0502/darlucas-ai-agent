@@ -168,6 +168,7 @@ class MistralAgent:
             logger.error(f"Error in generating meme concept from user input: {str(e)}")
             raise Exception(f"Failed to generate meme concept from user input: {str(e)}")
     
+
     async def generate_meme_concept_from_chat_history(self):
         """
         Generate a concept for a meme based on recent chat history
@@ -219,6 +220,7 @@ class MistralAgent:
             logger.error(f"Error in generating meme concept: {str(e)}")
             raise Exception(f"Failed to generate meme concept: {str(e)}")
     
+
     async def handle_content_policy_violation(self):
         """
         Generate a humorous message when content policy violation occurs
@@ -247,6 +249,7 @@ class MistralAgent:
         except Exception as e:
             logger.error(f"Error generating humorous response: {e}")
             return "Well, this chat was a little too spicy for me to generate a meme. Better luck next time hehe :)"
+
 
     async def decide_spontaneous_meme(self):
         """
@@ -295,6 +298,38 @@ Respond with ONLY "YES" or "NO", followed by a concise yet informative explanati
         except Exception as e:
             logger.error(f"Error in decide_spontaneous_meme: {str(e)}")
             return False, f"Error deciding whether to generate meme: {str(e)}"
+        
+
+    async def generate_keywords_from_chat_history(self):
+        """
+        Generate keywords from the chat history
+        """
+        history_text = "\n".join([
+            f"{msg['author']}: {msg['content']}" 
+            for msg in self.chat_history 
+        ])
+        
+        # Create a prompt for the AI to generate keywords
+        keywords_prompt_messages = [
+            {"role": "system", "content": "You are a keyword generator."},
+            {"role": "user", "content": f"""Generate keywords from the following chat history:
+
+{history_text}
+
+Respond with a keyword that will be used to query an API to search for a meme. Make sure that the keywords encapsulate the conversation history.
+If absolutely necessary, you can respond with up to 3 keywords, but try to keep it to 1.
+Respond with ONLY the keyword(s), no other text. If there are multiple keywords, separate them with a comma.
+
+For example: "meme, funny, internet culture"
+"""}
+        ]
+        
+        response = await self.client.chat.complete_async(
+            model=self.model,
+            messages=keywords_prompt_messages,
+        )
+        return response.choices[0].message.content
+    
 
     async def is_query_appropriate(self, query: str) -> tuple:
         """
@@ -355,6 +390,7 @@ Respond with ONLY "YES" if the query is completely appropriate, or "NO" followed
             # Default to allowing the query if there's an error checking it
             return True, f"Error checking query appropriateness: {str(e)}"
             
+
     async def search_memes(self, query: str, number: int = 3) -> dict:
         """
         Search for memes using the Humor API based on user query.
@@ -369,14 +405,15 @@ Respond with ONLY "YES" if the query is completely appropriate, or "NO" followed
         logger.info(f"Searching for memes with query: {query}")
         
         # Clean and prepare the query
-        # Split the query into keywords
+        # Split the query into keywords        
+        if not query:
+            # If no keywords are provided, use the chat history
+            query = await self.generate_keywords_from_chat_history()
+
         keywords = [k.strip() for k in query.split() if k.strip()]
-        
-        if not keywords:
-            return {"success": False, "error": "No keywords provided for meme search."}
-        
-        # First, check if the query is appropriate
-        is_appropriate, reason = await self.is_query_appropriate(query)
+
+        # Check if the query is appropriate
+        is_appropriate, reason = await self.is_query_appropriate(keywords)
         
         if not is_appropriate:
             logger.warning(f"Rejected inappropriate query: '{query}'. Reason: {reason}")

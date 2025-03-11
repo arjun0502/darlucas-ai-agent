@@ -386,12 +386,17 @@ async def react_to_message(ctx, *args):
 
 # New command to search for a relevant meme
 @bot.command(name="search", help="Search for a relevant meme.")
-async def search_meme(ctx, *, query):
+async def search_meme(ctx, *, query=None):
     """
     Search for a relevant meme based on a query.
+    If no query is provided, the bot will search for a meme based on chat history context.
     """
     # Let the user know we're working on it
-    processing_msg = await ctx.send("Searching for a relevant meme....")
+    if query:
+        processing_msg = await ctx.send(f"Searching for a meme based on your input: '{query}'...")
+    else:
+        processing_msg = await ctx.send("Searching for a meme based on your conversation....")
+        query = await agent_mistral.generate_keywords_from_chat_history()
 
     try:
         # Call the Mistral agent to search for memes
