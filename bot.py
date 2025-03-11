@@ -5,7 +5,6 @@ import aiohttp
 import io
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
-import asyncio
 
 from discord.ext import commands
 from dotenv import load_dotenv
