@@ -35,7 +35,7 @@ class MemeAgent:
                     "parameters": {
                         "type": "object",
                         "properties": {
-                            "query": {"type": "string", "description": ""},
+                            "query": {"type": "string", "description": "query to search for"}
                         }
                     },
                     "required": ["query"]
@@ -49,7 +49,7 @@ class MemeAgent:
                     "parameters": {
                         "type": "object",
                         "properties": {
-                            "meme_concept": {"type": "string", "description": ""}
+                            "meme_concept": {"type": "string", "description": "meme concept to generate"}
                         }
                     },
                     "required": ["meme_concept"]
@@ -128,13 +128,13 @@ class MemeAgent:
         tool_call = tool_response.choices[0].message.tool_calls[0]
         function_name = tool_call.function.name
         function_params = json.loads(tool_call.function.arguments)
-        function_result = self.tools_to_functions[function_name](**function_params)
+        function_result = await self.tools_to_functions[function_name](**function_params)
 
         ## TO DO: How to generate meme spontaneously 
 
         ## TO DO: ONCE WE GET THE EMBED, HOW DO WE RENDER IT? DO WE JUST WHAT WE ARE DOING BELOW??? 
         if isinstance(function_result, tuple):
-            file, embed = function_result
+            embed, file = function_result
             await message.reply(file=file,embed=embed)
         else:
             await message.reply(embed=function_result)

@@ -10,11 +10,13 @@ from PIL import Image, ImageDraw, ImageFont
 import asyncio
 from typing import Union, Tuple, Optional
 from openai import OpenAI
+from dotenv import load_dotenv
 
 # Setup logging
 logger = logging.getLogger(__name__)
 
 # API configuration
+load_dotenv()  # This loads variables from a .env file into environment variables
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=OPENAI_API_KEY)
 
@@ -200,7 +202,7 @@ async def handle_error(error):
         
         return embed
 
-async def generate_meme_from_concept(meme_concept):
+async def generate_meme(meme_concept):
         """
         Generate a meme based on recent chat history
         Returns image url without text and the text info separately

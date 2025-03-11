@@ -37,7 +37,7 @@ async def _make_request(url: str):
         logger.error(f"Error making request to Humor API: {str(e)}")
         return None
 
-async def search_memes(query: str) -> str:
+async def search_meme(query: str) -> str:
     """
     Search for memes using the Humor API based on user query.
     Returns a Discord embed with a randomly selected meme or an error message.
