@@ -5,6 +5,7 @@ import aiohttp
 import io
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
+import asyncio
 
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -169,6 +170,8 @@ async def on_message(message: discord.Message):
     agent_mistral.add_to_chat_history(message)
     logger.info(f"Added message from {message.author} to history: {message.content}")
 
+    #Create a new thread to go update the leaderboard
+    asyncio.create_task(evaluate_message_humor(message))
     try:
         spontaneous_meme_decision, spontaneous_meme_reason = await agent_mistral.decide_spontaneous_meme()
         logger.info(f"Spontaneous meme decision: {spontaneous_meme_decision}, reason: {spontaneous_meme_reason}")
@@ -456,6 +459,68 @@ async def search_meme(ctx, *, query):
     except Exception as e:
         logger.error(f"Error searching for memes: {e}")
         await processing_msg.edit(content=f"Sorry, I encountered an error while searching for memes: {str(e)}")
+
+async def evaluate_message_humor(message: discord.Message):
+    """
+    Evaluates if a message is funny and updates the user's score if it is
+    """
+    try:
+        # Call the agent to evaluate if the message is funny
+        is_funny = await agent_mistral.evaluate_message_humor(message)
+        
+        if is_funny:
+            # Update the user's score
+            agent_mistral.add_score_to_user(message.author.name)
+            logger.info(f"Added humor point to {message.author.name} for funny message")
+    except Exception as e:
+        logger.error(f"Error evaluating message humor: {e}")
+@bot.command(name="leaderboard", help="Show the funny message leaderboard. Use !leaderboard reset to reset all scores.")
+async def show_leaderboard(ctx, action=None):
+    """
+    Shows the current funny message leaderboard or resets it
+    """
+    if action and action.lower() == "reset":
+        # Check if the user has admin permissions
+        if ctx.message.author.guild_permissions.administrator:
+            result = agent_mistral.reset_all_scores()
+            await ctx.send(f"🧹 {result}")
+        else:
+            await ctx.send("⚠️ Only administrators can reset the leaderboard.")
+        return
+    
+    # Get the leaderboard data
+    leaderboard_data = agent_mistral.get_leaderboard()
+    
+    if not leaderboard_data:
+        await ctx.send("No one has earned any funny points yet! Say something funny to get on the board.")
+        return
+    
+    # Create an embed for the leaderboard
+    embed = discord.Embed(
+        title="🏆 Humor Leaderboard 🏆",
+        description="Points earned for funny messages",
+        color=discord.Color.gold()
+    )
+    
+    # Add leaderboard data
+    leaderboard_text = ""
+    for i, (username, score) in enumerate(leaderboard_data[:10], 1):
+        # Add medal emoji for top 3
+        if i == 1:
+            prefix = "🥇"
+        elif i == 2:
+            prefix = "🥈"
+        elif i == 3:
+            prefix = "🥉"
+        else:
+            prefix = f"{i}."
+            
+        leaderboard_text += f"{prefix} **{username}**: {score} point{'s' if score != 1 else ''}\n"
+    
+    embed.add_field(name="Top Comedians", value=leaderboard_text or "No scores yet", inline=False)
+    embed.set_footer(text="Say something funny to earn points! | Admins can use !leaderboard reset")
+    
+    await ctx.send(embed=embed)
 
 # Start the bot, connecting it to the gateway
 bot.run(token)
