@@ -484,8 +484,8 @@ async def show_leaderboard(ctx, action=None):
     
     # Create an embed for the leaderboard
     embed = discord.Embed(
-        title="🏆 Humor Leaderboard 🏆",
-        description="Points earned for funny messages",
+        title="🏆 Certified Funny™ Rankings 🏆",
+        description="Got jokes? Prove it by triggering spontaneous memes",
         color=discord.Color.gold()
     )
     
@@ -504,7 +504,7 @@ async def show_leaderboard(ctx, action=None):
             
         leaderboard_text += f"{prefix} **{username}**: {score} point{'s' if score != 1 else ''}\n"
     
-    embed.add_field(name="Top Comedians", value=leaderboard_text or "No scores yet", inline=False)
+    embed.add_field(name="Biggest Clowns", value=leaderboard_text or "No scores yet", inline=False)
     embed.set_footer(text="Say something funny to earn points! | Admins can use !leaderboard reset")
     
     await ctx.send(embed=embed)

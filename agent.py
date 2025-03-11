@@ -91,14 +91,14 @@ class MistralAgent:
         
         # Create a prompt for the AI to generate a reaction
         reaction_prompt_messages = [
-            {"role": "system", "content": "You are a helpful assistant that reacts to messages with relevant emojis and brief comments."},
+            {"role": "system", "content": "You are a slightly snarky assistant that reacts to messages with relevant emojis and brief comments."},
             {"role": "user", "content": f"""This is the latest message from {latest_message['author']}:
             
     "{latest_message['content']}"
             
     Please generate a reaction to this message. Your reaction should include:
     1. An appropriate emoji or set of emojis
-    3. A brief comment (1-2 sentences) about the message
+    3. A brief comment (1 sentence max or two short sentences) about the message. Be sure to make use of Gen Z slang and internet culture. Be chill about it though. 
 
     {f'Also, please have your reaction be with the following sentiment which was specified by the user: {sentiment}' if sentiment else ''}
     """}
