@@ -69,56 +69,6 @@ class MistralAgent:
         sorted_scores = sorted(self.user_scores.items(), key=lambda x: x[1], reverse=True)
         return sorted_scores
     
-    async def evaluate_message_humor(self, message: discord.Message) -> bool:
-        """
-        Evaluate if a message is funny enough to earn a point
-        
-        Args:
-            message: The Discord message to evaluate
-            
-        Returns:
-            bool: True if the message is funny, False otherwise
-        """
-        try:
-            # Skip very short messages
-            if len(message.content.strip()) < 5:
-                return False
-                
-            # Create a prompt for the AI to evaluate humor
-            humor_evaluation_messages = [
-                {"role": "system", "content": """You are a humor evaluator with a very high standard. 
-                Your job is to evaluate if a message is genuinely funny and deserves a point on a humor leaderboard.
-                
-                Only truly funny, clever, or witty messages should get points. Boring, generic, or mildly amusing messages should not.
-                Be strict and objective. No more than 1 in 4 messages should qualify as funny.
-                
-                Assess messages as if they were in a social setting like a Discord server.
-                Use your knowledge of gen z internet culture as a standard for if a meme is funny.
-                """},
-                {"role": "user", "content": f"""Here is a message from a user named {message.author.name}:
-                
-                "{message.content}"
-                
-                Is this message genuinely funny, clever, or witty enough to earn a point on the funny leaderboard?
-                Respond with ONLY "YES" or "NO". Be strict and selective - only truly funny content should get points.
-                """}
-            ]
-            
-            humor_response = await self.client.chat.complete_async(
-                model=self.model,
-                messages=humor_evaluation_messages
-            )
-            
-            evaluation = humor_response.choices[0].message.content.strip().upper()
-            is_funny = "YES" in evaluation
-            
-            logger.info(f"Humor evaluation for message from {message.author.name}: {evaluation}")
-            return is_funny
-                
-        except Exception as e:
-            logger.error(f"Error in evaluating message humor: {str(e)}")
-            return False
-    
     async def react_to_latest(self, sentiment: str) -> str:
         """
         React to the latest message in the chat history

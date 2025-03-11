@@ -170,13 +170,14 @@ async def on_message(message: discord.Message):
     agent_mistral.add_to_chat_history(message)
     logger.info(f"Added message from {message.author} to history: {message.content}")
 
-    #Create a new thread to go update the leaderboard
-    asyncio.create_task(evaluate_message_humor(message))
     try:
         spontaneous_meme_decision, spontaneous_meme_reason = await agent_mistral.decide_spontaneous_meme()
         logger.info(f"Spontaneous meme decision: {spontaneous_meme_decision}, reason: {spontaneous_meme_reason}")
 
         if spontaneous_meme_decision:
+            #Update leaderboard if message is funny
+            agent_mistral.add_score_to_user(message.author.name)
+            logger.info(f"Added humor point to {message.author.name} for meme-worthy message")
             await generate_spontaneous_meme(message)
     except Exception as e:
         logger.error(f"Error deciding spontaneous meme: {e}")
@@ -460,20 +461,6 @@ async def search_meme(ctx, *, query):
         logger.error(f"Error searching for memes: {e}")
         await processing_msg.edit(content=f"Sorry, I encountered an error while searching for memes: {str(e)}")
 
-async def evaluate_message_humor(message: discord.Message):
-    """
-    Evaluates if a message is funny and updates the user's score if it is
-    """
-    try:
-        # Call the agent to evaluate if the message is funny
-        is_funny = await agent_mistral.evaluate_message_humor(message)
-        
-        if is_funny:
-            # Update the user's score
-            agent_mistral.add_score_to_user(message.author.name)
-            logger.info(f"Added humor point to {message.author.name} for funny message")
-    except Exception as e:
-        logger.error(f"Error evaluating message humor: {e}")
 @bot.command(name="leaderboard", help="Show the funny message leaderboard. Use !leaderboard reset to reset all scores.")
 async def show_leaderboard(ctx, action=None):
     """
