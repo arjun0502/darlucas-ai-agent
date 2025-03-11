@@ -32,7 +32,7 @@ load_dotenv()
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=PREFIX, intents=intents)
 
-# Import the Mistral and OpenAI agent from the agent.py file
+# Import the Mistral and OpenAI agent from the agent_mistral.py and agent_openai.py files
 agent_mistral = MistralAgent()
 agent_openai = OpenAIAgent()
 
@@ -423,7 +423,6 @@ async def search_meme(ctx, *, query=None):
             
         # Get the single meme from the result
         meme = result["meme"]
-        available_count = result["available"]
         
         # Get the description (or use a default if not available)
         description = meme.get("description", "No description available")

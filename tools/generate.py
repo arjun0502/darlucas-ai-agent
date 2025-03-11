@@ -126,7 +126,81 @@ async def add_text_to_image(image_url, text):
     return output
 
 
-async def generate_meme_from_concept(self, meme_concept):
+async def handle_error(error):
+    """
+    Generate a humorous message when content policy violation occurs
+    """
+    try:            
+        HUMOR_REPONSE_PROMPT = [
+            {"role": "system", "content": "You are a witty, humorous AI assistant."},
+            {"role": "user", "content": f"""
+            Write a short, humorous message (2-3 sentences max) explaining why a meme couldn't be 
+            generated due to {error}. Make it funny, like the AI is slightly embarrassed.
+            
+            Don't use phrases like "I apologize" or "I'm sorry" - just be light and humorous.
+            Don't mention specific content policies - keep it vague and funny.
+            
+            Example: "Well, this chat was a little too spicy for me to generate a meme. Better luck next time hehe :)"
+            """} 
+        ]
+        
+        response = await client.chat.complete_async(
+            model="gpt-4o-mini",
+            messages=HUMOR_REPONSE_PROMPT,
+        )
+    
+        text_response = response.choices[0].message.content
+
+        DALLE_PROMPT = f"""Create a meme image given this description: {text_response}
+
+        I NEED a simple, clean image with NO TEXT whatsoever."""
+
+        # Generate the meme with DALL-E
+        image_response = client.images.generate(
+            model="dall-e-3",
+            prompt=DALLE_PROMPT,
+            size="1024x1024",
+            quality="standard",
+            n=1,
+        )
+
+        image_url = image_response.data[0].url
+
+        try:
+            # Add text to the image using Pillow
+            image_with_text = await add_text_to_image(image_url, text_response)
+        
+            # Send the modified image as a file
+            file = discord.File(fp=image_with_text, filename="meme.png")
+            
+            # Create an embed with the attached file
+            embed = discord.Embed(title="Oopsies", color=discord.Color.blue())
+            embed.set_image(url="attachment://meme.png")
+            
+            return embed, file
+        
+        except Exception as e:
+            logger.error(f"Error adding text to image: {str(e)}")
+            
+            # Fallback to returning the image without text overlay
+            embed = discord.Embed(title="Oopsies", color=discord.Color.blue())
+            embed.set_image(url=image_url)
+            
+            # Add the caption as a field since we couldn't overlay it
+            embed.add_field(name="Caption", value=text_response, inline=False)
+            
+            return embed, None
+    
+    except Exception as e:
+        logger.error(f"Error generating humorous response: {e}")
+        # Use a local file for the fallback image
+        fallback_file = discord.File("/Users/danielguo/School/darlucas-ai-agent/fallback_error.png", filename="fallback.png")
+        embed = discord.Embed(title="Oopsies", color=discord.Color.blue())
+        embed.set_image(url="attachment://fallback.png")
+        
+        return embed
+
+async def generate_meme_from_concept(meme_concept):
         """
         Generate a meme based on recent chat history
         Returns image url without text and the text info separately
@@ -173,17 +247,17 @@ async def generate_meme_from_concept(self, meme_concept):
                     logger.info(f"Fallback Caption: {meme_text}")
                         
             # Modified prompt for generating image WITHOUT text
-            dalle_prompt = f"""Create a meme image given this description: {image_description}
+            DALLE_PROMPT = f"""Create a meme image given this description: {image_description}
     
     I NEED a simple, clean image with NO TEXT whatsoever."""
             
             # Log the prompt
-            logger.info(f"DALL-E Prompt: {dalle_prompt[:200]}...")
+            logger.info(f"DALL-E Prompt: {DALLE_PROMPT[:200]}...")
             
             # Generate the meme with DALL-E
-            image_response = self.client.images.generate(
+            image_response = client.images.generate(
                 model="dall-e-3",
-                prompt=dalle_prompt,
+                prompt=DALLE_PROMPT,
                 size="1024x1024",
                 quality="standard",
                 n=1,
@@ -221,15 +295,9 @@ async def generate_meme_from_concept(self, meme_concept):
                 embed.add_field(name="Caption", value=meme_text, inline=False)
                 
                 return embed, None
+            
         except Exception as e:
             logger.error(f"Error in generate_meme_from_concept: {str(e)}")
-            
-            # Check if this is a content policy violation and return None with the error
-            if "content_policy_violation" in str(e):
-                logger.warning(f"Content policy violation in meme generation: {meme_concept}")
-                return None, str(e)
-            
-            # Re-raise for other types of errors
-            raise Exception(f"Failed to generate meme: {str(e)}")
+            return await handle_error(e)
         
         

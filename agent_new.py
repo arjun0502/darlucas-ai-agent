@@ -5,7 +5,8 @@ from typing import Dict
 import discord
 
 from mistralai import Mistral
-from tools import search_meme
+from tools.generate import generate_meme
+from tools.search import search_meme
 
 logger = logging.getLogger("discord")
 
@@ -80,8 +81,8 @@ class MemeAgent:
         self.tools_to_functions = {
             "search_meme": search_meme,
             "generate_meme": generate_meme,
-            "react": react,
-            "leaderboard": leaderboard
+            # "react": react,
+            # "leaderboard": leaderboard
         }
 
     
@@ -129,14 +130,11 @@ class MemeAgent:
         function_params = json.loads(tool_call.function.arguments)
         function_result = self.tools_to_functions[function_name](**function_params)
 
-        embed_to_return = function_result
-        if isinstance(function_result, str):
-            # logic for generating embed given error
-            embed_to_return = generate_error_embed()
-
-        # Edit the message to show the weather data.
-
         ## TO DO: How to generate meme spontaneously 
 
         ## TO DO: ONCE WE GET THE EMBED, HOW DO WE RENDER IT? DO WE JUST WHAT WE ARE DOING BELOW??? 
-        await res_message.reply(embed=embed_to_return)
+        if isinstance(function_result, tuple):
+            file, embed = function_result
+            await message.reply(file=file,embed=embed)
+        else:
+            await message.reply(embed=function_result)
