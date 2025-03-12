@@ -19,6 +19,7 @@ logging.basicConfig(
 from mistralai import Mistral
 from tools.generate import generate_meme
 from tools.search import search_meme
+from tools.leaderboard import leaderboard, generate_leaderboard_embed, process_command
 
 logger = logging.getLogger("discord")
 
@@ -122,34 +123,49 @@ class MemeAgent:
                     }
                 }
             },
-            # {
-            #     "type": "function",
-            #     "function": {
-            #         "name": "react",
-            #         "description": "reacts to latest message",
-            #         "parameters": {
-            #             "type": "object",
-            #             "properties": {
-            #                 "sentiment": {"type": "string"}
-            #             }
-            #         },
-            #     }
-            # },
-            # {
-            #     "type": "function",
-            #     "function": {
-            #         "name": "leaderboard",
-            #         "description": "generates leaderboard",
-            #         "parameters": {},
-            #     }
-            # },
+            {
+                "type": "function",
+                "function": {
+                    "name": "react",
+                    "description": "reacts to latest message with an appropriate emoji",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "sentiment": {
+                                "type": "string",
+                                "enum": ["positive", "negative", "neutral"],
+                                "description": "The sentiment of the reaction"
+                            }
+                        },
+                        "required": ["sentiment"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "leaderboard",
+                    "description": "displays leaderboard of top memes or user stats",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "command": {
+                                "type": "string", 
+                                "enum": ["leaderboard", "mystats"],
+                                "description": "The leaderboard command to execute"
+                            }
+                        },
+                        "required": ["command"]
+                    }
+                }
+            },
         ]
 
         self.tools_to_functions = {
             "search_meme": search_meme,
             "generate_meme": generate_meme,
-            # "react": self.react_message,
-            # "leaderboard": self.generate_leaderboard
+            "react": self.react_message,
+            "leaderboard": self.generate_leaderboard
         }
     
     def load_user_scores(self):
@@ -200,9 +216,122 @@ class MemeAgent:
         self.save_user_scores()
         logger.info(f"Added {points} point(s) to {username}. New score: {self.user_scores[username]}")
 
+    async def react_message(self, sentiment: str):
+        """React to a message with an appropriate emoji"""
+        emoji_map = {
+            "positive": ["😂", "🤣", "👍", "❤️", "🔥", "👏", "😁"],
+            "negative": ["😢", "👎", "😒", "😔", "🤔", "🙄"],
+            "neutral": ["😐", "🤷", "👀", "👋", "🙂"]
+        }
+    
+        # Choose a random emoji from the appropriate category
+        emoji = random.choice(emoji_map.get(sentiment, emoji_map["neutral"]))
+        
+        embed = discord.Embed(description=emoji, color=discord.Color.blue())
+        return embed
+
+    async def show_leaderboard(self, command: str):
+        """Show the leaderboard or user stats"""
+        if command == "leaderboard":
+            embed = await generate_leaderboard_embed()
+            return embed
+        elif command == "mystats":
+            # This will be handled in the main function with the user ID available
+            return discord.Embed(
+                title="User Stats",
+                description="Use !mystats in chat for your personal stats",
+                color=discord.Color.blue()
+            )
+
+    async def handle_reaction(self, reaction: discord.Reaction, user: discord.User):
+        """Handle a reaction added to a message"""
+        if user.bot:
+            return  # Ignore bot reactions
+
+        # Check if the reaction is a thumb up or down
+        emoji_name = reaction.emoji if isinstance(reaction.emoji, str) else reaction.emoji.name
+
+        is_upvote = emoji_name == "👍"
+        is_downvote = emoji_name == "👎"
+
+        if not (is_upvote or is_downvote):
+            return  # Not a vote reaction
+
+        message_id = str(reaction.message.id)
+        user_id = str(user.id)
+
+        # Update the leaderboard with the vote
+        if is_upvote or is_downvote:
+            leaderboard.update_vote(message_id, user_id, is_upvote)
+
+        logger.info(f"Handled reaction {emoji_name} by {user.name} on message {message_id}")
+
+    async def handle_reaction_remove(self, reaction: discord.Reaction, user: discord.User):
+        """Handle a reaction removed from a message"""
+        if user.bot:
+            return  # Ignore bot reactions
+
+        # Check if the reaction is a thumb up or down
+        emoji_name = reaction.emoji if isinstance(reaction.emoji, str) else reaction.emoji.name
+
+        is_vote = emoji_name in ["👍", "👎"]
+
+        if not is_vote:
+            return  # Not a vote reaction
+
+        message_id = str(reaction.message.id)
+        user_id = str(user.id)
+
+        # Remove the vote from the leaderboard
+        leaderboard.remove_vote(message_id, user_id)
+
+        logger.info(f"Handled reaction removal {emoji_name} by {user.name} on message {message_id}")
+
+    async def register_meme(self, message: discord.Message, response_message: discord.Message):
+        """Register a meme in the leaderboard database"""
+        # Extract embed data if it exists
+        if response_message.embeds:
+            embed_data = {
+                'title': response_message.embeds[0].title,
+                'description': response_message.embeds[0].description,
+                'color': response_message.embeds[0].color.value if response_message.embeds[0].color else None,
+                'fields': [
+                    {
+                        'name': field.name,
+                        'value': field.value,
+                        'inline': field.inline
+                    }
+                    for field in response_message.embeds[0].fields
+                ]
+            }
+            
+            # Image URL is stored in the embed
+            if response_message.embeds[0].image:
+                embed_data['image_url'] = response_message.embeds[0].image.url
+            
+            # Add the meme to the leaderboard
+            leaderboard.add_meme(
+                message_id=str(response_message.id),
+                author_id=str(message.author.id),
+                author_name=message.author.name,
+                embed_data=embed_data
+            )
+            
+            logger.info(f"Registered meme with ID {response_message.id} by {message.author.name}")
+
     async def run(self, message: discord.Message):
         # Add the current message to chat history
         self.add_to_chat_history(message)
+
+        # Check for commands
+        if message.content.startswith("!leaderboard"):
+            embed = await generate_leaderboard_embed()
+            return await message.reply(embed=embed)
+    
+        elif message.content.startswith("!mystats"):
+            user_id = str(message.author.id)
+            embed = await process_command("mystats", user_id)
+            return await message.reply(embed=embed)
         
         # Format chat history for inclusion in system prompt
         chat_history_context = self.format_chat_history()
@@ -253,21 +382,38 @@ class MemeAgent:
                 return
             
             # Send loading message based on function name
-            loading_text = "Searching for a meme..." if function_name == "search_meme" else "Generating a meme..."
+            loading_text = (
+            "Searching for a meme..." if function_name == "search_meme" else
+            "Generating a meme..." if function_name == "generate_meme" else
+            "Loading leaderboard..." if function_name == "leaderboard" else
+            "Thinking..."
+            )
             loading_message = await message.reply(loading_text)
             
             logger.info(f"Executing {function_name} with provided parameters")
-            function_result = await self.tools_to_functions[function_name](**function_params)
+            # Handle leaderboard command specially
+            if function_name == "leaderboard" and function_params.get("command") == "mystats":
+                # Add user_id parameter
+                function_result = await process_command("mystats", str(message.author.id))
+            else:
+                function_result = await self.tools_to_functions[function_name](**function_params)
 
             if isinstance(function_result, tuple):
                 embed, file = function_result
                 logger.info(f"Sending response with file and embed to {message.author.name}")
                 await loading_message.delete()  # Delete the loading message
-                await message.reply(file=file, embed=embed)
+                response_message = await message.reply(file=file, embed=embed)
             else:
                 logger.info(f"Sending embed response to {message.author.name}")
                 await loading_message.delete()  # Delete the loading message
-                await message.reply(embed=function_result)
+                response_message = await message.reply(embed=function_result)
+
+            # Then, register the meme and add reactions AFTER the message is created
+            if function_name in ["search_meme", "generate_meme"]:
+                await self.register_meme(message, response_message)
+                # Add default reactions to make voting easier
+                await response_message.add_reaction("👍")
+                await response_message.add_reaction("👎")
             
             logger.info(f"Successfully processed request from {message.author.name}")
                 

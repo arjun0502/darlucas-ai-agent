@@ -8,8 +8,10 @@ from dotenv import load_dotenv
 from agent_new import MemeAgent
 
 intents = discord.Intents.default()
-
 intents.message_content = True
+intents.reactions = True  # Enable reactions intent for handling upvotes/downvotes
+intents.members = True    # Enable members intent for user information
+
 
 logger = logging.getLogger("discord")
 
@@ -62,6 +64,23 @@ class DiscordBot(commands.Bot):
         
         # Run the meme agent whenever the bot receives a message.
         await self.meme_agent.run(message)
+    async def on_reaction_add(self, reaction, user):
+        """Event handler for when a reaction is added to a message"""
+        # Ignore reactions from the bot itself
+        if user == self.user:
+            return
+        
+        # Pass the reaction to the meme agent for handling
+        await self.meme_agent.handle_reaction(reaction, user)
+
+    async def on_reaction_remove(self, reaction, user):
+        """Event handler for when a reaction is removed from a message"""
+        # Ignore reactions from the bot itself
+        if user == self.user:
+            return
+        
+        # Pass the reaction to the meme agent for handling
+        await self.meme_agent.handle_reaction_remove(reaction, user)
 
 
 if __name__ == "__main__":
