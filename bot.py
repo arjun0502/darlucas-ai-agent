@@ -204,6 +204,19 @@ async def generate_meme(ctx, *, user_input=None):
     try:
         # Call Mistral agent to generate meme concept (text)
         if user_input:
+            is_query_appropriate, reason = await agent_mistral.is_query_appropriate(user_input)
+            if not is_query_appropriate:
+                # First, delete the loading message
+                await processing_msg.delete()
+
+                # Then send a new message with the file and embed
+                file = discord.File("fallback_error.png", filename="fallback_error.png")
+                embed = discord.Embed(title="NUH UH", description=f"You sly dog, I can't generate a meme based on that", color=discord.Color.red())
+                embed.set_footer(text=f"{reason}")
+                embed.set_image(url="attachment://fallback_error.png")
+                await ctx.send(file=file, embed=embed)
+                return
+            
             meme_concept = await agent_mistral.generate_meme_concept_from_input(user_input)
         else:
             meme_concept = await agent_mistral.generate_meme_concept_from_chat_history()
