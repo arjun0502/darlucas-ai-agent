@@ -663,7 +663,7 @@ async def search_meme(ctx, *, query=None):
         embed.set_footer(text=f"Requested by {ctx.author.display_name}")
         
         # Send the meme
-        meme_message = await ctx.send(file=file, embed=embed)
+        meme_message = await ctx.send(embed=embed)
 
         # Track the meme in the leaderboard
         meme_leaderboard.track_meme(meme_message, embed, ctx.author)
