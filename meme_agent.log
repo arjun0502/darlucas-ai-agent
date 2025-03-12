@@ -306,3 +306,233 @@ I NEED a simple, clean image with NO TEXT whatsoever....
 2025-03-11 17:45:23,196 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
 2025-03-11 17:45:24,486 - discord - INFO - Sending response with file and embed to arjunj4528
 2025-03-11 17:45:25,519 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 18:00:27,035 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 18:00:27,664 - discord.client - INFO - logging in using static token
+2025-03-11 18:00:28,644 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: bcc4cb39d6fab50ff9f0766a40dc0f7c).
+2025-03-11 18:00:30,670 - discord - INFO - -------------------
+2025-03-11 18:00:30,672 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 18:00:30,673 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 18:00:30,674 - discord - INFO - Python version: 3.13.2
+2025-03-11 18:00:30,676 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 18:00:30,677 - discord - INFO - -------------------
+2025-03-11 18:00:33,855 - discord - INFO - Message from arjunj4528: hi
+2025-03-11 18:00:33,857 - discord - INFO - Processing message from arjunj4528: 'hi'
+2025-03-11 18:00:33,858 - discord - INFO - Using chat history context with 2 messages
+2025-03-11 18:00:33,859 - discord - INFO - Sending request to Mistral API
+2025-03-11 18:00:34,772 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 18:00:34,779 - discord - INFO - Tool selected: search_meme
+2025-03-11 18:00:34,781 - discord - INFO - Tool parameters: {
+  "query": "hi"
+}
+2025-03-11 18:00:35,191 - discord - INFO - Executing search_meme with provided parameters
+2025-03-11 18:00:35,191 - tools.search - INFO - Searching for memes based on chat history with query: hi
+2025-03-11 18:00:36,270 - discord - INFO - Sending embed response to arjunj4528
+2025-03-11 18:00:36,408 - discord - INFO - Message from arjunj4528: yo whats up
+2025-03-11 18:00:36,411 - discord - INFO - Processing message from arjunj4528: 'yo whats up'
+2025-03-11 18:00:36,412 - discord - INFO - Using chat history context with 4 messages
+2025-03-11 18:00:36,414 - discord - INFO - Sending request to Mistral API
+2025-03-11 18:00:36,878 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 18:00:37,728 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 18:00:37,733 - discord - INFO - Tool selected: generate_meme
+2025-03-11 18:00:37,734 - discord - INFO - Tool parameters: {
+  "caption": "when you say yo whats up to a rock and it does not respond back",
+  "image_description": "A rock sitting on a beach"
+}
+2025-03-11 18:00:38,115 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 18:00:38,116 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: A rock sitting on a beach
+
+I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 18:00:48,785 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 18:00:50,893 - discord - INFO - Sending response with file and embed to arjunj4528
+2025-03-11 18:00:54,217 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 18:01:31,514 - discord - INFO - Message from danguo: yo
+2025-03-11 18:01:31,515 - discord - INFO - Processing message from danguo: 'yo'
+2025-03-11 18:01:31,516 - discord - INFO - Using chat history context with 6 messages
+2025-03-11 18:01:31,516 - discord - INFO - Sending request to Mistral API
+2025-03-11 18:01:32,372 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 18:01:32,378 - discord - INFO - Tool selected: search_meme
+2025-03-11 18:01:32,380 - discord - INFO - Tool parameters: {
+  "query": "general funny"
+}
+2025-03-11 18:01:32,635 - discord - INFO - Executing search_meme with provided parameters
+2025-03-11 18:01:32,636 - tools.search - INFO - Searching for memes based on chat history with query: general funny
+2025-03-11 18:05:36,392 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 18:05:36,865 - discord.client - INFO - logging in using static token
+2025-03-11 18:05:38,254 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: d2f97a5cb6f8199222ae7d52daa411c7).
+2025-03-11 18:05:40,357 - discord - INFO - -------------------
+2025-03-11 18:05:40,359 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 18:05:40,360 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 18:05:40,361 - discord - INFO - Python version: 3.13.2
+2025-03-11 18:05:40,362 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 18:05:40,363 - discord - INFO - -------------------
+2025-03-11 18:05:58,576 - discord - INFO - Message from arjunj4528: hi
+2025-03-11 18:05:58,577 - discord - INFO - Processing message from arjunj4528: 'hi'
+2025-03-11 18:05:58,578 - discord - INFO - Using chat history context with 2 messages
+2025-03-11 18:05:58,579 - discord - INFO - Sending request to Mistral API
+2025-03-11 18:05:59,581 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 18:05:59,586 - discord - INFO - Tool selected: search_meme
+2025-03-11 18:05:59,587 - discord - INFO - Tool parameters: {
+  "query": "hi"
+}
+2025-03-11 18:05:59,952 - discord - INFO - Executing search_meme with provided parameters
+2025-03-11 18:05:59,953 - tools.search - INFO - Searching for memes based on chat history with query: hi
+2025-03-11 18:06:00,438 - discord - INFO - Message from arjunj4528: whats up
+2025-03-11 18:06:00,440 - discord - INFO - Processing message from arjunj4528: 'whats up'
+2025-03-11 18:06:00,440 - discord - INFO - Using chat history context with 4 messages
+2025-03-11 18:06:00,441 - discord - INFO - Sending request to Mistral API
+2025-03-11 18:06:01,161 - discord - INFO - Sending embed response to arjunj4528
+2025-03-11 18:06:01,722 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 18:06:01,772 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 18:06:01,775 - discord - INFO - Tool selected: generate_meme
+2025-03-11 18:06:01,776 - discord - INFO - Tool parameters: {
+  "caption": "when you say whats up three times",
+  "image_description": "a dog wearing a hat and looking confused"
+}
+2025-03-11 18:06:02,082 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 18:06:02,083 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: a dog wearing a hat and looking confused
+
+I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 18:06:10,788 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 18:06:15,359 - discord - INFO - Sending response with file and embed to arjunj4528
+2025-03-11 18:06:20,116 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 18:34:57,811 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 18:34:58,470 - discord.client - INFO - logging in using static token
+2025-03-11 18:34:59,300 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 5a3f0e08e1ff9c35e06c789bab8ff4cf).
+2025-03-11 18:35:01,343 - discord - INFO - -------------------
+2025-03-11 18:35:01,346 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 18:35:01,349 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 18:35:01,351 - discord - INFO - Python version: 3.13.2
+2025-03-11 18:35:01,352 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 18:35:01,355 - discord - INFO - -------------------
+2025-03-11 18:35:12,092 - discord - INFO - Message from danguo: hey
+2025-03-11 18:35:12,094 - discord - INFO - Processing message from danguo: 'hey'
+2025-03-11 18:35:12,096 - discord - INFO - Using chat history context with 1 messages
+2025-03-11 18:35:12,097 - discord - INFO - Sending request to Mistral API
+2025-03-11 18:35:13,324 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 18:35:13,330 - discord - INFO - Tool selected: search_meme
+2025-03-11 18:35:13,332 - discord - INFO - Tool parameters: {
+  "query": "greeting"
+}
+2025-03-11 18:35:13,633 - discord - INFO - Executing search_meme with provided parameters
+2025-03-11 18:35:13,634 - tools.search - INFO - Searching for memes based on chat history with query: greeting
+2025-03-11 18:35:14,734 - discord - INFO - Sending embed response to danguo
+2025-03-11 18:35:15,209 - discord - INFO - Successfully processed request from danguo
+2025-03-11 18:35:22,837 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 18:35:23,479 - discord.client - INFO - logging in using static token
+2025-03-11 18:35:24,343 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: df89a91311a769a23a062e8f437d6476).
+2025-03-11 18:35:26,378 - discord - INFO - -------------------
+2025-03-11 18:35:26,379 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 18:35:26,381 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 18:35:26,382 - discord - INFO - Python version: 3.13.2
+2025-03-11 18:35:26,383 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 18:35:26,388 - discord - INFO - -------------------
+2025-03-11 18:35:54,058 - discord - INFO - Message from danguo: why is our agent generating
+2025-03-11 18:35:54,060 - discord - INFO - Processing message from danguo: 'why is our agent generating'
+2025-03-11 18:35:54,060 - discord - INFO - Using chat history context with 1 messages
+2025-03-11 18:35:54,061 - discord - INFO - Sending request to Mistral API
+2025-03-11 18:35:55,615 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 18:35:55,623 - discord - INFO - Tool selected: generate_meme
+2025-03-11 18:35:55,623 - discord - INFO - Tool parameters: {
+  "image_description": "A robot with a thought bubble showing binary code, looking confused",
+  "caption": "When the AI tries to understand memes"
+}
+2025-03-11 18:35:56,003 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 18:35:56,004 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: A robot with a thought bubble showing binary code, looking confused
+
+I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 18:36:07,494 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 18:36:09,019 - discord - INFO - Sending response with file and embed to danguo
+2025-03-11 18:36:09,946 - discord - INFO - Successfully processed request from danguo
+2025-03-11 18:36:21,110 - discord - INFO - Message from danguo: testing
+2025-03-11 18:36:21,112 - discord - INFO - Processing message from danguo: 'testing'
+2025-03-11 18:36:21,113 - discord - INFO - Using chat history context with 3 messages
+2025-03-11 18:36:21,115 - discord - INFO - Sending request to Mistral API
+2025-03-11 18:36:22,559 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 18:36:22,565 - discord - INFO - Tool selected: generate_meme
+2025-03-11 18:36:22,566 - discord - INFO - Tool parameters: {
+  "caption": "when you are testing",
+  "image_description": "a cat typing on a keyboard"
+}
+2025-03-11 18:36:23,006 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 18:36:23,006 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: a cat typing on a keyboard
+
+I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 18:36:36,575 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 18:37:53,100 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 18:37:53,852 - discord.client - INFO - logging in using static token
+2025-03-11 18:37:54,614 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 0a0ef2f4ae1aaa481ffa5c06b3307f28).
+2025-03-11 18:37:56,645 - discord - INFO - -------------------
+2025-03-11 18:37:56,646 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 18:37:56,647 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 18:37:56,647 - discord - INFO - Python version: 3.13.2
+2025-03-11 18:37:56,648 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 18:37:56,649 - discord - INFO - -------------------
+2025-03-11 18:38:01,873 - discord - INFO - Message from lucadollar: Why don't neural networks ever get invited to parties?
+They always overfit and can't generalize to new social situations!
+2025-03-11 18:38:01,877 - discord - INFO - Processing message from lucadollar: 'Why don't neural networks ever get invited to parties?
+They always overfit and can't generalize to new social situations!'
+2025-03-11 18:38:01,879 - discord - INFO - Using chat history context with 1 messages
+2025-03-11 18:38:01,880 - discord - INFO - Sending request to Mistral API
+2025-03-11 18:38:03,959 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 18:38:03,965 - discord - INFO - Tool selected: generate_meme
+2025-03-11 18:38:03,967 - discord - INFO - Tool parameters: {
+  "image_description": "Confused Neural Network at a Party",
+  "caption": "WHEN YOU TRY TO FIT IN AT THE PARTY BUT YOU JUST CAN'T GENERALIZE TO NEW SOCIAL SITUATIONS SO YOU OVERFIT INSTEAD"
+}
+2025-03-11 18:38:04,294 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 18:38:04,296 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: Confused Neural Network at a Party
+
+I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 18:38:16,425 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 18:42:26,340 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 18:42:27,003 - discord.client - INFO - logging in using static token
+2025-03-11 18:42:27,972 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: c54c42dc09f92dd3eafddf430c081be3).
+2025-03-11 18:42:30,005 - discord - INFO - -------------------
+2025-03-11 18:42:30,006 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 18:42:30,007 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 18:42:30,009 - discord - INFO - Python version: 3.13.2
+2025-03-11 18:42:30,010 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 18:42:30,012 - discord - INFO - -------------------
+2025-03-11 18:42:38,864 - discord - INFO - Message from arjunj4528: testing
+2025-03-11 18:42:38,865 - discord - INFO - Processing message from arjunj4528: 'testing'
+2025-03-11 18:42:38,866 - discord - INFO - Using chat history context with 1 messages
+2025-03-11 18:42:38,867 - discord - INFO - Sending request to Mistral API
+2025-03-11 18:42:40,411 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 18:42:40,418 - discord - INFO - Tool selected: generate_meme
+2025-03-11 18:42:40,419 - discord - INFO - Tool parameters: {
+  "caption": "WHEN YOU TEST WITHOUT EXPECTATIONS",
+  "image_description": "A person standing in a lab with a test tube, looking confused as the tube starts sprouting legs and dancing"
+}
+2025-03-11 18:42:40,751 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 18:42:40,753 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: A person standing in a lab with a test tube, looking confused as the tube starts sprouting legs and dancing
+
+I NEED a simple, clean image with NO TEXT whats...
+2025-03-11 18:42:52,588 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 18:42:54,050 - discord - INFO - Sending response with file and embed to arjunj4528
+2025-03-11 18:42:55,435 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 18:43:13,543 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 18:43:14,199 - discord.client - INFO - logging in using static token
+2025-03-11 18:43:15,084 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: aa9ca04f4c9942eeccf519e84d3180e0).
+2025-03-11 18:43:17,129 - discord - INFO - -------------------
+2025-03-11 18:43:17,131 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 18:43:17,132 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 18:43:17,133 - discord - INFO - Python version: 3.13.2
+2025-03-11 18:43:17,134 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 18:43:17,136 - discord - INFO - -------------------
+2025-03-11 18:43:33,341 - discord - INFO - Message from arjunj4528: testing
+2025-03-11 18:43:33,343 - discord - INFO - Processing message from arjunj4528: 'testing'
+2025-03-11 18:43:33,343 - discord - INFO - Using chat history context with 1 messages
+2025-03-11 18:43:33,344 - discord - INFO - Sending request to Mistral API
+2025-03-11 18:43:34,782 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 18:43:34,789 - discord - INFO - Tool selected: generate_meme
+2025-03-11 18:43:34,790 - discord - INFO - Tool parameters: {
+  "caption": "WHEN THE CODE COMPILES WITHOUT ANY ERROR",
+  "image_description": "person punching air in celebration"
+}
+2025-03-11 18:43:35,088 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 18:43:35,089 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: person punching air in celebration
+
+I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 18:43:45,837 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 18:43:47,116 - discord - INFO - Sending response with file and embed to arjunj4528
+2025-03-11 18:43:48,811 - discord - INFO - Successfully processed request from arjunj4528

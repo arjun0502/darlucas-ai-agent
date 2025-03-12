@@ -55,12 +55,13 @@ class DiscordBot(commands.Bot):
             return
 
         self.logger.info(f"Message from {message.author}: {message.content}")
-
-        # Add message to chat history
-        self.meme_agent.add_to_chat_history(message)
         
         # Run the meme agent whenever the bot receives a message.
         await self.meme_agent.run(message)
+
+        # Add message to chat history
+        self.meme_agent.add_to_chat_history(message)
+
 
 
 if __name__ == "__main__":
