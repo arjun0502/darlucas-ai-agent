@@ -242,7 +242,7 @@ class MemeAgent:
             {"role": "system", "content": system_prompt},
             {
                 "role": "user",
-                "content": f"This is the latest message from user {message.author}: {message.content}\nDecide what to do according to tools available to you. You should only take actions and use the tools if appropriate. Most of the time, you are a passive observer of the chat.",
+                "content": f"This is the latest message from user {message.author}: {message.content}\nDecide what to do according to tools available to you. You should only take actions and use the tools if appropriate. Most of the time, you are a passive observer of the chat. After deciding what to do, concisely explain your decision and thought process on why you decided to act, and why you chose the tool you did."
             },
         ]
 
@@ -258,8 +258,6 @@ class MemeAgent:
                 tools=self.tools,
                 tool_choice="any",
             )
-
-            messages.append(tool_response.choices[0].message)
             
             # Check if tool_calls exists and is not empty
             if not tool_response.choices[0].message.tool_calls:
@@ -298,6 +296,25 @@ class MemeAgent:
                 await message.reply(embed=function_result)
             
             logger.info(f"Successfully processed request from {message.author.name}")
+
+            messages.append(tool_response.choices[0].message)
+
+            messages.append(
+                {
+                    "role": "tool",
+                    "name": function_name,
+                    "content": "Successfully processed request from user",
+                    "tool_call_id": tool_call.id,
+                }
+            )
+
+            # Run the model again with the tool call and its result.
+            response = await self.client.chat.complete_async(
+                model=MISTRAL_MODEL,
+                messages=messages,
+            )
+
+            logger.info(response.choices[0].message.content)
                 
         except Exception as e:
             logger.error(f"Error in MemeAgent.run: {e}", exc_info=True)
