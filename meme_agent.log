@@ -1,0 +1,133 @@
+2025-03-11 16:32:36,130 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 16:32:36,788 - discord - INFO - Loaded scores for 2 users
+2025-03-11 16:32:36,790 - discord.client - INFO - logging in using static token
+2025-03-11 16:32:37,903 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 4357f5c9350288cb0ebde81f2b90df36).
+2025-03-11 16:32:39,938 - discord - INFO - -------------------
+2025-03-11 16:32:39,940 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 16:32:39,942 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 16:32:39,947 - discord - INFO - Python version: 3.13.2
+2025-03-11 16:32:39,949 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 16:32:39,951 - discord - INFO - -------------------
+2025-03-11 16:32:50,951 - discord - INFO - Message from arjunj4528: generate me a meme about bananas
+2025-03-11 16:32:50,954 - discord - INFO - Added 1 point(s) to arjunj4528. New score: 2
+2025-03-11 16:32:50,956 - discord - INFO - Processing message from arjunj4528: 'generate me a meme about bananas'
+2025-03-11 16:32:50,957 - discord - INFO - Using chat history context with 2 messages
+2025-03-11 16:32:50,959 - discord - INFO - Sending request to Mistral API
+2025-03-11 16:32:52,664 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 16:32:52,670 - discord - INFO - Tool selected: generate_meme
+2025-03-11 16:32:52,672 - discord - INFO - Tool parameters: {
+  "caption": "When you slip on a banana peel",
+  "image_description": "A cartoon character slipping on a banana peel"
+}
+2025-03-11 16:32:52,674 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 16:32:52,675 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: A cartoon character slipping on a banana peel
+    
+    I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 16:33:06,038 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 16:33:07,190 - discord - INFO - Sending response with file and embed to arjunj4528
+2025-03-11 16:33:08,389 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 16:38:30,947 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 16:38:31,438 - discord - INFO - Loaded scores for 2 users
+2025-03-11 16:38:31,440 - discord.client - INFO - logging in using static token
+2025-03-11 16:38:32,228 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: c8a38f4ef35d4a8690676c13eb0c6d73).
+2025-03-11 16:38:34,266 - discord - INFO - -------------------
+2025-03-11 16:38:34,268 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 16:38:34,271 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 16:38:34,272 - discord - INFO - Python version: 3.13.2
+2025-03-11 16:38:34,273 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 16:38:34,275 - discord - INFO - -------------------
+2025-03-11 16:38:43,253 - discord - INFO - Message from arjunj4528: please generate a meme about bananas
+2025-03-11 16:38:43,256 - discord - INFO - Added 1 point(s) to arjunj4528. New score: 3
+2025-03-11 16:38:43,257 - discord - INFO - Processing message from arjunj4528: 'please generate a meme about bananas'
+2025-03-11 16:38:43,258 - discord - INFO - Using chat history context with 2 messages
+2025-03-11 16:38:43,258 - discord - INFO - Sending request to Mistral API
+2025-03-11 16:38:44,525 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 16:38:44,532 - discord - INFO - Tool selected: generate_meme
+2025-03-11 16:38:44,533 - discord - INFO - Tool parameters: {
+  "image_description": "a person slipping on a banana",
+  "caption": "classic"
+}
+2025-03-11 16:38:44,534 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 16:38:44,535 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: a person slipping on a banana
+    
+    I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 16:38:58,561 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 16:39:00,170 - discord - INFO - Sending response with file and embed to arjunj4528
+2025-03-11 16:39:01,346 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 16:39:15,478 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 16:49:09,492 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 16:49:09,968 - discord - INFO - Loaded scores for 2 users
+2025-03-11 16:49:09,970 - discord.client - INFO - logging in using static token
+2025-03-11 16:49:10,867 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: f7b61d6a3ce44dc2738318ce36b5efcd).
+2025-03-11 16:49:12,962 - discord - INFO - -------------------
+2025-03-11 16:49:12,965 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 16:49:12,966 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 16:49:12,968 - discord - INFO - Python version: 3.13.2
+2025-03-11 16:49:12,969 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 16:49:12,970 - discord - INFO - -------------------
+2025-03-11 16:49:23,726 - discord - INFO - Message from arjunj4528: search for a meme
+2025-03-11 16:49:23,729 - discord - INFO - Added 1 point(s) to arjunj4528. New score: 4
+2025-03-11 16:49:23,731 - discord.client - ERROR - Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\arjun\miniconda3\envs\discord_bot\Lib\site-packages\discord\client.py", line 481, in _run_event
+    await coro(*args, **kwargs)
+  File "C:\Users\arjun\OneDrive\Documents\Stanford\Senior Year\Winter Quarter\CS153\darlucas-ai-agent\bot_new.py", line 64, in on_message
+    await self.meme_agent.run(message)
+          ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MemeAgent' object has no attribute 'run'
+2025-03-11 16:49:48,826 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 16:49:49,289 - discord - INFO - Loaded scores for 2 users
+2025-03-11 16:49:49,291 - discord.client - INFO - logging in using static token
+2025-03-11 16:49:50,109 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 60d53ddd675a8225f53a59535249b70d).
+2025-03-11 16:49:52,170 - discord - INFO - -------------------
+2025-03-11 16:49:52,171 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 16:49:52,172 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 16:49:52,173 - discord - INFO - Python version: 3.13.2
+2025-03-11 16:49:52,175 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 16:49:52,175 - discord - INFO - -------------------
+2025-03-11 16:49:56,295 - discord - INFO - Message from arjunj4528: search for a meme
+2025-03-11 16:49:56,298 - discord - INFO - Added 1 point(s) to arjunj4528. New score: 5
+2025-03-11 16:49:56,300 - discord - INFO - Processing message from arjunj4528: 'search for a meme'
+2025-03-11 16:49:56,301 - discord - INFO - Using chat history context with 2 messages
+2025-03-11 16:49:56,302 - discord - INFO - Sending request to Mistral API
+2025-03-11 16:49:57,231 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 16:49:57,237 - discord - INFO - Tool selected: search_meme
+2025-03-11 16:49:57,238 - discord - INFO - Tool parameters: {
+  "query": "give a random meme"
+}
+2025-03-11 16:49:57,525 - discord - INFO - Executing search_meme with provided parameters
+2025-03-11 16:49:57,526 - tools.search - INFO - Searching for memes based on chat history with query: give a random meme
+2025-03-11 16:49:59,024 - discord - INFO - Sending embed response to arjunj4528
+2025-03-11 16:49:59,507 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 16:50:36,259 - discord - INFO - Message from arjunj4528: get the spiderman meme
+2025-03-11 16:50:36,263 - discord - INFO - Added 1 point(s) to arjunj4528. New score: 6
+2025-03-11 16:50:36,265 - discord - INFO - Processing message from arjunj4528: 'get the spiderman meme'
+2025-03-11 16:50:36,266 - discord - INFO - Using chat history context with 4 messages
+2025-03-11 16:50:36,268 - discord - INFO - Sending request to Mistral API
+2025-03-11 16:50:37,225 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 16:50:37,231 - discord - INFO - Tool selected: search_meme
+2025-03-11 16:50:37,233 - discord - INFO - Tool parameters: {
+  "query": "spiderman"
+}
+2025-03-11 16:50:37,589 - discord - INFO - Executing search_meme with provided parameters
+2025-03-11 16:50:37,591 - tools.search - INFO - Searching for memes based on chat history with query: spiderman
+2025-03-11 16:50:38,794 - discord - INFO - Sending embed response to arjunj4528
+2025-03-11 16:50:39,383 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 16:50:52,351 - discord - INFO - Message from arjunj4528: generate a meme
+2025-03-11 16:50:52,354 - discord - INFO - Added 1 point(s) to arjunj4528. New score: 7
+2025-03-11 16:50:52,356 - discord - INFO - Processing message from arjunj4528: 'generate a meme'
+2025-03-11 16:50:52,357 - discord - INFO - Using chat history context with 6 messages
+2025-03-11 16:50:52,359 - discord - INFO - Sending request to Mistral API
+2025-03-11 16:50:53,698 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 16:50:53,705 - discord - INFO - Tool selected: generate_meme
+2025-03-11 16:50:53,707 - discord - INFO - Tool parameters: {
+  "caption": "Spiderman pointing at Spiderman",
+  "image_description": "Spiderman pointing at Spiderman"
+}
+2025-03-11 16:50:54,095 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 16:50:54,097 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: Spiderman pointing at Spiderman
+    
+    I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 16:51:11,638 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 16:51:12,794 - discord - INFO - Sending response with file and embed to arjunj4528
+2025-03-11 16:51:13,815 - discord - INFO - Successfully processed request from arjunj4528

@@ -9,8 +9,6 @@ from agent_new import MemeAgent
 
 intents = discord.Intents.default()
 
-# Enable message content intent so the bot can read messages.
-# The message content intent must be enabled in the Discord Developer Portal as well.
 intents.message_content = True
 
 logger = logging.getLogger("discord")
@@ -18,8 +16,6 @@ logger = logging.getLogger("discord")
 
 PREFIX = "!"
 CUSTOM_STATUS = "the forecasts"
-
-
 class DiscordBot(commands.Bot):
     def __init__(self):
         super().__init__(
@@ -63,7 +59,7 @@ class DiscordBot(commands.Bot):
         # Add message to chat history
         self.meme_agent.add_to_chat_history(message)
         self.meme_agent.add_score_to_user(message.author.name)
-
+        
         # Run the meme agent whenever the bot receives a message.
         await self.meme_agent.run(message)
 

@@ -11,6 +11,7 @@ import asyncio
 from typing import Union, Tuple, Optional
 from openai import OpenAI
 from dotenv import load_dotenv
+import io
 
 # Setup logging
 logger = logging.getLogger(__name__)
@@ -20,10 +21,9 @@ load_dotenv()  # This loads variables from a .env file into environment variable
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-
-async def add_text_to_image(image_url, text):
+async def add_caption_to_image(image_url, caption):
     """
-    Downloads an image from URL and adds text below the image with black text and reduced margins
+    Adds caption to image
     
     Args:
         image_url: URL of the image to download
@@ -45,7 +45,7 @@ async def add_text_to_image(image_url, text):
     # Get original image dimensions
     original_width, original_height = original_image.size
 
-    text = text.upper()
+    caption = caption.upper()
     
     # Try to load a good font
     try:
@@ -72,7 +72,7 @@ async def add_text_to_image(image_url, text):
         # Fallback for older Pillow versions or errors
         pass
     
-    wrapped_text = textwrap.fill(text, width=chars_per_line)
+    wrapped_text = textwrap.fill(caption, width=chars_per_line)
     
     # Calculate text height
     try:
@@ -170,7 +170,7 @@ async def handle_error(error):
 
         try:
             # Add text to the image using Pillow
-            image_with_text = await add_text_to_image(image_url, text_response)
+            image_with_text = await add_caption_to_image(image_url, text_response)
         
             # Send the modified image as a file
             file = discord.File(fp=image_with_text, filename="meme.png")
@@ -202,52 +202,12 @@ async def handle_error(error):
         
         return embed
 
-async def generate_meme(meme_concept):
+async def generate_meme(image_description, caption):
         """
         Generate a meme based on recent chat history
         Returns image url without text and the text info separately
         """
         try:
-            # Parse the structured meme concept
-            image_description = ""
-            meme_text = ""
-            
-            # Log the raw concept for debugging
-            logger.info(f"Raw meme concept: {meme_concept}")
-            
-            # Handle Markdown formatting in the response
-            clean_concept = meme_concept.replace("**", "")
-            
-            for line in clean_concept.split('\n'):
-                # Use case-insensitive check and handle different variations
-                if "IMAGE DESCRIPTION:" in line.upper():
-                    image_description = line.replace("IMAGE DESCRIPTION:", "", 1).strip()
-                elif "CAPTION:" in line.upper():
-                    meme_text = line.replace("CAPTION:", "", 1).strip()
-                        
-            # Log the parsed components
-            logger.info(f"Image Description: {image_description}")
-            logger.info(f"Caption: {meme_text}")
-            
-            # Check if we have valid content
-            if not image_description:
-                logger.error("Failed to parse image description")
-                # Try a fallback approach - take everything between IMAGE DESCRIPTION and CAPTION
-                parts = clean_concept.upper().split("IMAGE DESCRIPTION:")
-                if len(parts) > 1:
-                    caption_parts = parts[1].split("CAPTION:")
-                    if len(caption_parts) > 1:
-                        image_description = caption_parts[0].strip()
-                        logger.info(f"Fallback Image Description: {image_description}")
-            
-            if not meme_text:
-                logger.error("Failed to parse caption")
-                # Try a fallback approach
-                parts = clean_concept.upper().split("CAPTION:")
-                if len(parts) > 1:
-                    meme_text = parts[1].strip()
-                    logger.info(f"Fallback Caption: {meme_text}")
-                        
             # Modified prompt for generating image WITHOUT text
             DALLE_PROMPT = f"""Create a meme image given this description: {image_description}
     
@@ -267,16 +227,15 @@ async def generate_meme(meme_concept):
         
             # Extract image URL and text from result
             image_url = image_response.data[0].url
-            meme_text = meme_text
             
             # Check if we got a valid image URL
             if not image_url:
-                logger.error(f"No image URL returned for meme concept: {meme_concept}")
+                logger.error(f"No image URL returned for meme")
                 return
             
             try:
                 # Add text to the image using Pillow
-                image_with_text = await add_text_to_image(image_url, meme_text)
+                image_with_text = await add_caption_to_image(image_url, caption)
                 
                 # Send the modified image as a file
                 file = discord.File(fp=image_with_text, filename="meme.png")
@@ -294,7 +253,7 @@ async def generate_meme(meme_concept):
                 embed.set_image(url=image_url)
                 
                 # Add the caption as a field since we couldn't overlay it
-                embed.add_field(name="Caption", value=meme_text, inline=False)
+                embed.add_field(name="Caption", value=caption, inline=False)
                 
                 return embed, None
             
