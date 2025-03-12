@@ -5,16 +5,6 @@ from typing import Dict, List, Optional
 import discord
 from datetime import datetime
 
-# Set up logging configuration
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(),
-        logging.FileHandler("meme_agent.log")
-    ]
-)
-
 from mistralai import Mistral
 from tools.generate import generate_meme
 from tools.search import search_meme
@@ -25,13 +15,20 @@ MISTRAL_MODEL = "mistral-large-latest"
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 
 SYSTEM_PROMPT = """
-In most cases, you should NOT call any tools and just be a PASSIVE OBSERVER. Only call a tool if a meme is explicitly requested or if ALL spontaneous meme criteria are met. If you decide no meme is needed, simply respond with 'NO_ACTION' and nothing else.
+You are a funny meme connoisseur agent. You are given a chat history: 
+
+## Chat History
+{chat_history_context}
+
+Your job is to decide whether it's appropriate to call a tool to generate or search for a meme based on the chat history.
+
+In most cases, you should NOT call any tools and just be a PASSIVE OBSERVER. Only call a tool if a meme is explicitly requested or if ALL spontaneous meme criteria are met. If you decide no meme is needed, simply respond with 'NO_ACTION' and DO NOT RUN ANY TOOLS.
 
 ## Core Behavior Rules
 
 1. **DEFAULT STATE: NO TOOL CALL**
    - Do NOT call tools unless EXPLICITLY requested by user or, in the very rare chance, decide to spontaneously generate a meme
-   - The vast majority of messages should just have NO tool call and return "NO_ACTION"
+   - The vast majority of messages should just have NO tool call and return "NO_ACTION". MAKE SURE NOT TO CALL ANY TOOLS IF YOU CHOOSE NO_ACTION
 
 2. **EXPLICIT REQUESTS ONLY**
    - ONLY generate memes when users EXPLICITLY ask for one
@@ -98,7 +95,7 @@ For the RARE cases where spontaneous generation might be appropriate, ALL these 
 
 1. **Obvious Meme Opportunity**: The conversation history contains a clear comedic setup that is BEGGING for a meme response (must be genuinely funny)
 2. **Conversation Enhancement**: A meme would genuinely add value rather than disrupt the flow
-3. **No Recent Memes**: There must NOT be any "SYSTEM: Generated Meme" entries in the recent chat history
+3. **No Recent Memes**: There must NOT be any "SYSTEM: Generated Meme" in the recent chat history
 4. **Natural Conversation Pause**: The conversation appears to have a natural break where a meme wouldn't interrupt ongoing dialogue
 5. **Highly Relatable Content**: The topic must be something universally relatable that would benefit from visual humor
 6. **No Sensitive Topics**: The conversation must not be about sensitive, personal, or serious issues where a meme would be inappropriate
@@ -110,10 +107,7 @@ Before responding with ANY meme, perform this final check:
 2. Is there a "SYSTEM: Generated Meme" entry in the recent chat history? If YES, do NOT spontaneously generate a meme.
 3. If considering spontaneous generation, have ALL SIX criteria been fully met? If ANY are not met, remain silent.
 
-IMPORTANT: In most cases, you should NOT call any tools. Only call a tool if a meme is explicitly requested or if ALL spontaneous meme criteria are met (which is extremely rare, <1% of messages). If you decide no meme is needed, simply respond with 'NO_ACTION' and nothing else.
-
-## Chat History
-{chat_history_context}
+IMPORTANT: In most cases, you should NOT call any tools. Only call a tool if a meme is explicitly requested or if ALL spontaneous meme criteria are met (which is extremely rare, <1% of messages). If you decide no meme is needed, simply respond with 'NO_ACTION' and DO NOT RUN ANY TOOLS!!
 """
 
 class MemeAgent:
@@ -203,6 +197,8 @@ class MemeAgent:
         try:
             # Format chat history for inclusion in system prompt
             chat_history_context = self.format_chat_history()
+
+            logger.info(f"Chat history: {chat_history_context}")
             
             # Apply chat history to system prompt
             system_prompt = SYSTEM_PROMPT.format(chat_history_context=chat_history_context)
@@ -234,25 +230,13 @@ class MemeAgent:
             if not model_response.tool_calls:
                 # Model chose not to use any tools - this is expected for most messages
                 logger.info("Model chose not to generate a meme")
-                # Check if the response is just 'NO_ACTION'
-                if model_response.content and model_response.content.strip() == "NO_ACTION":
-                    logger.info("Model returned NO_ACTION response")
-                    return
-                if model_response.content:
-                    logger.info(f"Model returned content: {model_response.content}")
                 return
             
             # If we get here, the model decided to use a tool
             tool_call = model_response.tool_calls[0]
             function_name = tool_call.function.name
             
-            # Parse the function parameters
-            try:
-                function_params = json.loads(tool_call.function.arguments)
-            except json.JSONDecodeError as e:
-                logger.error(f"Failed to parse function arguments: {e}")
-                await message.reply("Sorry, there was an error processing your meme request.")
-                return
+            function_params = json.loads(tool_call.function.arguments)
             
             # Log the tool selection
             logger.info(f"Tool selected: {function_name}")
@@ -271,6 +255,37 @@ class MemeAgent:
             try: 
                 logger.info(f"Executing {function_name} with provided parameters")
                 function_result = await self.tools_to_functions[function_name](**function_params)
+
+                if function_result is None:
+                    logger.info(f"No result from {function_name}")
+                    await message.reply("I couldn't find a relevant meme. Let me try to generate one for you instead!")
+                    messages.append(
+                        {
+                            "role": "user",
+                            "content": f"You couldn't find a relevant meme. Try to generate one for me instead using the generate_meme tool."
+                        },
+                    )
+                    logger.info(f"Sending request to Mistral API")
+                    tool_response = await self.client.chat.complete_async(
+                        model=MISTRAL_MODEL,
+                        messages=messages,
+                        tools=self.tools,
+                        tool_choice="auto",
+                    )
+                    
+                    # Check if tool_calls exists and is not empty
+                    if not tool_response or not tool_response.choices[0].message.tool_calls:
+                        logger.error("No tool calls in response")
+                        await message.reply("Sorry, I couldn't process that request. Please try again.")
+                        return
+
+                    tool_call = tool_response.choices[0].message.tool_calls[0]
+                    function_name = tool_call.function.name
+                    function_params = json.loads(tool_call.function.arguments)
+                    function_result = await self.tools_to_functions[function_name](**function_params)
+                    
+                    # Add a system message to chat history indicating a meme was generated
+                    self.add_system_message_to_history("Generated Meme")
                     
                 if isinstance(function_result, tuple):
                     embed, file = function_result
@@ -306,38 +321,7 @@ class MemeAgent:
                     messages=messages,
                 )
 
-                logger.info(new_response.choices[0].message.content)
-            
-                if function_result is None:
-                    logger.info(f"No result from {function_name}")
-                    await message.reply("I couldn't find a relevant meme. Let me try to generate one for you instead!")
-                    messages.append(
-                        {
-                            "role": "user",
-                            "content": f"You couldn't find a relevant meme. Try to generate one for me instead using the generate_meme tool."
-                        },
-                    )
-                    logger.info(f"Sending request to Mistral API")
-                    tool_response = await self.client.chat.complete_async(
-                        model=MISTRAL_MODEL,
-                        messages=messages,
-                        tools=self.tools,
-                        tool_choice="auto",
-                    )
-                    
-                    # Check if tool_calls exists and is not empty
-                    if not tool_response or not tool_response.choices[0].message.tool_calls:
-                        logger.error("No tool calls in response")
-                        await message.reply("Sorry, I couldn't process that request. Please try again.")
-                        return
-
-                    tool_call = tool_response.choices[0].message.tool_calls[0]
-                    function_name = tool_call.function.name
-                    function_params = json.loads(tool_call.function.arguments)
-                    function_result = await self.tools_to_functions[function_name](**function_params)
-                    
-                    # Add a system message to chat history indicating a meme was generated
-                    self.add_system_message_to_history("Generated Meme")
+                logger.info(f"New response: {new_response.choices[0].message.content}")
 
             except Exception as e:
                 logger.error(f"Error executing {function_name}: {e}", exc_info=True)
