@@ -6,6 +6,7 @@ import io
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
 import json
+import random
 
 from discord.ext import commands
 from discord.ui import Button, View
@@ -329,6 +330,9 @@ async def on_message(message: discord.Message):
             agent_mistral.add_score_to_user(message.author.name)
             logger.info(f"Added humor point to {message.author.name} for meme-worthy message")
             await generate_spontaneous_meme(message)
+
+            # Check for spontaneous judging
+            await judge_spontaneous(message)
     except Exception as e:
         logger.error(f"Error deciding spontaneous meme: {e}")
 
@@ -470,6 +474,57 @@ async def generate_meme(ctx, *, user_input=None):
             
         await processing_msg.edit(content=error_message)
         
+async def judge_spontaneous(message):
+    """
+    Randomly decide to judge a popular meme when someone comments about memes or humor
+    """
+    # Get chat history from agent
+    history = agent_mistral.chat_history
+    
+    if not history:
+        return
+    
+    # Only trigger this occasionally (10% chance when message mentions memes)
+    mentions_keywords = any(keyword in message.content.lower() for keyword in 
+                           ['meme', 'funny', 'humor', 'laugh', 'lol', 'lmao', 'rofl', 'hilarious'])
+    
+    if mentions_keywords and random.random() < 0.1:  # 10% chance to trigger
+        # Let's check if there are memes to judge
+        top_memes = meme_leaderboard.get_top_memes(5)
+        
+        if not top_memes:
+            return  # No memes to judge
+        
+        # Pick a random meme from the top 5
+        meme_to_judge = random.choice(top_memes)
+        
+        # Generate the judgment
+        judgment = await agent_mistral.judge_meme(meme_to_judge)
+        
+        # Create a link to the original message
+        meme_link = f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{meme_to_judge['message_id']}"
+        
+        # Create embed with judgment
+        embed = discord.Embed(
+            title="✨ Spontaneous Meme Review ✨",
+            description=f"I couldn't help but notice we're talking about memes. Let me give my opinion on one of our top memes:\n\n{judgment}",
+            color=discord.Color.purple()
+        )
+        
+        # Add the meme image
+        if meme_to_judge["embed_data"]["image_url"]:
+            embed.set_image(url=meme_to_judge["embed_data"]["image_url"])
+        
+        # Add meme info
+        embed.add_field(
+            name="Meme Info",
+            value=f"By: {meme_to_judge['author_name']}\nVotes: 👍 {meme_to_judge['upvotes']} | 👎 {meme_to_judge['downvotes']} | Net: {meme_to_judge['upvotes'] - meme_to_judge['downvotes']}\n[View Original]({meme_link})",
+            inline=False
+        )
+        
+        # Send the judgment
+        await message.channel.send(embed=embed)
+
 
 # Function for spontaneous meme generation (called from on_message)
 async def generate_spontaneous_meme(message):
@@ -519,7 +574,7 @@ async def generate_spontaneous_meme(message):
             embed.set_footer(text=f"Generated spontaneously based on your conversation")
             
             # Send the meme
-            meme_message = await ctx.send(file=file, embed=embed)
+            meme_message = await message.channel.send(file=file, embed=embed)
 
             # Extract the permanent CDN URL from the sent message's embed
             if meme_message.embeds and meme_message.embeds[0].image:
@@ -746,6 +801,81 @@ async def on_reaction_remove(reaction, user):
         return
     await meme_leaderboard.process_reaction(reaction, user, False)
 
+@bot.command(name="judge", help="Judge a meme from the leaderboard. Use !judge [rank] to judge a specific meme by rank.")
+async def judge_meme_cmd(ctx, rank=None):
+    """
+    Have the bot judge a meme from the leaderboard
+    
+    Args:
+        ctx: The Discord context
+        rank: Optional - specific rank on the leaderboard to judge
+    """
+    # Let the user know we're working on it
+    processing_msg = await ctx.send("Analyzing the meme with my sophisticated humor algorithms...")
+    
+    try:
+        # Get the top memes
+        top_memes = meme_leaderboard.get_top_memes(20)  # Get top 20 to have enough to choose from
+        
+        if not top_memes:
+            await processing_msg.edit(content="No memes found in the leaderboard to judge! Use `!generate` to create some memes first.")
+            return
+        
+        # Determine which meme to judge
+        target_rank = 0  # Default to the top meme
+        
+        if rank:
+            try:
+                target_rank = int(rank) - 1  # Convert to 0-indexed
+                if target_rank < 0 or target_rank >= len(top_memes):
+                    await processing_msg.edit(content=f"Invalid rank! Please specify a rank between 1 and {len(top_memes)}.")
+                    return
+            except ValueError:
+                await processing_msg.edit(content="Invalid rank! Please specify a number.")
+                return
+        
+        # Get the target meme
+        meme_to_judge = top_memes[target_rank]
+        
+        # Call the Mistral agent to judge the meme
+        judgment = await agent_mistral.judge_meme(meme_to_judge)
+        
+        # Create a human-readable rank
+        display_rank = target_rank + 1
+        rank_emoji = "🥇" if display_rank == 1 else "🥈" if display_rank == 2 else "🥉" if display_rank == 3 else f"{display_rank}."
+        
+        # Create a link to the original message
+        meme_link = f"https://discord.com/channels/{ctx.guild.id}/{ctx.channel.id}/{meme_to_judge['message_id']}"
+        
+        # Create embed with judgment
+        embed = discord.Embed(
+            title=f"{rank_emoji} Meme Judgment: Rank #{display_rank}",
+            description=judgment,
+            color=discord.Color.gold()
+        )
+        
+        # Add the meme image
+        if meme_to_judge["embed_data"]["image_url"]:
+            embed.set_image(url=meme_to_judge["embed_data"]["image_url"])
+        
+        # Add meme info
+        embed.add_field(
+            name="Meme Info",
+            value=f"By: {meme_to_judge['author_name']}\nVotes: 👍 {meme_to_judge['upvotes']} | 👎 {meme_to_judge['downvotes']} | Net: {meme_to_judge['upvotes'] - meme_to_judge['downvotes']}\n[View Original]({meme_link})",
+            inline=False
+        )
+        
+        embed.set_footer(text=f"Judgment requested by {ctx.author.display_name}")
+        
+        # Send the judgment
+        await ctx.send(embed=embed)
+        
+        # Delete the processing message
+        await processing_msg.delete()
+        
+    except Exception as e:
+        logger.error(f"Error judging meme: {e}")
+        await processing_msg.edit(content=f"Sorry, I encountered an error while judging the meme: {str(e)}")
 
 
 
