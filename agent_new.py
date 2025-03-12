@@ -3,8 +3,7 @@ import json
 import logging
 from typing import Dict, List, Optional
 import discord
-import random
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # Set up logging configuration
 logging.basicConfig(
@@ -26,134 +25,86 @@ MISTRAL_MODEL = "mistral-large-latest"
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 
 SYSTEM_PROMPT = """
-You are an intelligent meme assistant. First, look at the latest message and determine whether the user is EXPLICITLY requesting a meme.
+In most cases, you should NOT call any tools and just be a PASSIVE OBSERVER. Only call a tool if a meme is explicitly requested or if ALL spontaneous meme criteria are met (which is extremely rare, <2% of messages). If you decide no meme is needed, simply respond with 'NO_ACTION' and nothing else.
 
-## Tool Selection
+## Core Behavior Rules
 
-If they explicitly request a meme, determine which tool to use:
+1. **DEFAULT STATE: NO TOOL CALL**
+   - Do NOT call tools unless EXPLICITLY requested by user or, in the rare chance, decide to spontaneously generate a meme
+   - The vast majority of messages should just have NO tool call
+
+2. **EXPLICIT REQUESTS ONLY**
+   - ONLY generate memes when users EXPLICITLY ask for one using clear language
+   - Valid triggers: "make a meme", "generate a meme", "create a meme", "find a meme", "show me a meme", "give me a meme"
+   - If a request is ambiguous, DO NOT generate a meme
+
+3. **SPONTANEOUS MEMES: NEARLY NEVER**
+   - Spontaneous meme generation should be EXTREMELY RARE (less than 2% of messages)
+   - ALL criteria listed below must be met for spontaneous generation
+   - If ANY criterion is not met, do not make a tool call
+
+## Request Analysis and Tool Selection
+
+First, analyze ONLY THE LAST USER MESSAGE to determine if a meme is explicitly requested:
 
 ### Use `search_meme` when:
 - User is looking for a specific existing meme or meme format
 - Examples:
   - "Get the meme with multiple spidermen pointing at each other"
-  - "Send the capybara meme"
-  - "Give me the two buttons meme"
-  - "Find the 'distracted boyfriend' meme"
-  - "Show me the 'change my mind' meme format"
-  - "I need that meme where the dog is sitting in the burning house saying 'this is fine'"
-  - "Can I see the 'drake hotline bling' meme template?"
-  - "Get me the 'galaxy brain' meme"
-  - "Find that meme with Kermit drinking tea"
-  - "Show the 'woman yelling at cat' meme"
+  - "capybara meme"
+  - "Can you get me meme where drake is like huh"
+  - "Find a meme" (will require extracting topic from conversation history)
 
 ### Use `generate_meme` when:
 - User wants a custom or new meme
 - User asks to "create," "make," or "generate" a meme
-- Request includes specific elements to combine in a novel way
 - Examples:
-  - "Make a meme about my coding project failing"
-  - "Create a funny meme about AI"
-  - "Generate a meme about working from home"
-  - "Make a meme about debugging at 3am"
-  - "Create something about waiting for code to compile"
-  - "Generate a meme that captures how it feels when the boss asks for last-minute changes"
-  - "Make a funny meme about my plants dying despite my best efforts"
-  - "Create a meme about spending too much time on social media"
-  - "Generate something about pretending to work during video calls"
-  - "Make a meme about trying to explain tech to my parents"
+  - "Make a meme about Rainbow Road on Mario Kart being super hard"
+  - "Create a meme about me not wanting to do homework"
+  - "Generate a meme" (this requires extracting topic from conversation history)
 
-## Parameter Determination
-
-Once you've selected the tool, determine the parameters:
+## Parameter Extraction (ONLY AFTER determining a meme is appropriate)
 
 ### For search_meme:
-- Extract specific keywords from the request for the query parameter
-- If request is generic, review conversation history for relevant context
-- Focus on subject matter and emotional tone
-- Keep keywords concise and relevant
+- PRIMARY SOURCE: Extract specific keywords from the LAST USER MESSAGE if it contains topic details
+- SECONDARY SOURCE: If last message only contains a simple request ("show me a meme", "find a meme"), THEN examine the RECENT CONVERSATION HISTORY to determine the relevant topic
+- Focus on subject matter and visual elements mentioned
+- Remove unnecessary words like "find", "get", "show me"
 - Examples:
-  - "Find a meme about cats knocking things off tables" → query: "cats knocking things off tables"
-  - "Show me a programming meme" → query: "programming"
-  - After discussion about job interviews: "Show me a relevant meme" → query: "job interview"
-  - After talking about Monday mornings: "I need a meme for this" → query: "Monday morning tired"
-  - "Get me a meme about waiting" → query: "waiting impatient"
+  - Direct request: "Can you find me that meme with the guy blinking in disbelief?" → query: "blinking guy disbelief"
+  - Context-based: After discussion about job interviews, user says "Show me a meme" → query: "job interview stress" (extracted from conversation)
+  - Direct request: "I need that distracted boyfriend meme" → query: "distracted boyfriend"
+  - Context-based: After talking about gaming, user says "Find a relevant meme" → query: "video game frustration" (extracted from conversation)
 
 ### For generate_meme:
-- Create image description and caption based on request or conversation context
-- For specific requests, use the explicit topics mentioned
-- For generic requests, review conversation history to determine relevant themes
-- Keep captions brief, avoid contractions, and ensure they read naturally
+- PRIMARY SOURCE: Extract topic and details from the LAST USER MESSAGE if it contains specific topic
+- SECONDARY SOURCE: If last message only contains a simple request ("make a meme", "generate a meme"), THEN examine the RECENT CONVERSATION HISTORY to determine the most relevant topic
+- Be specific about the image description and caption
 - Examples:
-  - "Make a meme about slipping on bananas" →
-    - image: "person confidently walking then dramatically slipping on banana peel"
-    - caption: "ME EXPLAINING MY FIVE YEAR PLAN / THE UNIVERSE"
-  - After discussing debugging: "Make a funny meme" →
-    - image: "person staring intensely at computer screen with messy hair and empty coffee cups"
-    - caption: "WHEN THE BUG DISAPPEARS AFTER YOU REMOVE THE CODE THAT FIXES IT"
-  - "Create a meme about my fitness journey" →
-    - image: "person excitedly buying gym equipment then using it as clothes hanger"
-    - caption: "DAY 1 OF FITNESS JOURNEY / DAY 2 OF FITNESS JOURNEY"
+  - Direct request: "Make a meme about debugging at 3am" →
+    - image: "programmer with bloodshot eyes staring at computer screen surrounded by empty coffee cups in dark room"
+    - caption: "ME AT 3AM WHEN THE BUG I'VE BEEN CHASING FOR 5 HOURS WAS A TYPO"
+  - Context-based: After discussing plant care problems, user says "Generate a meme" →
+    - image: "person lovingly watering plant while plant dramatically wilts"
+    - caption: "MY PLANTS RECEIVING THE PERFECT AMOUNT OF WATER AND SUNLIGHT / MY PLANTS CHOOSING DEATH ANYWAY"
 
-## EXTREMELY LIMITED Spontaneous Meme Generation
+## Spontaneous Meme Criteria (ALL MUST BE MET TO TRIGGER A TOOL CALL)
 
-**IMPORTANT: DEFAULT TO NOT GENERATING A MEME UNLESS EXPLICITLY REQUESTED!**
+For the RARE cases where spontaneous generation might be appropriate, ALL these criteria must be met:
 
-If the user is NOT explicitly requesting a meme, spontaneous meme generation should be EXTREMELY RARE. The vast majority of messages should NOT trigger meme generation. When in doubt, DO NOT generate a meme.
+1. **Obvious Meme Opportunity**: The conversation history contains a clear comedic setup that is BEGGING for a meme response
+2. **Conversation Enhancement**: A meme would genuinely add value rather than disrupt the flow. For example, if a user is clearly awaiting a response from a different user, DO NOT generate a meme.
 
-Consider these strict criteria - ALL must be met before generating a spontaneous meme:
-1. Is there an obvious joke or reference that is practically begging to be made into a meme?
-2. Is the conversation clearly casual and light-hearted?
-3. Has sufficient context been established so that a meme would make perfect sense?
-4. Would a meme genuinely enhance the conversation rather than interrupt it?
-5. Has it been a significant time since any meme was shared in the conversation?
 
-For spontaneous memes, always use generate_meme and base parameters on recent conversation context.
+## FINAL VERIFICATION CHECK
 
-Examples of the RARE appropriate opportunities for spontaneous memes:
-- User: "I just spent 3 hours debugging only to find I had a typo in a variable name"
-- User: "My cat knocked my coffee onto my keyboard right before my important presentation"
-- User: "The client loved my presentation but then asked for completely different features"
+Before responding with ANY meme, perform this final check:
+1. Is the user EXPLICITLY asking for a meme using clear language in the LAST MESSAGE? If NO, most likely remain silent.
+2. If considering spontaneous generation, have ALL FOUR criteria been fully met when analyzing BOTH the LAST MESSAGE and CONVERSATION HISTORY? If ANY are not met, remain silent.
 
-Examples of common inappropriate times for spontaneous memes (DO NOT generate memes for these):
-- User: "Can you help me understand this error message?"
-- User: "I'm trying to solve this complex problem with my database"
-- User: "Could you explain how this algorithm works?"
-- User: "What do you think about this approach?"
-- User: "I'm not sure what's causing this issue"
-- User: "How would you implement this feature?"
+IMPORTANT: In most cases, you should NOT call any tools. Only call a tool if a meme is explicitly requested or if ALL spontaneous meme criteria are met (which is extremely rare, <2% of messages). If you decide no meme is needed, simply respond with 'NO_ACTION' and nothing else.
 
-## Chat History
-
-The chat history is provided below between triple backticks.
-
-```
 {chat_history_context}
-```
-
-Carefully analyze the chat history when deciding whether to generate a meme. In most cases, the correct decision will be to NOT generate a meme unless explicitly requested.
-
-## Humor Style Guidelines
-
-When a meme is appropriate (either requested or in the extremely rare case of spontaneous generation), create absurdist Gen Z memes with these characteristics:
-- Deadpan delivery of bizarre statements
-- Surreal juxtapositions that make no logical sense yet feel right
-- Anti-humor where the punchline deliberately disappoints or confuses
-- Captions that start normal but end with unrelated conclusions
-- Random elements that have nothing to do with the setup
-- Abrupt emotional tone shifts mid-caption
-- Existential crises in mundane situations
-- Made-up words that sound like they could be real (like "conpentpine")
-- Self-referential humor about meme culture itself
-
-## FINAL REMINDER
-
-**YOU SHOULD ONLY GENERATE MEMES WHEN APPROPRIATE, WHICH SHOULD BE RARE!**
-
-DO NOT disrupt the flow of conversation among the users in the channel. You should be a passive observer of the chat in most cases, only responding when:
-1. A user explicitly requests a meme
-2. A truly exceptional opportunity for a spontaneous meme arises (which should be extremely rare)
-
-When in doubt, do not generate a meme.
 """
 
 class MemeAgent:
@@ -229,127 +180,149 @@ class MemeAgent:
         return formatted_history
     
     async def run(self, message: discord.Message):
-        # Add the current message to chat history
-        self.add_to_chat_history(message)
-        
-        # Format chat history for inclusion in system prompt
-        chat_history_context = self.format_chat_history()
-        
-        # Apply chat history to system prompt
-        system_prompt = SYSTEM_PROMPT.format(chat_history_context=chat_history_context)
-        
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {
-                "role": "user",
-                "content": f"This is the latest message from user {message.author}: {message.content}\nDecide what to do according to tools available to you. You should only take actions and use the tools if appropriate. Most of the time, you are a passive observer of the chat. After deciding what to do, concisely explain your decision and thought process on why you decided to act, and why you chose the tool you did."
-            },
-        ]
-
+        """Process a Discord message and potentially generate a meme response"""
         try:
-            logger.info(f"Processing message from {message.author.name}: '{message.content}'")
-            logger.info(f"Using chat history context with {len(self.chat_history)} messages")
+            # Add the current message to chat history
+            self.add_to_chat_history(message)
             
-            # Send request to Mistral API
-            logger.info(f"Sending request to Mistral API")
-            tool_response = await self.client.chat.complete_async(
+            # Format chat history for inclusion in system prompt
+            chat_history_context = self.format_chat_history()
+            
+            # Apply chat history to system prompt
+            system_prompt = SYSTEM_PROMPT.format(chat_history_context=chat_history_context)
+            
+            # Prepare messages for LLM
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {
+                    "role": "user",
+                    "content": f"This is the latest message from user {message.author}: {message.content}\n\nYour default behavior is to not call any tools. Only use a tool if the message explicitly requests a meme or if all spontaneous meme criteria are fully met (which should be extremely rare). After deciding what to do, concisely explain your decision and thought process on why you decided to act, and why you chose the tool you did."
+                },
+            ]
+
+            # Log request information
+            logger.info(f"Processing message from {message.author.name}: '{message.content}'")
+            
+            # Request to Mistral
+            response = await self.client.chat.complete_async(
                 model=MISTRAL_MODEL,
                 messages=messages,
                 tools=self.tools,
-                tool_choice="any",
+                tool_choice="auto",  
             )
             
-            # Check if tool_calls exists and is not empty
-            if not tool_response.choices[0].message.tool_calls:
-                logger.error("No tool calls in response")
-                await message.reply("Sorry, I couldn't process that request. Please try again.")
-                return
-
-            tool_call = tool_response.choices[0].message.tool_calls[0]
-            function_name = tool_call.function.name
-            function_params = json.loads(tool_call.function.arguments)
+            # Get the model's response
+            model_response = response.choices[0].message
             
-            # Log the selected tool and parameters
+            # Check if the model chose to use a tool
+            if not model_response.tool_calls:
+                # Model chose not to use any tools - this is expected for most messages
+                logger.info("Model chose not to generate a meme")
+                # Check if the response is just 'NO_ACTION'
+                if model_response.content and model_response.content.strip() == "NO_ACTION":
+                    logger.info("Model returned NO_ACTION response")
+                    return
+                if model_response.content:
+                    logger.info(f"Model returned content: {model_response.content}")
+                return
+            
+            # If we get here, the model decided to use a tool
+            tool_call = model_response.tool_calls[0]
+            function_name = tool_call.function.name
+            
+            # Parse the function parameters
+            try:
+                function_params = json.loads(tool_call.function.arguments)
+            except json.JSONDecodeError as e:
+                logger.error(f"Failed to parse function arguments: {e}")
+                await message.reply("Sorry, there was an error processing your meme request.")
+                return
+            
+            # Log the tool selection
             logger.info(f"Tool selected: {function_name}")
             logger.info(f"Tool parameters: {json.dumps(function_params, indent=2)}")
             
+            # Validate the function name
             if function_name not in self.tools_to_functions:
                 logger.error(f"Unknown function: {function_name}")
                 await message.reply(f"Sorry, I don't know how to {function_name}. Please try again.")
                 return
             
-            # Send loading message based on function name
+            # Send a loading message
             loading_text = "Searching for a meme..." if function_name == "search_meme" else "Generating a meme..."
             loading_message = await message.reply(loading_text)
             
-            logger.info(f"Executing {function_name} with provided parameters")
-            function_result = await self.tools_to_functions[function_name](**function_params)
-
-            if function_result is None:
-                logger.info(f"No result from {function_name}")
-                await message.reply("I couldn't find a relevant meme. Let me try to generate one for you instead!")
+            try: 
+                logger.info(f"Executing {function_name} with provided parameters")
+                function_result = await self.tools_to_functions[function_name](**function_params)
+                    
+                if isinstance(function_result, tuple):
+                    embed, file = function_result
+                    logger.info(f"Sending response with file and embed to {message.author.name}")
+                    await loading_message.delete()  # Delete the loading message
+                    await message.reply(file=file, embed=embed)
+                else:
+                    logger.info(f"Sending embed response to {message.author.name}")
+                    await loading_message.delete()  # Delete the loading message
+                    await message.reply(embed=function_result)
+                
+                logger.info(f"Successfully processed request from {message.author.name}")
+                
+                messages.append(response.choices[0].message)
                 messages.append(
                     {
-                        "role": "user",
-                        "content": f"You couldn't find a relevant meme. Try to generate one for me instead using the generate_meme tool."
-                    },
+                        "role": "tool",
+                        "name": function_name,
+                        "content": "Successfully processed request from user",
+                        "tool_call_id": tool_call.id,
+                    }
                 )
-                logger.info(f"Sending request to Mistral API")
-                tool_response = await self.client.chat.complete_async(
+
+                # Run the model again with the tool call and its result.
+                new_response = await self.client.chat.complete_async(
                     model=MISTRAL_MODEL,
                     messages=messages,
-                    tools=self.tools,
-                    tool_choice="any",
                 )
-                
-                # Check if tool_calls exists and is not empty
-                if not tool_response.choices[0].message.tool_calls:
-                    logger.error("No tool calls in response")
-                    await message.reply("Sorry, I couldn't process that request. Please try again.")
-                    return
 
-                tool_call = tool_response.choices[0].message.tool_calls[0]
-                function_name = tool_call.function.name
-                function_params = json.loads(tool_call.function.arguments)
-                function_result = await self.tools_to_functions[function_name](**function_params)
-                
-            if isinstance(function_result, tuple):
-                embed, file = function_result
-                logger.info(f"Sending response with file and embed to {message.author.name}")
-                await loading_message.delete()  # Delete the loading message
-                await message.reply(file=file, embed=embed)
-            else:
-                logger.info(f"Sending embed response to {message.author.name}")
-                await loading_message.delete()  # Delete the loading message
-                await message.reply(embed=function_result)
+                logger.info(new_response.choices[0].message.content)
             
-            logger.info(f"Successfully processed request from {message.author.name}")
+                if function_result is None:
+                    logger.info(f"No result from {function_name}")
+                    await message.reply("I couldn't find a relevant meme. Let me try to generate one for you instead!")
+                    messages.append(
+                        {
+                            "role": "user",
+                            "content": f"You couldn't find a relevant meme. Try to generate one for me instead using the generate_meme tool."
+                        },
+                    )
+                    logger.info(f"Sending request to Mistral API")
+                    tool_response = await self.client.chat.complete_async(
+                        model=MISTRAL_MODEL,
+                        messages=messages,
+                        tools=self.tools,
+                        tool_choice="auto",
+                    )
+                    
+                    # Check if tool_calls exists and is not empty
+                    if not tool_response or tool_response.choices[0].message.tool_calls:
+                        logger.error("No tool calls in response")
+                        await message.reply("Sorry, I couldn't process that request. Please try again.")
+                        return
 
-            messages.append(tool_response.choices[0].message)
+                    tool_call = tool_response.choices[0].message.tool_calls[0]
+                    function_name = tool_call.function.name
+                    function_params = json.loads(tool_call.function.arguments)
+                    function_result = await self.tools_to_functions[function_name](**function_params)
 
-            messages.append(
-                {
-                    "role": "tool",
-                    "name": function_name,
-                    "content": "Successfully processed request from user",
-                    "tool_call_id": tool_call.id,
-                }
-            )
-
-            # Run the model again with the tool call and its result.
-            response = await self.client.chat.complete_async(
-                model=MISTRAL_MODEL,
-                messages=messages,
-            )
-
-            logger.info(response.choices[0].message.content)
+            except Exception as e:
+                logger.error(f"Error executing {function_name}: {e}", exc_info=True)
+                # Try to delete loading message if it exists
+                try:
+                    await loading_message.delete()
+                except Exception:
+                    pass
+                await message.reply(f"Sorry, I couldn't process your meme request: {str(e)}")
                 
         except Exception as e:
             logger.error(f"Error in MemeAgent.run: {e}", exc_info=True)
-            # If there was a loading message try to delete it
-            try:
-                if 'loading_message' in locals():
-                    await loading_message.delete()
-            except:
-                pass
             await message.reply(f"Sorry, something went wrong: {str(e)}")
