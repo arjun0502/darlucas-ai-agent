@@ -19,7 +19,7 @@ logging.basicConfig(
 from mistralai import Mistral
 from tools.generate import generate_meme
 from tools.search import search_meme
-from tools.leaderboard import leaderboard, generate_leaderboard_embed, process_command
+from tools.leaderboard import leaderboard, generate_paginated_leaderboard, process_command
 
 logger = logging.getLogger("discord")
 
@@ -233,7 +233,16 @@ class MemeAgent:
     async def show_leaderboard(self, command: str):
         """Show the leaderboard or user stats"""
         if command == "leaderboard":
-            embed = await generate_leaderboard_embed()
+            # For the agent, we only return the embed part without pagination
+            # Since pagination requires interaction with the bot instance
+            embed, _ = await generate_paginated_leaderboard()
+            
+            # Add a note to use the command directly
+            embed.add_field(
+                name="Note",
+                value="For the full interactive leaderboard experience, use the !leaderboard command directly.",
+                inline=False
+            )
             return embed
         elif command == "mystats":
             # This will be handled in the main function with the user ID available
