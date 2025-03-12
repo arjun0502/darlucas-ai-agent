@@ -237,8 +237,8 @@ async def generate_meme(ctx, *, user_input=None):
             # Send the modified image as a file
             file = discord.File(fp=image_with_text, filename="meme.png")
             
-            # Create an embed with the attached file
-            embed = discord.Embed(title="Generated Meme", color=discord.Color.blue())
+            # Create an embed with the attached file - REMOVED TITLE
+            embed = discord.Embed(color=discord.Color.blue())
             embed.set_image(url="attachment://meme.png")
             
             # Add info about whether this was from user input or chat history
@@ -254,7 +254,7 @@ async def generate_meme(ctx, *, user_input=None):
             logger.error(f"Error adding text to image: {e}")
             
             # Fallback to sending the image without text overlay
-            embed = discord.Embed(title="Generated Meme", color=discord.Color.blue())
+            embed = discord.Embed(color=discord.Color.blue())
             embed.set_image(url=image_url)
             
             if user_input:
@@ -323,8 +323,8 @@ async def generate_spontaneous_meme(message):
             # Send the modified image as a file
             file = discord.File(fp=image_with_text, filename="meme.png")
             
-            # Create an embed with the attached file
-            embed = discord.Embed(title="Spontaneous Meme", color=discord.Color.green())
+            # Create an embed with the attached file - REMOVED TITLE
+            embed = discord.Embed(color=discord.Color.green())
             embed.set_image(url="attachment://meme.png")
             embed.set_footer(text=f"Generated spontaneously based on your conversation")
             
@@ -335,7 +335,7 @@ async def generate_spontaneous_meme(message):
             logger.error(f"Error adding text to image: {e}")
             
             # Fallback to sending the image without text overlay
-            embed = discord.Embed(title="Spontaneous Meme", color=discord.Color.green())
+            embed = discord.Embed(color=discord.Color.green())
             embed.set_image(url=image_url)
             embed.set_footer(text=f"Generated spontaneously based on your conversation")
             
@@ -369,8 +369,8 @@ async def react_to_message(ctx, *args):
     try:
         reaction = await agent_mistral.react_to_latest(sentiment)
         
-        # Display the reaction
-        embed = discord.Embed(title="Reaction to Latest Message", color=discord.Color.green())
+        # Display the reaction - REMOVED TITLE
+        embed = discord.Embed(color=discord.Color.green())
         embed.description = reaction
         embed.set_footer(text=f"Requested by {ctx.author.display_name}")
         
@@ -423,35 +423,15 @@ async def search_meme(ctx, *, query=None):
             
         # Get the single meme from the result
         meme = result["meme"]
-        available_count = result["available"]
         
-        # Get the description (or use a default if not available)
-        description = meme.get("description", "No description available")
-        
-        # Create an embed to display the meme
+        # Create an embed to display the meme - SIMPLIFIED VERSION
         embed = discord.Embed(
             title=f"Found Meme for '{query}'", 
-            description=f"**{description}**", 
             color=discord.Color.purple()
         )
         
         # Add the meme as the main image
         embed.set_image(url=meme["url"])
-        
-        # Add additional meme details if available
-        if meme.get("width") and meme.get("height"):
-            embed.add_field(
-                name="Dimensions", 
-                value=f"{meme['width']}×{meme['height']}", 
-                inline=True
-            )
-        
-        if meme.get("type"):
-            embed.add_field(
-                name="Type", 
-                value=meme["type"].replace("image/", ""), 
-                inline=True
-            )
         
         embed.set_footer(text=f"Requested by {ctx.author.display_name}")
         

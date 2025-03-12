@@ -1705,3 +1705,389 @@ CAPTION: Cats in space. Because who needs a can of tuna when you can have a whol
     
     I NEED a simple, clean image with NO TEX...
 2025-03-08 11:34:59,017 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 23:22:03,693 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 23:22:04,746 - discord.client - INFO - logging in using static token
+2025-03-11 23:22:05,963 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 89397661989a44113b678fb9706016bc).
+2025-03-11 23:22:08,015 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-11 23:22:10,160 - discord_bot - INFO - Added message from danguo to history: yo
+2025-03-11 23:22:11,692 - discord_bot - INFO - Added message from danguo to history: haha
+2025-03-11 23:22:12,040 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:12,046 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:12,966 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:12,973 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:13,027 - discord_bot - INFO - Added message from danguo to history: wjdqwa
+2025-03-11 23:22:13,346 - discord_bot - INFO - Added message from danguo to history: da
+2025-03-11 23:22:13,679 - discord_bot - INFO - Added message from danguo to history: wsdf
+2025-03-11 23:22:13,955 - discord_bot - INFO - Added message from danguo to history: as
+2025-03-11 23:22:13,972 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:13,975 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:13,976 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:14,088 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:14,092 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:14,170 - discord_bot - INFO - Added message from danguo to history: fa
+2025-03-11 23:22:14,469 - discord_bot - INFO - Added message from danguo to history: sfd
+2025-03-11 23:22:14,509 - discord_bot - INFO - Added message from arjunj4528 to history: aokdjf;lkadsfja;
+2025-03-11 23:22:14,561 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:14,562 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:14,562 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:14,674 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:14,675 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:14,676 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:14,762 - discord_bot - INFO - Added message from danguo to history: a
+2025-03-11 23:22:14,812 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:14,815 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:15,276 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:15,278 - discord_bot - INFO - Added message from danguo to history: f
+2025-03-11 23:22:15,293 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:15,309 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:15,311 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:15,311 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:15,582 - discord_bot - INFO - Added message from danguo to history: aef
+2025-03-11 23:22:15,696 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:15,704 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:16,063 - discord_bot - INFO - Added message from danguo to history: awa
+2025-03-11 23:22:16,303 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:16,331 - discord_bot - INFO - Added message from danguo to history: rd
+2025-03-11 23:22:16,350 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:16,674 - discord_bot - INFO - Added message from danguo to history: aef
+2025-03-11 23:22:16,687 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:16,691 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:16,796 - discord_bot - INFO - Added message from danguo to history: awrsf
+2025-03-11 23:22:17,218 - discord_bot - INFO - Added message from danguo to history: as
+2025-03-11 23:22:17,235 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:17,239 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:17,476 - discord_bot - INFO - Added message from danguo to history: d
+2025-03-11 23:22:17,806 - discord_bot - INFO - Added message from danguo to history: ads
+2025-03-11 23:22:18,005 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:18,009 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:18,013 - discord_bot - INFO - Added message from danguo to history: awf
+2025-03-11 23:22:18,244 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:18,248 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:18,249 - discord_bot - INFO - Added message from arjunj4528 to history: alkdsfjlkjl
+2025-03-11 23:22:18,303 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:18,307 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:18,381 - discord_bot - INFO - Added message from danguo to history: q
+2025-03-11 23:22:18,480 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:18,481 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:18,482 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:18,490 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:18,498 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:18,671 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:18,675 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:18,676 - discord_bot - INFO - Added message from danguo to history: wfasa
+2025-03-11 23:22:18,859 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:18,862 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:18,869 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:18,870 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:18,871 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:19,474 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:19,478 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:19,571 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:19,575 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:20,294 - discord_bot - INFO - Added message from danguo to history: qw
+2025-03-11 23:22:20,603 - discord_bot - INFO - Added message from danguo to history: f
+2025-03-11 23:22:20,804 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:20,805 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:20,805 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:21,228 - discord_bot - INFO - Added message from danguo to history: afs
+2025-03-11 23:22:21,333 - discord_bot - INFO - Added message from danguo to history: a
+2025-03-11 23:22:21,544 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:21,545 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:21,546 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:21,547 - discord_bot - INFO - Added message from danguo to history: sf
+2025-03-11 23:22:21,741 - discord_bot - INFO - Added message from danguo to history: a
+2025-03-11 23:22:21,813 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:21,814 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:21,815 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:21,951 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:21,956 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:21,960 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:21,961 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:21,962 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:21,994 - discord_bot - INFO - Added message from danguo to history: sf
+2025-03-11 23:22:22,459 - discord_bot - INFO - Added message from danguo to history: as
+asf
+2025-03-11 23:22:22,473 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:22,477 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:22,702 - discord_bot - INFO - Added message from danguo to history: a
+2025-03-11 23:22:22,853 - discord_bot - INFO - Added message from arjunj4528 to history: kljalkjdflj
+2025-03-11 23:22:23,040 - discord_bot - INFO - Added message from danguo to history: sf
+2025-03-11 23:22:23,193 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:23,194 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:23,195 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:23,296 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:23,298 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:23,300 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:23,306 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:23,315 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:23,368 - discord_bot - INFO - Added message from danguo to history: asf
+2025-03-11 23:22:23,674 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:23,676 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:23,677 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:23,679 - discord_bot - INFO - Added message from danguo to history: asf
+2025-03-11 23:22:23,793 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:23,796 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:23,885 - discord_bot - INFO - Added message from arjunj4528 to history: adsfjlaksdjfl
+2025-03-11 23:22:23,943 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:23,944 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:23,945 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:23,966 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:23,970 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:24,075 - discord_bot - INFO - Added message from danguo to history: a
+2025-03-11 23:22:24,273 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:24,276 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:24,277 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:24,363 - discord_bot - INFO - Added message from danguo to history: sf
+2025-03-11 23:22:24,579 - discord_bot - INFO - Added message from danguo to history: a
+2025-03-11 23:22:24,709 - discord_bot - INFO - Added message from arjunj4528 to history: aldskfjlakdsjf
+2025-03-11 23:22:24,882 - discord_bot - INFO - Added message from danguo to history: sfd
+2025-03-11 23:22:24,905 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:24,906 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:24,906 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:24,933 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:24,937 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:25,084 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:22:25,085 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:25,086 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:22:25,618 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:25,623 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:25,926 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:25,929 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:26,368 - discord_bot - INFO - Added message from danguo to history: asf
+2025-03-11 23:22:27,667 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:27,674 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:29,418 - discord_bot - INFO - Added message from danguo to history: what is this
+2025-03-11 23:22:30,434 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:30,447 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:31,659 - discord_bot - INFO - Added message from danguo to history: hahaha
+2025-03-11 23:22:33,196 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:33,201 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:37,621 - discord_bot - INFO - Added message from danguo to history: arjun youre hilarious
+2025-03-11 23:22:38,827 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:38,831 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:41,796 - discord_bot - INFO - Added message from arjunj4528 to history: dude I'm like the funniest
+2025-03-11 23:22:42,939 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:42,947 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:45,482 - discord_bot - INFO - Added message from danguo to history: deez nuts hahah
+2025-03-11 23:22:47,326 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:47,332 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:22:48,965 - discord_bot - INFO - Added message from arjunj4528 to history: me > dave chappelle
+2025-03-11 23:22:50,661 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:50,666 - discord_bot - INFO - Spontaneous meme decision: True, reason: Decided to generate a meme for this conversation.
+2025-03-11 23:22:50,668 - agent_mistral - INFO - Added 1 point(s) to arjunj4528. New score: 1
+2025-03-11 23:22:50,669 - discord_bot - INFO - Added humor point to arjunj4528 for meme-worthy message
+2025-03-11 23:22:51,021 - agent_mistral - INFO - Generating meme concept from history: danguo: hahaha
+danguo: arjun youre hilarious
+arjunj4528: dude I'm like the funniest
+danguo: deez nuts hahah
+arjunj4528: me > dave chappelle...
+2025-03-11 23:22:56,339 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:22:56,346 - agent_mistral - INFO - Generated meme concept: IMAGE DESCRIPTION: A crowded comedy club. Dave Chappelle is on stage, struggling to perform while Arjun is in the audience, laughing hysterically at his own jokes, with "DEEZ NUTS" written on his t-shirt.
+
+CAPTION: When you are the only comedian in your laughs.
+2025-03-11 23:22:56,348 - agent_openai - INFO - Raw meme concept: IMAGE DESCRIPTION: A crowded comedy club. Dave Chappelle is on stage, struggling to perform while Arjun is in the audience, laughing hysterically at his own jokes, with "DEEZ NUTS" written on his t-shirt.
+
+CAPTION: When you are the only comedian in your laughs.
+2025-03-11 23:22:56,348 - agent_openai - INFO - Image Description: A crowded comedy club. Dave Chappelle is on stage, struggling to perform while Arjun is in the audience, laughing hysterically at his own jokes, with "DEEZ NUTS" written on his t-shirt.
+2025-03-11 23:22:56,349 - agent_openai - INFO - Caption: When you are the only comedian in your laughs.
+2025-03-11 23:22:56,349 - agent_openai - INFO - DALL-E Prompt: Create a meme image given this description: A crowded comedy club. Dave Chappelle is on stage, struggling to perform while Arjun is in the audience, laughing hysterically at his own jokes, with "DEEZ ...
+2025-03-11 23:23:06,684 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 23:23:59,519 - discord_bot - INFO - Added message from arjunj4528 to history: bruh mario kart is hard
+2025-03-11 23:24:00,934 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:24:00,942 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:24:06,962 - discord_bot - INFO - Added message from arjunj4528 to history: search for a meme about chicken
+2025-03-11 23:24:08,017 - discord_bot - INFO - Added message from lucadollar to history: banana split like my pants fr fr
+2025-03-11 23:24:08,331 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:24:08,332 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:24:08,333 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:24:08,840 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:24:08,845 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:24:16,527 - discord_bot - INFO - Added message from danguo to history: lucas is obsessed with banana pants
+2025-03-11 23:24:17,337 - discord_bot - INFO - Added message from danguo to history: ahahhaha
+2025-03-11 23:24:17,645 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:24:17,647 - agent_mistral - ERROR - Error in decide_spontaneous_meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:24:17,648 - discord_bot - INFO - Spontaneous meme decision: False, reason: Error deciding whether to generate meme: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:24:17,955 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:24:17,960 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:24:21,025 - agent_mistral - INFO - Searching for memes with query: meme about banana pants
+2025-03-11 23:24:21,027 - agent_mistral - INFO - Checking if query is appropriate: ['meme', 'about', 'banana', 'pants']
+2025-03-11 23:24:21,360 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:24:21,446 - discord_bot - INFO - Added message from danguo to history: jqwdwaflkwesfoiqad
+2025-03-11 23:24:21,740 - discord_bot - INFO - Added message from danguo to history: qward
+2025-03-11 23:24:22,971 - agent_mistral - INFO - Humor API response: {'memes': [], 'available': 0}
+2025-03-11 23:24:23,349 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:24:23,355 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:24:24,336 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:24:24,342 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:24:32,928 - agent_mistral - INFO - Searching for memes with query: drake
+2025-03-11 23:24:32,929 - agent_mistral - INFO - Checking if query is appropriate: ['drake']
+2025-03-11 23:24:33,619 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:24:34,774 - agent_mistral - INFO - Humor API response: {'memes': [{'id': 1781334, 'description': 'Drake last night', 'url': 'https://i.redd.it/k4pyfnmpaxge1.jpeg', 'type': 'image/jpeg', 'width': 601, 'height': 500, 'ratio': 1.202}, {'id': 1803884, 'description': 'Drake watching Kendrick Lamar’s Half Time Show', 'url': 'https://i.redd.it/erzibnn1w7ie1.jpeg', 'type': 'image/jpeg', 'width': 1200, 'height': 800, 'ratio': 1.5}, {'id': 1804142, 'description': 'Drake the type of fella...', 'url': 'https://i.redd.it/ythkjfpwu9ie1.jpeg', 'type': 'image/jpeg', 'width': 1179, 'height': 1343, 'ratio': 0.877885331347729}, {'id': 1804178, 'description': 'The Kansas Chiefs and Drake getting massacred on national television simultaneously.', 'url': 'https://i.redd.it/ku4p8wffh8ie1.jpeg', 'type': 'image/jpeg', 'width': 1200, 'height': 1500, 'ratio': 0.8}, {'id': 1804204, 'description': 'Hey Drake!', 'url': 'https://i.redd.it/canhfudz88ie1.jpeg', 'type': 'image/jpeg', 'width': 1080, 'height': 1080, 'ratio': 1.0}, {'id': 1804212, 'description': 'Behold the "Hey Drake" meme template', 'url': 'https://i.redd.it/0665vlz458ie1.jpeg', 'type': 'image/jpeg', 'width': 536, 'height': 500, 'ratio': 1.072}, {'id': 1804224, 'description': 'Someone needs to check on Drake', 'url': 'https://i.redd.it/wnfapooh28ie1.png', 'type': 'image/png', 'width': 1080, 'height': 1080, 'ratio': 1.0}, {'id': 1804240, 'description': 'Poor Drake', 'url': 'https://i.redd.it/8nal28tlv7ie1.jpeg', 'type': 'image/jpeg', 'width': 1200, 'height': 1282, 'ratio': 0.9360374414976599}, {'id': 1806352, 'description': '“Say drake”? (context in comments)', 'url': 'https://i.redd.it/itocbkactcie1.jpeg', 'type': 'image/jpeg', 'width': 1290, 'height': 1363, 'ratio': 0.946441672780631}, {'id': 1824698, 'description': 'Drake stood no chance against these two ?', 'url': 'https://i.redd.it/zq4yup02keje1.jpeg', 'type': 'image/jpeg', 'width': 1290, 'height': 1203, 'ratio': 1.0723192019950125}], 'available': 43}
+2025-03-11 23:24:37,629 - agent_mistral - INFO - Searching for memes with query: spiderman pointing
+2025-03-11 23:24:37,630 - agent_mistral - INFO - Checking if query is appropriate: ['spiderman', 'pointing']
+2025-03-11 23:24:38,023 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:24:39,560 - agent_mistral - INFO - Humor API response: {'memes': [], 'available': 0}
+2025-03-11 23:24:54,508 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:24:54,953 - agent_mistral - INFO - Searching for memes with query: spooderman
+2025-03-11 23:24:54,954 - agent_mistral - INFO - Checking if query is appropriate: ['spooderman']
+2025-03-11 23:24:55,437 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:24:56,938 - agent_mistral - INFO - Humor API response: {'memes': [], 'available': 0}
+2025-03-11 23:25:10,178 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:25:10,184 - agent_mistral - INFO - Searching for memes with query: banana pants
+2025-03-11 23:25:10,185 - agent_mistral - INFO - Checking if query is appropriate: ['banana', 'pants']
+2025-03-11 23:25:10,483 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:25:10,486 - agent_mistral - ERROR - Error in is_query_appropriate: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:25:12,026 - agent_mistral - INFO - Humor API response: {'memes': [], 'available': 0}
+2025-03-11 23:25:17,142 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:25:17,149 - agent_mistral - INFO - Searching for memes with query: banana pants
+2025-03-11 23:25:17,150 - agent_mistral - INFO - Checking if query is appropriate: ['banana', 'pants']
+2025-03-11 23:25:17,451 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-03-11 23:25:17,454 - agent_mistral - ERROR - Error in is_query_appropriate: API error occurred: Status 429
+{"message":"Requests rate limit exceeded"}
+2025-03-11 23:25:19,090 - agent_mistral - INFO - Humor API response: {'memes': [], 'available': 0}
+2025-03-11 23:25:23,389 - discord_bot - INFO - Added message from danguo to history: yo
+2025-03-11 23:25:24,206 - discord_bot - INFO - Added message from danguo to history: mario
+2025-03-11 23:25:25,023 - discord_bot - INFO - Added message from danguo to history: kart
+2025-03-11 23:25:25,643 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:25:25,647 - discord_bot - INFO - Added message from danguo to history: haha
+2025-03-11 23:25:25,671 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:25:25,674 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:25:25,679 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:25:26,972 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:25:26,980 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:25:27,072 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:25:27,076 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:25:33,634 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:25:33,640 - agent_mistral - INFO - Searching for memes with query: mario kart
+2025-03-11 23:25:33,641 - agent_mistral - INFO - Checking if query is appropriate: ['mario', 'kart']
+2025-03-11 23:25:34,036 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:25:35,874 - agent_mistral - INFO - Humor API response: {'memes': [{'id': 264606, 'description': '15 things and other stuff (Themed: Mario Kart): Mix of stolen memes, gifs, videos, etc. All Mario Kart related.', 'url': 'https://i.imgur.com/jftl0GC.jpg', 'type': 'image/jpeg'}, {'id': 264610, 'description': '15 things and other stuff (Themed: Mario Kart)', 'url': 'https://i.imgur.com/APrjymI.gif', 'type': 'image/gif'}, {'id': 271922, 'description': 'Last night was the Tuesday CeleryDump, so I calculated that tonight should be the Wednesday CeleryDump: makes sense bc yoshi is the best mario kart driver, fight me', 'url': 'https://i.imgur.com/ipDBC7x.jpg', 'type': 'image/jpeg'}, {'id': 291535, 'description': "I am so proud.: Hey, heads up, a bit of a story here. If you don't care, the pics themselves should get the point across. First of all, I love my niece, but she's not much of a gamer. I say this in the sense that she's really only played things like mario Kart or Party. She saw me playing cult of the lamb one day and fell in love with the art style and bought it on the switch for herself. She was not prepared for a roguelike. She persevered, though, and started to make process and figure things out.", 'url': 'https://i.imgur.com/9trxTAW.png', 'type': 'image/png'}, {'id': 405453, 'description': 'Man, I Miss The 90’s (OC): I’ll challenge any one of you at Mario Kart 64.', 'url': 'https://i.imgur.com/SnTpvcd.png', 'type': 'image/png'}, {'id': 1061912, 'description': 'Your aim in Mario Kart when…', 'url': 'https://i.redd.it/t6pjdh622ded1.jpeg', 'type': 'image/jpeg', 'width': 1030, 'height': 2048, 'ratio': 0.5029296875}, {'id': 1061994, 'description': 'Your aim in Mario Kart when…', 'url': 'https://i.redd.it/edrcob902ded1.jpeg', 'type': 'image/jpeg', 'width': 1030, 'height': 2048, 'ratio': 0.5029296875}, {'id': 1152766, 'description': 'Mario kart chain of events', 'url': 'https://i.redd.it/1jjunkaja3kd1.jpeg', 'type': 'image/jpeg', 'width': 1289, 'height': 816, 'ratio': 1.579656862745098}, {'id': 1580460, 'description': 'The effects of too much mario kart ', 'url': 'https://i.redd.it/ynat3vcq9s8e1.jpeg', 'type': 'image/jpeg', 'width': 778, 'height': 832, 'ratio': 0.9350961538461539}, {'id': 1643888, 'description': 'Uno and Mario Kart ?', 'url': 'https://i.redd.it/9axb10z8fqbe1.jpeg', 'type': 'image/jpeg', 'width': 720, 'height': 848, 'ratio': 0.8490566037735849}], 'available': 11}
+2025-03-11 23:31:28,038 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 23:31:29,040 - discord.client - INFO - logging in using static token
+2025-03-11 23:31:30,161 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: dc021bc7c865be7da762f8f99949a313).
+2025-03-11 23:31:32,198 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-11 23:31:58,529 - discord_bot - INFO - Added message from arjunj4528 to history: generate a meme about cheese yo
+2025-03-11 23:31:59,760 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:31:59,766 - discord_bot - INFO - Spontaneous meme decision: True, reason: Decided to generate a meme for this conversation.
+2025-03-11 23:31:59,767 - agent_mistral - INFO - Added 1 point(s) to arjunj4528. New score: 2
+2025-03-11 23:31:59,767 - discord_bot - INFO - Added humor point to arjunj4528 for meme-worthy message
+2025-03-11 23:32:00,170 - agent_mistral - INFO - Generating meme concept from history: arjunj4528: generate a meme about cheese yo...
+2025-03-11 23:32:01,600 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:32:01,607 - agent_mistral - INFO - Generated meme concept: IMAGE DESCRIPTION: A mouse sitting at a tiny cheese cellar filled with various types of cheese, looking overwhelmed and holding a sign that says "Cheese Anonymous Meeting Today"
+
+CAPTION: Even mice cannot handle the temptation of too much cheese.
+2025-03-11 23:32:01,608 - agent_openai - INFO - Raw meme concept: IMAGE DESCRIPTION: A mouse sitting at a tiny cheese cellar filled with various types of cheese, looking overwhelmed and holding a sign that says "Cheese Anonymous Meeting Today"
+
+CAPTION: Even mice cannot handle the temptation of too much cheese.
+2025-03-11 23:32:01,609 - agent_openai - INFO - Image Description: A mouse sitting at a tiny cheese cellar filled with various types of cheese, looking overwhelmed and holding a sign that says "Cheese Anonymous Meeting Today"
+2025-03-11 23:32:01,610 - agent_openai - INFO - Caption: Even mice cannot handle the temptation of too much cheese.
+2025-03-11 23:32:01,610 - agent_openai - INFO - DALL-E Prompt: Create a meme image given this description: A mouse sitting at a tiny cheese cellar filled with various types of cheese, looking overwhelmed and holding a sign that says "Cheese Anonymous Meeting Toda...
+2025-03-11 23:32:12,449 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 23:32:30,287 - agent_mistral - INFO - Generating meme concept from history: arjunj4528: generate a meme about cheese yo...
+2025-03-11 23:32:31,712 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:32:31,717 - agent_mistral - INFO - Generated meme concept: IMAGE DESCRIPTION: A mouse sitting at a tiny dining table with a giant wedge of Swiss cheese looming over him like a towering cake.
+
+CAPTION: When you wished for unlimited cheese
+2025-03-11 23:32:31,718 - agent_openai - INFO - Raw meme concept: IMAGE DESCRIPTION: A mouse sitting at a tiny dining table with a giant wedge of Swiss cheese looming over him like a towering cake.
+
+CAPTION: When you wished for unlimited cheese
+2025-03-11 23:32:31,719 - agent_openai - INFO - Image Description: A mouse sitting at a tiny dining table with a giant wedge of Swiss cheese looming over him like a towering cake.
+2025-03-11 23:32:31,720 - agent_openai - INFO - Caption: When you wished for unlimited cheese
+2025-03-11 23:32:31,720 - agent_openai - INFO - DALL-E Prompt: Create a meme image given this description: A mouse sitting at a tiny dining table with a giant wedge of Swiss cheese looming over him like a towering cake.
+    
+    I NEED a simple, clean image with ...
+2025-03-11 23:32:46,044 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 23:43:24,473 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 23:43:25,684 - discord.client - INFO - logging in using static token
+2025-03-11 23:43:26,815 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: bf87b4ad6a01ca1f7afa76229e9a9e2b).
+2025-03-11 23:43:28,920 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-11 23:43:37,725 - discord_bot - INFO - Added message from arjunj4528 to history: yo
+2025-03-11 23:43:38,216 - discord_bot - INFO - Added message from arjunj4528 to history: yo
+2025-03-11 23:43:39,055 - discord_bot - INFO - Added message from arjunj4528 to history: yo
+2025-03-11 23:43:39,091 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:43:39,097 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:43:39,466 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:43:39,470 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:43:40,390 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:43:40,400 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:43:41,723 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:51:08,974 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 23:51:10,107 - discord.client - INFO - logging in using static token
+2025-03-11 23:51:11,260 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 36222b422d639ebeb66070aabf35a22a).
+2025-03-11 23:51:13,345 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-11 23:52:07,206 - discord_bot - INFO - Added message from arjunj4528 to history: hey
+2025-03-11 23:52:08,736 - discord_bot - INFO - Added message from arjunj4528 to history: how are you
+2025-03-11 23:52:08,939 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:52:08,944 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:52:10,347 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:52:10,356 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:52:10,795 - discord_bot - INFO - Added message from arjunj4528 to history: are you good
+2025-03-11 23:52:12,290 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:52:12,297 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:53:03,656 - discord_bot - INFO - Added message from arjunj4528 to history: yo rainbow road be hella hard
+2025-03-11 23:53:05,472 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:53:05,477 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:54:12,287 - discord_bot - INFO - Added message from arjunj4528 to history: yeah I always be falling off
+2025-03-11 23:54:14,016 - agent_mistral - INFO - Generating meme concept from history: arjunj4528: hey
+arjunj4528: how are you
+arjunj4528: are you good
+arjunj4528: yo rainbow road be hella hard
+arjunj4528: yeah I always be falling off...
+2025-03-11 23:54:14,274 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:54:14,280 - discord_bot - INFO - Spontaneous meme decision: False, reason: Decided not to generate a meme for this conversation.
+2025-03-11 23:54:15,537 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:54:15,543 - agent_mistral - INFO - Generated meme concept: IMAGE DESCRIPTION: A cartoon character racing on Rainbow Road, but the road is literally made of rainbows that are actively trying to buck the character off, like a rodeo bull.
+
+CAPTION: Rainbow Road does not care how you are. It only knows falling off.
+2025-03-11 23:54:15,545 - agent_openai - INFO - Raw meme concept: IMAGE DESCRIPTION: A cartoon character racing on Rainbow Road, but the road is literally made of rainbows that are actively trying to buck the character off, like a rodeo bull.
+
+CAPTION: Rainbow Road does not care how you are. It only knows falling off.
+2025-03-11 23:54:15,547 - agent_openai - INFO - Image Description: A cartoon character racing on Rainbow Road, but the road is literally made of rainbows that are actively trying to buck the character off, like a rodeo bull.
+2025-03-11 23:54:15,548 - agent_openai - INFO - Caption: Rainbow Road does not care how you are. It only knows falling off.
+2025-03-11 23:54:15,549 - agent_openai - INFO - DALL-E Prompt: Create a meme image given this description: A cartoon character racing on Rainbow Road, but the road is literally made of rainbows that are actively trying to buck the character off, like a rodeo bull...
+2025-03-11 23:54:29,935 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 23:54:47,865 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:54:47,869 - agent_mistral - INFO - Searching for memes with query: Mario Kart
+2025-03-11 23:54:47,870 - agent_mistral - INFO - Checking if query is appropriate: ['Mario', 'Kart']
+2025-03-11 23:54:48,224 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 23:54:49,692 - agent_mistral - INFO - Humor API response: {'memes': [{'id': 264606, 'description': '15 things and other stuff (Themed: Mario Kart): Mix of stolen memes, gifs, videos, etc. All Mario Kart related.', 'url': 'https://i.imgur.com/jftl0GC.jpg', 'type': 'image/jpeg'}, {'id': 264610, 'description': '15 things and other stuff (Themed: Mario Kart)', 'url': 'https://i.imgur.com/APrjymI.gif', 'type': 'image/gif'}, {'id': 271922, 'description': 'Last night was the Tuesday CeleryDump, so I calculated that tonight should be the Wednesday CeleryDump: makes sense bc yoshi is the best mario kart driver, fight me', 'url': 'https://i.imgur.com/ipDBC7x.jpg', 'type': 'image/jpeg'}, {'id': 291535, 'description': "I am so proud.: Hey, heads up, a bit of a story here. If you don't care, the pics themselves should get the point across. First of all, I love my niece, but she's not much of a gamer. I say this in the sense that she's really only played things like mario Kart or Party. She saw me playing cult of the lamb one day and fell in love with the art style and bought it on the switch for herself. She was not prepared for a roguelike. She persevered, though, and started to make process and figure things out.", 'url': 'https://i.imgur.com/9trxTAW.png', 'type': 'image/png'}, {'id': 405453, 'description': 'Man, I Miss The 90’s (OC): I’ll challenge any one of you at Mario Kart 64.', 'url': 'https://i.imgur.com/SnTpvcd.png', 'type': 'image/png'}, {'id': 1061912, 'description': 'Your aim in Mario Kart when…', 'url': 'https://i.redd.it/t6pjdh622ded1.jpeg', 'type': 'image/jpeg', 'width': 1030, 'height': 2048, 'ratio': 0.5029296875}, {'id': 1061994, 'description': 'Your aim in Mario Kart when…', 'url': 'https://i.redd.it/edrcob902ded1.jpeg', 'type': 'image/jpeg', 'width': 1030, 'height': 2048, 'ratio': 0.5029296875}, {'id': 1152766, 'description': 'Mario kart chain of events', 'url': 'https://i.redd.it/1jjunkaja3kd1.jpeg', 'type': 'image/jpeg', 'width': 1289, 'height': 816, 'ratio': 1.579656862745098}, {'id': 1580460, 'description': 'The effects of too much mario kart ', 'url': 'https://i.redd.it/ynat3vcq9s8e1.jpeg', 'type': 'image/jpeg', 'width': 778, 'height': 832, 'ratio': 0.9350961538461539}, {'id': 1643888, 'description': 'Uno and Mario Kart ?', 'url': 'https://i.redd.it/9axb10z8fqbe1.jpeg', 'type': 'image/jpeg', 'width': 720, 'height': 848, 'ratio': 0.8490566037735849}], 'available': 11}
+2025-03-11 23:55:25,019 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
