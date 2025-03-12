@@ -6,6 +6,7 @@ import platform
 from discord.ext import commands
 from dotenv import load_dotenv
 from agent_new import MemeAgent
+from tools.leaderboard import leaderboard, generate_leaderboard_embed, process_command
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -27,6 +28,7 @@ class DiscordBot(commands.Bot):
         self.logger = logger
         self.meme_agent = MemeAgent()
         self.chat_history = []
+        self.add_commands()
 
     async def on_ready(self):
         self.logger.info("-------------------")
@@ -64,6 +66,7 @@ class DiscordBot(commands.Bot):
         
         # Run the meme agent whenever the bot receives a message.
         await self.meme_agent.run(message)
+
     async def on_reaction_add(self, reaction, user):
         """Event handler for when a reaction is added to a message"""
         # Ignore reactions from the bot itself
@@ -82,6 +85,19 @@ class DiscordBot(commands.Bot):
         # Pass the reaction to the meme agent for handling
         await self.meme_agent.handle_reaction_remove(reaction, user)
 
+    def add_commands(self):
+        @self.command(name="leaderboard")
+        async def _leaderboard(ctx):
+            """Display the meme leaderboard"""
+            embed = await generate_leaderboard_embed()
+            await ctx.send(embed=embed)
+            
+        @self.command(name="mystats")
+        async def _mystats(ctx):
+            """Display your personal meme stats"""
+            user_id = str(ctx.author.id)
+            embed = await process_command("mystats", user_id)
+            await ctx.send(embed=embed)
 
 if __name__ == "__main__":
     load_dotenv()

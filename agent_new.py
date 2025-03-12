@@ -86,23 +86,23 @@ class MemeAgent:
         self.load_user_scores()
         
         self.tools = [
-            {
-                "type": "function",
-                "function": {
-                    "name": "search_meme",
-                    "description": "retrieves meme from Humor API either based on user input or chat history",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "query": 
-                            {"type": "string", 
-                             "description": "the search query/keywords from the user for Humor API"
-                            }
-                        },
-                        "required": ["query"]
-                    }
-                }
-            },
+            # {
+            #     "type": "function",
+            #     "function": {
+            #         "name": "search_meme",
+            #         "description": "retrieves meme from Humor API either based on user input or chat history",
+            #         "parameters": {
+            #             "type": "object",
+            #             "properties": {
+            #                 "query": 
+            #                 {"type": "string", 
+            #                  "description": "the search query/keywords from the user for Humor API"
+            #                 }
+            #             },
+            #             "required": ["query"]
+            #         }
+            #     }
+            # },
             {
                 "type": "function",
                 "function": {
@@ -123,24 +123,24 @@ class MemeAgent:
                     }
                 }
             },
-            {
-                "type": "function",
-                "function": {
-                    "name": "react",
-                    "description": "reacts to latest message with an appropriate emoji",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "sentiment": {
-                                "type": "string",
-                                "enum": ["positive", "negative", "neutral"],
-                                "description": "The sentiment of the reaction"
-                            }
-                        },
-                        "required": ["sentiment"]
-                    }
-                }
-            },
+            # {
+            #     "type": "function",
+            #     "function": {
+            #         "name": "react",
+            #         "description": "reacts to latest message with an appropriate emoji",
+            #         "parameters": {
+            #             "type": "object",
+            #             "properties": {
+            #                 "sentiment": {
+            #                     "type": "string",
+            #                     "enum": ["positive", "negative", "neutral"],
+            #                     "description": "The sentiment of the reaction"
+            #                 }
+            #             },
+            #             "required": ["sentiment"]
+            #         }
+            #     }
+            # },
             {
                 "type": "function",
                 "function": {
@@ -162,10 +162,10 @@ class MemeAgent:
         ]
 
         self.tools_to_functions = {
-            "search_meme": search_meme,
+            #"search_meme": search_meme,
             "generate_meme": generate_meme,
-            "react": self.react_message,
-            "leaderboard": self.generate_leaderboard
+            #"react": self.react_message,
+            "leaderboard": self.show_leaderboard
         }
     
     def load_user_scores(self):
@@ -322,16 +322,6 @@ class MemeAgent:
     async def run(self, message: discord.Message):
         # Add the current message to chat history
         self.add_to_chat_history(message)
-
-        # Check for commands
-        if message.content.startswith("!leaderboard"):
-            embed = await generate_leaderboard_embed()
-            return await message.reply(embed=embed)
-    
-        elif message.content.startswith("!mystats"):
-            user_id = str(message.author.id)
-            embed = await process_command("mystats", user_id)
-            return await message.reply(embed=embed)
         
         # Format chat history for inclusion in system prompt
         chat_history_context = self.format_chat_history()
