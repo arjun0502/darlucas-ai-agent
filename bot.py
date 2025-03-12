@@ -5,11 +5,16 @@ import aiohttp
 import io
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
+import json
 
 from discord.ext import commands
+from discord.ui import Button, View
 from dotenv import load_dotenv
 from agent_mistral import MistralAgent
 from agent_openai import OpenAIAgent
+
+from meme_leaderboard import MemeLeaderboard
+
 
 PREFIX = "!"
 
@@ -35,9 +40,155 @@ bot = commands.Bot(command_prefix=PREFIX, intents=intents)
 # Import the Mistral and OpenAI agent from the agent.py file
 agent_mistral = MistralAgent()
 agent_openai = OpenAIAgent()
+meme_leaderboard = MemeLeaderboard()
 
 # Get the token from the environment variables
 token = os.getenv("DISCORD_TOKEN")
+
+
+# Paginated leaderboard view
+class MemeLeaderboardView(View):
+    def __init__(self, ctx, memes, timeout=120):
+        super().__init__(timeout=timeout)
+        self.ctx = ctx
+        self.memes = memes
+        self.current_page = 0
+        self.total_pages = len(memes)
+        self.message = None
+        
+        # Add buttons
+        self.update_buttons()
+
+    async def start(self):
+        """Start the paginated view"""
+        if not self.memes:
+            return await self.ctx.send("No memes found!")
+                
+        embed = self.get_current_embed()
+        self.message = await self.ctx.send(embed=embed, view=self)
+        return self.message
+    
+    def update_buttons(self):
+        """Update the buttons based on current page"""
+        # Clear existing buttons
+        self.clear_items()
+        
+        # Previous button
+        prev_button = Button(
+            style=discord.ButtonStyle.secondary,
+            emoji="⬅️",
+            custom_id="prev",
+            disabled=(self.current_page == 0)
+        )
+        prev_button.callback = self.prev_callback
+        self.add_item(prev_button)
+        
+        # Page indicator
+        page_indicator = Button(
+            style=discord.ButtonStyle.secondary,
+            label=f"{self.current_page + 1}/{self.total_pages}",
+            custom_id="page_indicator",
+            disabled=True
+        )
+        self.add_item(page_indicator)
+        
+        # Next button
+        next_button = Button(
+            style=discord.ButtonStyle.secondary,
+            emoji="➡️",
+            custom_id="next",
+            disabled=(self.current_page >= self.total_pages - 1)
+        )
+        next_button.callback = self.next_callback
+        self.add_item(next_button)
+    
+    async def prev_callback(self, interaction):
+        """Handle previous button click"""
+        self.current_page = max(0, self.current_page - 1)
+        
+        # Update buttons and embed
+        self.update_buttons()
+        embed = self.get_current_embed()
+        
+        # Respond to the interaction
+        await interaction.response.edit_message(embed=embed, view=self)
+    
+    async def next_callback(self, interaction):
+        """Handle next button click"""
+        self.current_page = min(self.total_pages - 1, self.current_page + 1)
+        
+        # Update buttons and embed
+        self.update_buttons()
+        embed = self.get_current_embed()
+        
+        # Respond to the interaction
+        await interaction.response.edit_message(embed=embed, view=self)
+    
+    def get_current_embed(self):
+        """Create an embed for the current meme"""
+        if not self.memes or self.current_page >= len(self.memes):
+            # Return a default embed if something goes wrong
+            return discord.Embed(
+                title="No memes found",
+                description="No memes to display",
+                color=discord.Color.red()
+            )
+        
+        meme = self.memes[self.current_page]
+        
+        # Calculate rank (using the original position in the list)
+        rank = self.current_page + 1
+        
+        # Calculate net votes
+        net_votes = meme["upvotes"] - meme["downvotes"]
+        
+        # Determine rank emoji
+        if rank == 1:
+            rank_emoji = "🥇"
+        elif rank == 2:
+            rank_emoji = "🥈"
+        elif rank == 3:
+            rank_emoji = "🥉"
+        else:
+            rank_emoji = f"{rank}."
+        
+        # Create link to original message
+        meme_link = f"https://discord.com/channels/{self.ctx.guild.id}/{self.ctx.channel.id}/{meme['message_id']}"
+        
+        # Create embed with the title "Certified Funny™ Leaderboard"
+        embed = discord.Embed(
+            title=f"🏆 Certified Funny™ Leaderboard 🏆",
+            description=f"{rank_emoji} Meme by {meme['author_name']}\n\n**Votes:** 👍 {meme['upvotes']} | 👎 {meme['downvotes']} | Net: {net_votes}\n\n[Jump to Original]({meme_link})",
+            color=discord.Color.gold()
+        )
+        
+        # Add the meme image
+        if meme["embed_data"]["image_url"]:
+            embed.set_image(url=meme["embed_data"]["image_url"])
+        
+        # Add the original meme title if available
+        if meme["embed_data"]["title"]:
+            embed.add_field(
+                name="Original Title",
+                value=meme["embed_data"]["title"],
+                inline=False
+            )
+        
+        # Add any fields from the original embed
+        if meme["embed_data"].get("fields"):
+            for field in meme["embed_data"]["fields"]:
+                embed.add_field(
+                    name=field["name"],
+                    value=field["value"],
+                    inline=field["inline"]
+                )
+        
+        # Add pagination info to footer
+        embed.set_footer(text=f"Page {self.current_page + 1}/{self.total_pages} • Use the buttons to navigate")
+        
+        return embed
+
+
 
 # Helper function to add text to images
 async def add_text_to_image(image_url, text):
@@ -261,7 +412,33 @@ async def generate_meme(ctx, *, user_input=None):
                 embed.set_footer(text=f"Based on chat history • Requested by {ctx.author.display_name}")
             
             # Send the meme
-            await ctx.send(file=file, embed=embed)
+            meme_message = await ctx.send(file=file, embed=embed)
+
+            # Extract the permanent CDN URL from the sent message's embed
+            if meme_message.embeds and meme_message.embeds[0].image:
+                permanent_url = meme_message.embeds[0].image.url
+                logger.info(f"Permanent CDN URL: {permanent_url}")
+                
+                # Create a new embed with the permanent URL
+                tracking_embed = discord.Embed(title=embed.title, description=embed.description, color=embed.color)
+                tracking_embed.set_image(url=permanent_url)
+                
+                # Copy over footer and fields
+                if embed.footer:
+                    tracking_embed.set_footer(text=embed.footer.text, icon_url=embed.footer.icon_url)
+                
+                for field in embed.fields:
+                    tracking_embed.add_field(name=field.name, value=field.value, inline=field.inline)
+                
+                # Track this embed with permanent URL
+                meme_leaderboard.track_meme(meme_message, tracking_embed, ctx.author)
+            else:
+                # Fallback if no image found
+                meme_leaderboard.track_meme(meme_message, embed, ctx.author)
+                logger.warning(f"No image found in message {meme_message.id}, using original embed")
+
+            # Set up the voting reactions
+            await meme_leaderboard.setup_reactions(meme_message)
             
         except Exception as e:
             logger.error(f"Error adding text to image: {e}")
@@ -342,7 +519,33 @@ async def generate_spontaneous_meme(message):
             embed.set_footer(text=f"Generated spontaneously based on your conversation")
             
             # Send the meme
-            await message.channel.send(file=file, embed=embed)
+            meme_message = await ctx.send(file=file, embed=embed)
+
+            # Extract the permanent CDN URL from the sent message's embed
+            if meme_message.embeds and meme_message.embeds[0].image:
+                permanent_url = meme_message.embeds[0].image.url
+                logger.info(f"Permanent CDN URL: {permanent_url}")
+                
+                # Create a new embed with the permanent URL
+                tracking_embed = discord.Embed(title=embed.title, description=embed.description, color=embed.color)
+                tracking_embed.set_image(url=permanent_url)
+                
+                # Copy over footer and fields
+                if embed.footer:
+                    tracking_embed.set_footer(text=embed.footer.text, icon_url=embed.footer.icon_url)
+                
+                for field in embed.fields:
+                    tracking_embed.add_field(name=field.name, value=field.value, inline=field.inline)
+                
+                # Track this embed with permanent URL
+                meme_leaderboard.track_meme(meme_message, tracking_embed, message.author)
+            else:
+                # Fallback if no image found
+                meme_leaderboard.track_meme(meme_message, embed, message.author)
+                logger.warning(f"No image found in message {meme_message.id}, using original embed")
+
+            # Set up the voting reactions
+            await meme_leaderboard.setup_reactions(meme_message)
             
         except Exception as e:
             logger.error(f"Error adding text to image: {e}")
@@ -449,7 +652,13 @@ async def search_meme(ctx, *, query=None):
         embed.set_footer(text=f"Requested by {ctx.author.display_name}")
         
         # Send the meme
-        await ctx.send(embed=embed)
+        meme_message = await ctx.send(file=file, embed=embed)
+
+        # Track the meme in the leaderboard
+        meme_leaderboard.track_meme(meme_message, embed, ctx.author)
+
+        # Set up the voting reactions
+        await meme_leaderboard.setup_reactions(meme_message)
         
         # Delete the processing message
         await processing_msg.delete()
@@ -458,53 +667,239 @@ async def search_meme(ctx, *, query=None):
         logger.error(f"Error searching for memes: {e}")
         await processing_msg.edit(content=f"Sorry, I encountered an error while searching for memes: {str(e)}")
 
-@bot.command(name="leaderboard", help="Show the funny message leaderboard. Use !leaderboard reset to reset all scores.")
+@bot.command(name="leaderboard", help="Show the meme leaderboard. Use 'mystats' to see your stats, or 'reset' to reset all data (admin only).")
 async def show_leaderboard(ctx, action=None):
     """
-    Shows the current funny message leaderboard or resets it
+    Shows the meme leaderboard or user stats
     """
+    # Handle reset command (admin only)
     if action and action.lower() == "reset":
-        # Check if the user has admin permissions
         if ctx.message.author.guild_permissions.administrator:
-            result = agent_mistral.reset_all_scores()
+            result = meme_leaderboard.reset_all_data()
             await ctx.send(f"🧹 {result}")
         else:
             await ctx.send("⚠️ Only administrators can reset the leaderboard.")
         return
     
-    # Get the leaderboard data
-    leaderboard_data = agent_mistral.get_leaderboard()
-    
-    if not leaderboard_data:
-        await ctx.send("No one has earned any funny points yet! Say something funny to get on the board.")
+    # Handle mystats command
+    if action and action.lower() == "mystats":
+        user_stats = meme_leaderboard.get_user_stats(ctx.author.id)
+        
+        # Create user stats embed
+        embed = discord.Embed(
+            title=f"Meme Stats for {ctx.author.display_name}",
+            color=discord.Color.purple()
+        )
+        
+        embed.add_field(name="📊 Memes Created", value=str(user_stats["memes_created"]), inline=True)
+        embed.add_field(name="👍 Total Upvotes", value=str(user_stats["total_upvotes"]), inline=True)
+        embed.add_field(name="👎 Total Downvotes", value=str(user_stats["total_downvotes"]), inline=True)
+        embed.add_field(name="💯 Net Popularity", value=str(user_stats["net_popularity"]), inline=True)
+        
+        # Add most popular meme if available
+        if user_stats["most_popular_meme"]:
+            popular_meme = user_stats["most_popular_meme"]
+            
+            # Display the meme image directly in the embed
+            if popular_meme["embed_data"]["image_url"]:
+                embed.set_image(url=popular_meme["embed_data"]["image_url"])
+                logger.info(f"Setting mystats image URL: {popular_meme['embed_data']['image_url']}")
+            
+            # Add a link to the original message
+            meme_link = f"https://discord.com/channels/{ctx.guild.id}/{ctx.channel.id}/{popular_meme['message_id']}"
+            embed.add_field(
+                name="🏆 Most Popular Meme", 
+                value=f"👍 {popular_meme['upvotes']} | 👎 {popular_meme['downvotes']} | [View Original]({meme_link})",
+                inline=False
+            )
+        
+        embed.set_footer(text=f"Use {PREFIX}leaderboard to see the overall rankings")
+        
+        await ctx.send(embed=embed)
         return
     
-    # Create an embed for the leaderboard
+    # Default: show paginated top memes
+    top_memes = meme_leaderboard.get_top_memes(20)  # Get more memes for pagination
+    
+    if not top_memes:
+        await ctx.send("No memes have been created yet! Use `!generate` to create one.")
+        return
+    
+    # Add debug logging to inspect the memes data
+    logger.info(f"Showing leaderboard with {len(top_memes)} memes")
+    for i, meme in enumerate(top_memes[:3]):  # Log details of first 3 memes
+        logger.info(f"Meme {i+1} - ID: {meme['message_id']}, Image URL: {meme['embed_data'].get('image_url', 'None')}")
+    
+    # Create and start the paginated view
+    view = MemeLeaderboardView(ctx, top_memes)
+    await view.start()
+
+@bot.event
+async def on_reaction_add(reaction, user):
+    if user.bot:
+        return
+    await meme_leaderboard.process_reaction(reaction, user, True)
+
+@bot.event
+async def on_reaction_remove(reaction, user):
+    if user.bot:
+        return
+    await meme_leaderboard.process_reaction(reaction, user, False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Add this debug command to your bot.py file to check the structure of stored memes
+# This will help diagnose why images aren't showing up
+
+@bot.command(name="debugmeme", help="Debug command to show meme data structure (admin only)")
+async def debug_meme(ctx):
+    """Admin command to display the data structure of stored memes for debugging"""
+    # Get some memes to inspect
+    top_memes = meme_leaderboard.get_top_memes(3)  # Just get a few
+    
+    if not top_memes:
+        await ctx.send("No memes found in the database.")
+        return
+    
+    # Create an embed with the diagnostic info
     embed = discord.Embed(
-        title="🏆 Certified Funny™ Rankings 🏆",
-        description="Got jokes? Let's hear them, if they're good, you get a surprise.",
-        color=discord.Color.gold()
+        title="Meme Data Structure Debug Info",
+        description="Showing data for up to 3 memes",
+        color=discord.Color.blue()
     )
     
-    # Add leaderboard data
-    leaderboard_text = ""
-    for i, (username, score) in enumerate(leaderboard_data[:10], 1):
-        # Add medal emoji for top 3
-        if i == 1:
-            prefix = "🥇"
-        elif i == 2:
-            prefix = "🥈"
-        elif i == 3:
-            prefix = "🥉"
-        else:
-            prefix = f"{i}."
-            
-        leaderboard_text += f"{prefix} **{username}**: {score} point{'s' if score != 1 else ''}\n"
+    for i, meme in enumerate(top_memes):
+        # Basic meme info
+        meme_info = (
+            f"ID: {meme['message_id']}\n"
+            f"Author: {meme['author_name']}\n"
+            f"Votes: 👍 {meme['upvotes']} | 👎 {meme['downvotes']}\n"
+        )
+        
+        # Embed data diagnostics
+        embed_data = meme.get('embed_data', {})
+        image_url = embed_data.get('image_url', 'None')
+        
+        embed_info = (
+            f"Title: {embed_data.get('title', 'None')}\n"
+            f"Image URL: {image_url}\n"
+            f"Fields count: {len(embed_data.get('fields', []))}"
+        )
+        
+        embed.add_field(
+            name=f"Meme #{i+1} Basic Info",
+            value=meme_info,
+            inline=False
+        )
+        
+        embed.add_field(
+            name=f"Meme #{i+1} Embed Data",
+            value=embed_info,
+            inline=False
+        )
+        
+        # Try to display the image
+        if i == 0 and image_url and image_url != 'None':
+            embed.set_image(url=image_url)
     
-    embed.add_field(name="Finest Clowns", value=leaderboard_text or "No scores yet", inline=False)
-    embed.set_footer(text="Say something funny to earn points! | Admins can use !leaderboard reset")
-    
+    # Send the debug info
     await ctx.send(embed=embed)
+
+# Add this to inspect the raw data file
+@bot.command(name="inspectdata", help="Inspect the raw meme data file (admin only)")
+async def inspect_data(ctx):
+    """Admin command to display the raw meme data file contents"""
+    
+    # Check if the file exists
+    if not os.path.exists(meme_leaderboard.memes_file):
+        await ctx.send(f"No meme data file found at {meme_leaderboard.memes_file}")
+        return
+    
+    # Read the raw file
+    try:
+        with open(meme_leaderboard.memes_file, 'r') as f:
+            data = json.load(f)
+        
+        # Get the size and meme count
+        file_size = os.path.getsize(meme_leaderboard.memes_file) / 1024  # KB
+        meme_count = len(data.get("memes", {}))
+        last_updated = data.get("last_updated", "Unknown")
+        
+        # Create an info message
+        info = (
+            f"**Meme Data File Info**\n"
+            f"File: `{meme_leaderboard.memes_file}`\n"
+            f"Size: {file_size:.2f} KB\n"
+            f"Meme Count: {meme_count}\n"
+            f"Last Updated: {last_updated}\n\n"
+        )
+        
+        # Sample of meme IDs
+        meme_ids = list(data.get("memes", {}).keys())[:5]  # First 5 meme IDs
+        id_list = "\n".join(meme_ids) if meme_ids else "None"
+        
+        info += f"**Sample Meme IDs:**\n{id_list}"
+        
+        await ctx.send(info)
+        
+        # If there are memes, send the first meme's full data as a code block
+        if meme_ids:
+            first_meme_data = json.dumps(data["memes"][meme_ids[0]], indent=2)
+            if len(first_meme_data) > 1900:  # Discord message limit
+                first_meme_data = first_meme_data[:1900] + "..."
+            
+            await ctx.send(f"**First meme data structure:**\n```json\n{first_meme_data}\n```")
+    
+    except Exception as e:
+        await ctx.send(f"Error reading meme data file: {str(e)}")
+
+
+
+
+
+
+
+
+
+
 
 # Start the bot, connecting it to the gateway
 bot.run(token)
