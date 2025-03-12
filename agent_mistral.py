@@ -479,25 +479,17 @@ Respond with ONLY "YES" if the query is completely appropriate, or "NO" followed
             return {"success": False, "error": f"Failed to search for memes: {str(e)}"}
         
 
+
     async def judge_meme(self, meme_data):
-        """
-        Judge a meme and provide a humorous analysis of why it's funny (or not).
-        
-        Args:
-            meme_data: Dictionary containing meme information
-            
-        Returns:
-            A string with the humorous judgment of the meme
-        """
+        """Judge a meme and provide a humorous analysis"""
         try:
-            # Extract the necessary information about the meme
+            # Extract meme information
             author_name = meme_data.get("author_name", "Unknown")
             upvotes = meme_data.get("upvotes", 0)
             downvotes = meme_data.get("downvotes", 0)
             
-            # Get the meme image URL and caption (if available)
+            # Get image URL and caption
             embed_data = meme_data.get("embed_data", {})
-            image_url = embed_data.get("image_url", "No image available")
             
             # Get the caption or title from fields or description
             caption = None
@@ -511,7 +503,7 @@ Respond with ONLY "YES" if the query is completely appropriate, or "NO" followed
             
             # Create a prompt for Mistral to judge the meme
             judge_prompt_messages = [
-                {"role": "system", "content": "You are a witty, funny meme judge with a slightly snarky sense of humor. You judge memes and explain why they're funny or not. You should be creative and humorous in your judgments."},
+                {"role": "system", "content": "You are a witty, funny meme judge with a slightly snarky sense of humor. You judge memes and explain why they're funny or not."},
                 {"role": "user", "content": f"""I need you to judge this meme:
 
     Meme by: {author_name}
@@ -519,14 +511,14 @@ Respond with ONLY "YES" if the query is completely appropriate, or "NO" followed
 
     Caption/Title: {caption if caption else "No caption available"}
 
-    Based on this information, provide a humorous judgment of this meme. Your response should:
+    Provide a humorous judgment of this meme. Your response should:
     1. Start with a verdict (scale of 1-10 with a creative rating name)
     2. Explain why this meme is or isn't funny in a witty way
     3. Include your assessment of why people upvoted/downvoted it
     4. Offer one suggestion to make it even funnier
     5. Conclude with a funny one-liner related to the meme
 
-    Keep your response humorous and casual. Don't be mean-spirited, but feel free to be snarky and slightly irreverent. Use internet slang, Gen Z humor, and relevant cultural references. Maximum 3-4 paragraphs total.
+    Keep your response humorous and casual with internet slang and Gen Z humor.
     """}
             ]
             
@@ -541,4 +533,4 @@ Respond with ONLY "YES" if the query is completely appropriate, or "NO" followed
             
         except Exception as e:
             logger.error(f"Error in judge_meme: {str(e)}")
-            return f"I tried to judge this meme, but my humor circuits malfunctioned. Maybe the meme was so funny it broke me? Or so unfunny? We'll never know..."
+            return f"I tried to judge this meme, but my humor circuits malfunctioned."

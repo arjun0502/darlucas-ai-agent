@@ -305,11 +305,7 @@ async def on_ready():
 
 @bot.event
 async def on_message(message: discord.Message):
-    """
-    Called when a message is sent in any channel the bot can see.
-
-    https://discordpy.readthedocs.io/en/latest/api.html#discord.on_message
-    """
+    """Called when a message is sent"""
     # Don't delete this line! It's necessary for the bot to process commands.
     await bot.process_commands(message)
 
@@ -322,6 +318,7 @@ async def on_message(message: discord.Message):
     logger.info(f"Added message from {message.author} to history: {message.content}")
 
     try:
+        # Check for spontaneous meme generation
         spontaneous_meme_decision, spontaneous_meme_reason = await agent_mistral.decide_spontaneous_meme()
         logger.info(f"Spontaneous meme decision: {spontaneous_meme_decision}, reason: {spontaneous_meme_reason}")
 
@@ -330,12 +327,23 @@ async def on_message(message: discord.Message):
             agent_mistral.add_score_to_user(message.author.name)
             logger.info(f"Added humor point to {message.author.name} for meme-worthy message")
             await generate_spontaneous_meme(message)
-
-            # Check for spontaneous judging
-            await judge_spontaneous(message)
+        
+        # Check for recent memes (in the last 5 minutes)
+        recent_memes = meme_leaderboard.get_recent_memes(limit=5, since_seconds=300)
+        
+        if recent_memes:
+            # Higher chance to judge if message mentions relevant keywords
+            mentions_keywords = any(keyword in message.content.lower() for keyword in 
+                                  ['meme', 'funny', 'humor', 'laugh', 'lol', 'judge', 'rate'])
+            
+            # 30% chance if keywords mentioned, 5% otherwise
+            judge_chance = 0.33 if mentions_keywords else 0.05
+            
+            if random.random() < judge_chance:
+                logger.info(f"Triggering spontaneous meme judging based on message: {message.content[:50]}...")
+                await judge_spontaneous(message)
     except Exception as e:
-        logger.error(f"Error deciding spontaneous meme: {e}")
-
+        logger.error(f"Error in on_message event: {e}")
         
 # Commands
 # New command for generating memes based on chat history
@@ -473,58 +481,6 @@ async def generate_meme(ctx, *, user_input=None):
             error_message += f"\n\nError details: {str(e)}"
             
         await processing_msg.edit(content=error_message)
-        
-async def judge_spontaneous(message):
-    """
-    Randomly decide to judge a popular meme when someone comments about memes or humor
-    """
-    # Get chat history from agent
-    history = agent_mistral.chat_history
-    
-    if not history:
-        return
-    
-    # Only trigger this occasionally (10% chance when message mentions memes)
-    mentions_keywords = any(keyword in message.content.lower() for keyword in 
-                           ['meme', 'funny', 'humor', 'laugh', 'lol', 'lmao', 'rofl', 'hilarious'])
-    
-    if mentions_keywords and random.random() < 0.1:  # 10% chance to trigger
-        # Let's check if there are memes to judge
-        top_memes = meme_leaderboard.get_top_memes(5)
-        
-        if not top_memes:
-            return  # No memes to judge
-        
-        # Pick a random meme from the top 5
-        meme_to_judge = random.choice(top_memes)
-        
-        # Generate the judgment
-        judgment = await agent_mistral.judge_meme(meme_to_judge)
-        
-        # Create a link to the original message
-        meme_link = f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{meme_to_judge['message_id']}"
-        
-        # Create embed with judgment
-        embed = discord.Embed(
-            title="✨ Spontaneous Meme Review ✨",
-            description=f"I couldn't help but notice we're talking about memes. Let me give my opinion on one of our top memes:\n\n{judgment}",
-            color=discord.Color.purple()
-        )
-        
-        # Add the meme image
-        if meme_to_judge["embed_data"]["image_url"]:
-            embed.set_image(url=meme_to_judge["embed_data"]["image_url"])
-        
-        # Add meme info
-        embed.add_field(
-            name="Meme Info",
-            value=f"By: {meme_to_judge['author_name']}\nVotes: 👍 {meme_to_judge['upvotes']} | 👎 {meme_to_judge['downvotes']} | Net: {meme_to_judge['upvotes'] - meme_to_judge['downvotes']}\n[View Original]({meme_link})",
-            inline=False
-        )
-        
-        # Send the judgment
-        await message.channel.send(embed=embed)
-
 
 # Function for spontaneous meme generation (called from on_message)
 async def generate_spontaneous_meme(message):
@@ -801,21 +757,16 @@ async def on_reaction_remove(reaction, user):
         return
     await meme_leaderboard.process_reaction(reaction, user, False)
 
+# Add at the bottom of bot.py before bot.run(token)
+
 @bot.command(name="judge", help="Judge a meme from the leaderboard. Use !judge [rank] to judge a specific meme by rank.")
 async def judge_meme_cmd(ctx, rank=None):
-    """
-    Have the bot judge a meme from the leaderboard
-    
-    Args:
-        ctx: The Discord context
-        rank: Optional - specific rank on the leaderboard to judge
-    """
-    # Let the user know we're working on it
+    """Have the bot judge a meme from the leaderboard"""
     processing_msg = await ctx.send("Analyzing the meme with my sophisticated humor algorithms...")
     
     try:
         # Get the top memes
-        top_memes = meme_leaderboard.get_top_memes(20)  # Get top 20 to have enough to choose from
+        top_memes = meme_leaderboard.get_top_memes(20)
         
         if not top_memes:
             await processing_msg.edit(content="No memes found in the leaderboard to judge! Use `!generate` to create some memes first.")
@@ -877,6 +828,57 @@ async def judge_meme_cmd(ctx, rank=None):
         logger.error(f"Error judging meme: {e}")
         await processing_msg.edit(content=f"Sorry, I encountered an error while judging the meme: {str(e)}")
 
+
+async def judge_spontaneous(message):
+    """Spontaneously judge the most recent meme"""
+    try:
+        # Get recent memes posted in the last 5 minutes
+        recent_memes = meme_leaderboard.get_recent_memes(limit=5, since_seconds=300)
+        
+        if not recent_memes:
+            logger.info("No recent memes available to judge spontaneously")
+            return  # No recent memes to judge
+            
+        # Get the most recent meme
+        meme_to_judge = recent_memes[0]
+        
+        logger.info(f"Spontaneously judging recent meme by {meme_to_judge['author_name']}")
+        
+        # Let the user know we're working on it
+        processing_msg = await message.channel.send("Speaking of memes, let me give my thoughts on that recent one...")
+        
+        # Generate the judgment
+        judgment = await agent_mistral.judge_meme(meme_to_judge)
+        
+        # Create a link to the original message
+        meme_link = f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{meme_to_judge['message_id']}"
+        
+        # Create embed with judgment
+        embed = discord.Embed(
+            title="🔍 Fresh Meme Review 🔍",
+            description=f"{judgment}",
+            color=discord.Color.purple()
+        )
+        
+        # Add the meme image
+        if meme_to_judge["embed_data"]["image_url"]:
+            embed.set_image(url=meme_to_judge["embed_data"]["image_url"])
+        
+        # Add meme info
+        embed.add_field(
+            name="Meme Info",
+            value=f"By: {meme_to_judge['author_name']}\nVotes: 👍 {meme_to_judge['upvotes']} | 👎 {meme_to_judge['downvotes']} | Net: {meme_to_judge['upvotes'] - meme_to_judge['downvotes']}\n[View Original]({meme_link})",
+            inline=False
+        )
+        
+        # Send the judgment
+        await message.channel.send(embed=embed)
+        
+        # Delete the processing message
+        await processing_msg.delete()
+        
+    except Exception as e:
+        logger.error(f"Error in spontaneous judging: {str(e)}")
 
 
 

@@ -236,3 +236,28 @@ class MemeLeaderboard:
         except Exception as e:
             logger.error(f"Error resetting meme data: {e}")
             return f"Error resetting meme data: {e}"
+
+    def get_recent_memes(self, limit=5, since_seconds=300):
+        """Get memes created within the last few seconds"""
+        try:
+            from datetime import datetime, timedelta
+            time_threshold = (datetime.now() - timedelta(seconds=since_seconds)).isoformat()
+            
+            # Filter memes by creation time
+            memes_list = list(self.meme_data["memes"].values())
+            recent_memes = [
+                meme for meme in memes_list 
+                if meme.get("created_at", "0") > time_threshold
+            ]
+            
+            # Sort by creation time, newest first
+            sorted_memes = sorted(
+                recent_memes, 
+                key=lambda m: m.get("created_at", "0"), 
+                reverse=True
+            )
+            
+            return sorted_memes[:limit]
+        except Exception as e:
+            logger.error(f"Error getting recent memes: {e}")
+            return []
