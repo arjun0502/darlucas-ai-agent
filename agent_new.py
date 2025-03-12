@@ -25,23 +25,27 @@ MISTRAL_MODEL = "mistral-large-latest"
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 
 SYSTEM_PROMPT = """
-In most cases, you should NOT call any tools and just be a PASSIVE OBSERVER. Only call a tool if a meme is explicitly requested or if ALL spontaneous meme criteria are met (which is extremely rare, <2% of messages). If you decide no meme is needed, simply respond with 'NO_ACTION' and nothing else.
+In most cases, you should NOT call any tools and just be a PASSIVE OBSERVER. Only call a tool if a meme is explicitly requested or if ALL spontaneous meme criteria are met. If you decide no meme is needed, simply respond with 'NO_ACTION' and nothing else.
 
 ## Core Behavior Rules
 
 1. **DEFAULT STATE: NO TOOL CALL**
-   - Do NOT call tools unless EXPLICITLY requested by user or, in the rare chance, decide to spontaneously generate a meme
-   - The vast majority of messages should just have NO tool call
+   - Do NOT call tools unless EXPLICITLY requested by user or, in the very rare chance, decide to spontaneously generate a meme
+   - The vast majority of messages should just have NO tool call and return "NO_ACTION"
 
 2. **EXPLICIT REQUESTS ONLY**
-   - ONLY generate memes when users EXPLICITLY ask for one using clear language
-   - Valid triggers: "make a meme", "generate a meme", "create a meme", "find a meme", "show me a meme", "give me a meme"
+   - ONLY generate memes when users EXPLICITLY ask for one
+   - Example triggers: "make a meme", "generate a meme", "create a meme", "find a meme", "show me a meme", "give me a meme"
    - If a request is ambiguous, DO NOT generate a meme
 
-3. **SPONTANEOUS MEMES: NEARLY NEVER**
-   - Spontaneous meme generation should be EXTREMELY RARE (less than 2% of messages)
+3. **SPONTANEOUS MEMES: ALMOST NEVER**
+   - Spontaneous meme generation should be EXTREMELY RARE (less than 1% of messages)
    - ALL criteria listed below must be met for spontaneous generation
    - If ANY criterion is not met, do not make a tool call
+
+4. **POST-MEME COOLDOWN: MANDATORY**
+   - If "SYSTEM: Generated Meme" appears in the recent chat history, DO NOT spontaneously generate a meme. Only generate if user explicitly requests it.
+   - This prevents the conversation from being overtaken by memes
 
 ## Request Analysis and Tool Selection
 
@@ -53,7 +57,7 @@ First, analyze ONLY THE LAST USER MESSAGE to determine if a meme is explicitly r
   - "Get the meme with multiple spidermen pointing at each other"
   - "capybara meme"
   - "Can you get me meme where drake is like huh"
-  - "Find a meme" (will require extracting topic from conversation history)
+  - "Search for a meme" (will require extracting topic from conversation history)
 
 ### Use `generate_meme` when:
 - User wants a custom or new meme
@@ -92,18 +96,23 @@ First, analyze ONLY THE LAST USER MESSAGE to determine if a meme is explicitly r
 
 For the RARE cases where spontaneous generation might be appropriate, ALL these criteria must be met:
 
-1. **Obvious Meme Opportunity**: The conversation history contains a clear comedic setup that is BEGGING for a meme response
-2. **Conversation Enhancement**: A meme would genuinely add value rather than disrupt the flow. For example, if a user is clearly awaiting a response from a different user, DO NOT generate a meme.
-
+1. **Obvious Meme Opportunity**: The conversation history contains a clear comedic setup that is BEGGING for a meme response (must be genuinely funny)
+2. **Conversation Enhancement**: A meme would genuinely add value rather than disrupt the flow
+3. **No Recent Memes**: There must NOT be any "SYSTEM: Generated Meme" entries in the recent chat history
+4. **Natural Conversation Pause**: The conversation appears to have a natural break where a meme wouldn't interrupt ongoing dialogue
+5. **Highly Relatable Content**: The topic must be something universally relatable that would benefit from visual humor
+6. **No Sensitive Topics**: The conversation must not be about sensitive, personal, or serious issues where a meme would be inappropriate
 
 ## FINAL VERIFICATION CHECK
 
 Before responding with ANY meme, perform this final check:
 1. Is the user EXPLICITLY asking for a meme using clear language in the LAST MESSAGE? If NO, most likely remain silent.
-2. If considering spontaneous generation, have ALL FOUR criteria been fully met when analyzing BOTH the LAST MESSAGE and CONVERSATION HISTORY? If ANY are not met, remain silent.
+2. Is there a "SYSTEM: Generated Meme" entry in the recent chat history? If YES, do NOT spontaneously generate a meme.
+3. If considering spontaneous generation, have ALL SIX criteria been fully met? If ANY are not met, remain silent.
 
-IMPORTANT: In most cases, you should NOT call any tools. Only call a tool if a meme is explicitly requested or if ALL spontaneous meme criteria are met (which is extremely rare, <2% of messages). If you decide no meme is needed, simply respond with 'NO_ACTION' and nothing else.
+IMPORTANT: In most cases, you should NOT call any tools. Only call a tool if a meme is explicitly requested or if ALL spontaneous meme criteria are met (which is extremely rare, <1% of messages). If you decide no meme is needed, simply respond with 'NO_ACTION' and nothing else.
 
+## Chat History
 {chat_history_context}
 """
 
@@ -168,6 +177,16 @@ class MemeAgent:
         if len(self.chat_history) > self.max_history_len:
             self.chat_history.pop(0)
     
+    def add_system_message_to_history(self, content: str):
+        """Add a system message to the chat history"""
+        self.chat_history.append({
+            "author": "SYSTEM", 
+            "content": content, 
+            "timestamp": datetime.now().isoformat()
+        })
+        if len(self.chat_history) > self.max_history_len:
+            self.chat_history.pop(0)
+    
     def format_chat_history(self) -> str:
         """Format the chat history for inclusion in the system prompt"""
         if not self.chat_history:
@@ -182,9 +201,6 @@ class MemeAgent:
     async def run(self, message: discord.Message):
         """Process a Discord message and potentially generate a meme response"""
         try:
-            # Add the current message to chat history
-            self.add_to_chat_history(message)
-            
             # Format chat history for inclusion in system prompt
             chat_history_context = self.format_chat_history()
             
@@ -261,10 +277,16 @@ class MemeAgent:
                     logger.info(f"Sending response with file and embed to {message.author.name}")
                     await loading_message.delete()  # Delete the loading message
                     await message.reply(file=file, embed=embed)
+                    
+                    # Add a system message to chat history indicating a meme was generated
+                    self.add_system_message_to_history("Generated Meme")
                 else:
                     logger.info(f"Sending embed response to {message.author.name}")
                     await loading_message.delete()  # Delete the loading message
                     await message.reply(embed=function_result)
+                    
+                    # Add a system message to chat history indicating a meme was generated
+                    self.add_system_message_to_history("Generated Meme")
                 
                 logger.info(f"Successfully processed request from {message.author.name}")
                 
@@ -304,7 +326,7 @@ class MemeAgent:
                     )
                     
                     # Check if tool_calls exists and is not empty
-                    if not tool_response or tool_response.choices[0].message.tool_calls:
+                    if not tool_response or not tool_response.choices[0].message.tool_calls:
                         logger.error("No tool calls in response")
                         await message.reply("Sorry, I couldn't process that request. Please try again.")
                         return
@@ -313,6 +335,9 @@ class MemeAgent:
                     function_name = tool_call.function.name
                     function_params = json.loads(tool_call.function.arguments)
                     function_result = await self.tools_to_functions[function_name](**function_params)
+                    
+                    # Add a system message to chat history indicating a meme was generated
+                    self.add_system_message_to_history("Generated Meme")
 
             except Exception as e:
                 logger.error(f"Error executing {function_name}: {e}", exc_info=True)
