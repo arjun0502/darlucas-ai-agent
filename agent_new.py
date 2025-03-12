@@ -20,6 +20,8 @@ from mistralai import Mistral
 from tools.generate import generate_meme
 from tools.search import search_meme
 from tools.leaderboard import leaderboard, generate_paginated_leaderboard, process_command
+from tools.judge import judge_meme, judge_channel_taste, get_meme_data, get_channel_taste_data
+
 
 logger = logging.getLogger("discord")
 
@@ -159,12 +161,37 @@ class MemeAgent:
                     }
                 }
             },
+            {
+                "type": "function",
+                "function": {
+                    "name": "judge",
+                    "description": "judges memes from the leaderboard or the channel's taste in memes; provides a critical assessment of humor quality",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "meme_number": {
+                                "type": "integer", 
+                                "description": "The position of the meme in the leaderboard to judge (1 for top meme, 2 for second, etc.). If omitted, judges the top meme."
+                            },
+                            "judge_channel": {
+                                "type": "boolean",
+                                "description": "If true, judge the overall taste of the channel instead of a specific meme"
+                            },
+                            "judgment": {
+                                "type": "string",
+                                "description": "The AI's critical assessment and judgment of the meme or channel taste. Should be witty, insightful, and honest."
+                            }
+                        },
+                        "required": ["judgment"]
+                    }
+                }
+            }
         ]
 
         self.tools_to_functions = {
             #"search_meme": search_meme,
             "generate_meme": generate_meme,
-            #"react": self.react_message,
+            "judge": self.judge_memes,
             "leaderboard": self.show_leaderboard
         }
     
@@ -327,6 +354,52 @@ class MemeAgent:
             )
             
             logger.info(f"Registered meme with ID {response_message.id} by {message.author.name}")
+
+        async def judge_memes(self, meme_number: Optional[int] = None, judge_channel: bool = False, judgment: str = ""):
+            """
+            Judge memes or the channel's taste with AI-generated judgment
+            
+            Args:
+                meme_number: The position of the meme to judge (1-indexed)
+                judge_channel: Whether to judge the overall channel taste
+                judgment: The AI-generated judgment text
+                
+            Returns:
+                discord.Embed with the judgment
+            """
+            try:
+                if judge_channel:
+                    embed = await judge_channel_taste()
+                    # Replace the placeholder description with the AI-generated judgment
+                    embed.description = judgment
+                    # Set color based on the tone of the judgment (this is optional)
+                    if "excellent" in judgment.lower() or "great" in judgment.lower() or "good" in judgment.lower():
+                        embed.color = discord.Color.green()
+                    elif "bad" in judgment.lower() or "terrible" in judgment.lower() or "poor" in judgment.lower():
+                        embed.color = discord.Color.red()
+                    else:
+                        embed.color = discord.Color.gold()
+                else:
+                    embed = await judge_meme(meme_number)
+                    # Replace the placeholder description with the AI-generated judgment
+                    embed.description = judgment
+                    # Set color based on the tone of the judgment (this is optional)
+                    if "excellent" in judgment.lower() or "great" in judgment.lower() or "good" in judgment.lower():
+                        embed.color = discord.Color.green()
+                    elif "bad" in judgment.lower() or "terrible" in judgment.lower() or "poor" in judgment.lower():
+                        embed.color = discord.Color.red()
+                    else:
+                        embed.color = discord.Color.gold()
+                
+                return embed
+            except Exception as e:
+                logger.error(f"Error in judge_memes: {e}", exc_info=True)
+                return discord.Embed(
+                    title="Judge Error",
+                    description=f"Sorry, I couldn't judge the memes: {str(e)}",
+                    color=discord.Color.red()
+                )
+
 
     async def run(self, message: discord.Message):
         # Add the current message to chat history
