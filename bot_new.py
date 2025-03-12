@@ -52,7 +52,7 @@ class DiscordBot(commands.Bot):
             or message.author.bot
             or message.content.startswith("!")
         ):
-            return
+            return None
 
         self.logger.info(f"Message from {message.author}: {message.content}")
         

@@ -285,6 +285,34 @@ class MemeAgent:
             logger.info(f"Executing {function_name} with provided parameters")
             function_result = await self.tools_to_functions[function_name](**function_params)
 
+            if function_result is None:
+                logger.info(f"No result from {function_name}")
+                await message.reply("I couldn't find a relevant meme. Let me try to generate one for you instead!")
+                messages.append(
+                    {
+                        "role": "user",
+                        "content": f"You couldn't find a relevant meme. Try to generate one for me instead using the generate_meme tool."
+                    },
+                )
+                logger.info(f"Sending request to Mistral API")
+                tool_response = await self.client.chat.complete_async(
+                    model=MISTRAL_MODEL,
+                    messages=messages,
+                    tools=self.tools,
+                    tool_choice="any",
+                )
+                
+                # Check if tool_calls exists and is not empty
+                if not tool_response.choices[0].message.tool_calls:
+                    logger.error("No tool calls in response")
+                    await message.reply("Sorry, I couldn't process that request. Please try again.")
+                    return
+
+                tool_call = tool_response.choices[0].message.tool_calls[0]
+                function_name = tool_call.function.name
+                function_params = json.loads(tool_call.function.arguments)
+                function_result = await self.tools_to_functions[function_name](**function_params)
+                
             if isinstance(function_result, tuple):
                 embed, file = function_result
                 logger.info(f"Sending response with file and embed to {message.author.name}")

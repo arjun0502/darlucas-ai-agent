@@ -76,12 +76,12 @@ async def search_meme(query: str) -> str:
     data = await _make_request(url)
     
     if data is None:
-        return "Error fetching memes from Humor API. Please try again later."
+        return None
     
     # Check if we got any memes
     memes = data.get("memes", [])
     if not memes:
-        return f"No memes found for '{query}'"
+        return None
     
     # Randomly select one meme from the results
     selected_meme = random.choice(memes)
