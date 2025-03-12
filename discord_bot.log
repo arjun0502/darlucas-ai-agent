@@ -1727,3 +1727,45 @@ discord.ext.commands.errors.MissingRequiredArgument: query is a required argumen
 2025-03-10 19:48:06,774 - agent_mistral - INFO - Checking if query is appropriate: memes
 2025-03-10 19:48:07,334 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
 2025-03-10 19:48:07,930 - agent_mistral - ERROR - Humor API error: 401 - {"status":"failure", "code":401,"message":"You are not authorized. Please read https://humorapi.com/docs/#Authentication"}
+2025-03-11 17:24:32,726 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 17:24:33,630 - discord.client - INFO - logging in using static token
+2025-03-11 17:24:34,525 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 1f485f260656dea63aeb9c0f8f055983).
+2025-03-11 17:24:36,597 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-11 17:25:32,933 - discord_bot - INFO - Added message from lucadollar to history: Do you remember that one meme? That had a red echidna. He was lost, potentially looking for directions
+2025-03-11 17:25:35,255 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 17:25:35,263 - discord_bot - INFO - Spontaneous meme decision: True, reason: Decided to generate a meme for this conversation.
+2025-03-11 17:25:35,266 - agent_mistral - INFO - Added 1 point(s) to lucadollar. New score: 1
+2025-03-11 17:25:35,268 - discord_bot - INFO - Added humor point to lucadollar for meme-worthy message
+2025-03-11 17:25:35,476 - agent_mistral - INFO - Generating meme concept from history: lucadollar: Do you remember that one meme? That had a red echidna. He was lost, potentially looking for directions...
+2025-03-11 17:25:37,497 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 17:25:37,504 - agent_mistral - INFO - Generated meme concept: IMAGE DESCRIPTION: A red echidna standing at a crowded intersection holding a gigantic map that is completely blank. The echidna is wearing a confused expression and a tiny backpack. Behind it, there are clear signs pointing in various directions with humorous labels such as "Treasure", "Free Wifi", and "Pizza Party".
+
+CAPTION: Somehow, still lost.
+2025-03-11 17:25:37,506 - agent_openai - INFO - Raw meme concept: IMAGE DESCRIPTION: A red echidna standing at a crowded intersection holding a gigantic map that is completely blank. The echidna is wearing a confused expression and a tiny backpack. Behind it, there are clear signs pointing in various directions with humorous labels such as "Treasure", "Free Wifi", and "Pizza Party".
+
+CAPTION: Somehow, still lost.
+2025-03-11 17:25:37,509 - agent_openai - INFO - Image Description: A red echidna standing at a crowded intersection holding a gigantic map that is completely blank. The echidna is wearing a confused expression and a tiny backpack. Behind it, there are clear signs pointing in various directions with humorous labels such as "Treasure", "Free Wifi", and "Pizza Party".
+2025-03-11 17:25:37,512 - agent_openai - INFO - Caption: Somehow, still lost.
+2025-03-11 17:25:37,513 - agent_openai - INFO - DALL-E Prompt: Create a meme image given this description: A red echidna standing at a crowded intersection holding a gigantic map that is completely blank. The echidna is wearing a confused expression and a tiny ba...
+2025-03-11 17:25:49,989 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 17:33:49,983 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 17:33:50,745 - discord.client - INFO - logging in using static token
+2025-03-11 17:33:51,564 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: c6330932c0c7f611f3ef57631e2be444).
+2025-03-11 17:33:53,638 - discord_bot - INFO - darlucas-bot#2086 has connected to Discord!
+2025-03-11 17:34:56,482 - discord_bot - INFO - Added message from arjunj4528 to history: generate me a meme about an AI email agent being silly
+2025-03-11 17:34:58,357 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 17:34:58,363 - discord_bot - INFO - Spontaneous meme decision: True, reason: Decided to generate a meme for this conversation.
+2025-03-11 17:34:58,365 - agent_mistral - INFO - Added 1 point(s) to arjunj4528. New score: 8
+2025-03-11 17:34:58,366 - discord_bot - INFO - Added humor point to arjunj4528 for meme-worthy message
+2025-03-11 17:34:58,788 - agent_mistral - INFO - Generating meme concept from history: arjunj4528: generate me a meme about an AI email agent being silly...
+2025-03-11 17:35:00,408 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 17:35:00,412 - agent_mistral - INFO - Generated meme concept: IMAGE DESCRIPTION: A robot sitting at a desk with a giant, old-fashioned typewriter, wearing a silly hat, and typing with boxing gloves on. The robot is surrounded by stacks of printed emails that are piling up to the ceiling.
+
+CAPTION: AI email agent at work. Efficiency may vary.
+2025-03-11 17:35:00,414 - agent_openai - INFO - Raw meme concept: IMAGE DESCRIPTION: A robot sitting at a desk with a giant, old-fashioned typewriter, wearing a silly hat, and typing with boxing gloves on. The robot is surrounded by stacks of printed emails that are piling up to the ceiling.
+
+CAPTION: AI email agent at work. Efficiency may vary.
+2025-03-11 17:35:00,415 - agent_openai - INFO - Image Description: A robot sitting at a desk with a giant, old-fashioned typewriter, wearing a silly hat, and typing with boxing gloves on. The robot is surrounded by stacks of printed emails that are piling up to the ceiling.
+2025-03-11 17:35:00,415 - agent_openai - INFO - Caption: AI email agent at work. Efficiency may vary.
+2025-03-11 17:35:00,416 - agent_openai - INFO - DALL-E Prompt: Create a meme image given this description: A robot sitting at a desk with a giant, old-fashioned typewriter, wearing a silly hat, and typing with boxing gloves on. The robot is surrounded by stacks o...
+2025-03-11 17:35:14,636 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"

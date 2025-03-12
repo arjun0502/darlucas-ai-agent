@@ -131,3 +131,178 @@ AttributeError: 'MemeAgent' object has no attribute 'run'
 2025-03-11 16:51:11,638 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
 2025-03-11 16:51:12,794 - discord - INFO - Sending response with file and embed to arjunj4528
 2025-03-11 16:51:13,815 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 17:27:15,686 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 17:27:16,143 - discord.client - INFO - logging in using static token
+2025-03-11 17:27:17,331 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: 650aeb002f8ec1cc3767f388c79457aa).
+2025-03-11 17:27:19,383 - discord - INFO - -------------------
+2025-03-11 17:27:19,386 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 17:27:19,388 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 17:27:19,389 - discord - INFO - Python version: 3.13.2
+2025-03-11 17:27:19,390 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 17:27:19,391 - discord - INFO - -------------------
+2025-03-11 17:28:01,153 - discord - INFO - Message from arjunj4528: yo I'm cooked this week
+2025-03-11 17:28:01,155 - discord.client - ERROR - Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\arjun\miniconda3\envs\discord_bot\Lib\site-packages\discord\client.py", line 481, in _run_event
+    await coro(*args, **kwargs)
+  File "C:\Users\arjun\OneDrive\Documents\Stanford\Senior Year\Winter Quarter\CS153\darlucas-ai-agent\bot_new.py", line 61, in on_message
+    self.meme_agent.add_score_to_user(message.author.name)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MemeAgent' object has no attribute 'add_score_to_user'
+2025-03-11 17:28:02,405 - discord - INFO - Message from arjunj4528: so much work
+2025-03-11 17:28:02,406 - discord.client - ERROR - Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\arjun\miniconda3\envs\discord_bot\Lib\site-packages\discord\client.py", line 481, in _run_event
+    await coro(*args, **kwargs)
+  File "C:\Users\arjun\OneDrive\Documents\Stanford\Senior Year\Winter Quarter\CS153\darlucas-ai-agent\bot_new.py", line 61, in on_message
+    self.meme_agent.add_score_to_user(message.author.name)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MemeAgent' object has no attribute 'add_score_to_user'
+2025-03-11 17:28:24,092 - discord - INFO - Message from arjunj4528: its okay just got to grind
+2025-03-11 17:28:24,094 - discord.client - ERROR - Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\arjun\miniconda3\envs\discord_bot\Lib\site-packages\discord\client.py", line 481, in _run_event
+    await coro(*args, **kwargs)
+  File "C:\Users\arjun\OneDrive\Documents\Stanford\Senior Year\Winter Quarter\CS153\darlucas-ai-agent\bot_new.py", line 61, in on_message
+    self.meme_agent.add_score_to_user(message.author.name)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MemeAgent' object has no attribute 'add_score_to_user'
+2025-03-11 17:28:27,125 - discord - INFO - Message from arjunj4528: lets get ittttt
+2025-03-11 17:28:27,127 - discord.client - ERROR - Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\arjun\miniconda3\envs\discord_bot\Lib\site-packages\discord\client.py", line 481, in _run_event
+    await coro(*args, **kwargs)
+  File "C:\Users\arjun\OneDrive\Documents\Stanford\Senior Year\Winter Quarter\CS153\darlucas-ai-agent\bot_new.py", line 61, in on_message
+    self.meme_agent.add_score_to_user(message.author.name)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MemeAgent' object has no attribute 'add_score_to_user'
+2025-03-11 17:28:32,673 - discord - INFO - Message from arjunj4528: please generate a meme
+2025-03-11 17:28:32,674 - discord.client - ERROR - Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\arjun\miniconda3\envs\discord_bot\Lib\site-packages\discord\client.py", line 481, in _run_event
+    await coro(*args, **kwargs)
+  File "C:\Users\arjun\OneDrive\Documents\Stanford\Senior Year\Winter Quarter\CS153\darlucas-ai-agent\bot_new.py", line 61, in on_message
+    self.meme_agent.add_score_to_user(message.author.name)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MemeAgent' object has no attribute 'add_score_to_user'
+2025-03-11 17:29:39,844 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 17:29:41,061 - discord.client - INFO - logging in using static token
+2025-03-11 17:29:42,073 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: fd87c5b4605f53d55ea6028142ceff36).
+2025-03-11 17:29:44,117 - discord - INFO - -------------------
+2025-03-11 17:29:44,117 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 17:29:44,118 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 17:29:44,119 - discord - INFO - Python version: 3.13.2
+2025-03-11 17:29:44,119 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 17:29:44,120 - discord - INFO - -------------------
+2025-03-11 17:30:08,337 - discord - INFO - Message from arjunj4528: please generate me a meme
+2025-03-11 17:30:08,339 - discord - INFO - Processing message from arjunj4528: 'please generate me a meme'
+2025-03-11 17:30:08,341 - discord - INFO - Using chat history context with 2 messages
+2025-03-11 17:30:08,343 - discord - INFO - Sending request to Mistral API
+2025-03-11 17:30:11,005 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 17:30:11,011 - discord - INFO - Tool selected: generate_meme
+2025-03-11 17:30:11,013 - discord - INFO - Tool parameters: {
+  "image_description": "A cartoon of a cat typing on a laptop with a confused expression.",
+  "caption": "When you've been coding for hours and still can't figure out that bug"
+}
+2025-03-11 17:30:13,980 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 17:30:13,981 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: A cartoon of a cat typing on a laptop with a confused expression.
+
+I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 17:30:25,622 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 17:30:31,429 - discord - INFO - Sending response with file and embed to arjunj4528
+2025-03-11 17:30:32,843 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 17:35:21,204 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 17:35:21,673 - discord.client - INFO - logging in using static token
+2025-03-11 17:35:22,367 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: a22dbeb9fdcd4bdb45c7a3e2d9b068b3).
+2025-03-11 17:35:24,440 - discord - INFO - -------------------
+2025-03-11 17:35:24,442 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 17:35:24,443 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 17:35:24,445 - discord - INFO - Python version: 3.13.2
+2025-03-11 17:35:24,446 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 17:35:24,447 - discord - INFO - -------------------
+2025-03-11 17:35:34,096 - discord - INFO - Message from arjunj4528: generate a meme about an AI email agent being silly
+2025-03-11 17:35:34,097 - discord - INFO - Processing message from arjunj4528: 'generate a meme about an AI email agent being silly'
+2025-03-11 17:35:34,099 - discord - INFO - Using chat history context with 2 messages
+2025-03-11 17:35:34,100 - discord - INFO - Sending request to Mistral API
+2025-03-11 17:35:35,479 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 17:35:35,485 - discord - INFO - Tool selected: generate_meme
+2025-03-11 17:35:35,487 - discord - INFO - Tool parameters: {
+  "caption": "AI email fails again",
+  "image_description": "a chaotic desk with a frustrated person and a silly AI email agent on a computer screen"
+}
+2025-03-11 17:35:35,756 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 17:35:35,757 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: a chaotic desk with a frustrated person and a silly AI email agent on a computer screen
+
+I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 17:35:46,695 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 17:35:48,370 - discord - INFO - Sending response with file and embed to arjunj4528
+2025-03-11 17:35:49,806 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 17:36:04,616 - discord - INFO - Message from arjunj4528: search for a meme about chickens
+2025-03-11 17:36:04,618 - discord - INFO - Processing message from arjunj4528: 'search for a meme about chickens'
+2025-03-11 17:36:04,620 - discord - INFO - Using chat history context with 4 messages
+2025-03-11 17:36:04,622 - discord - INFO - Sending request to Mistral API
+2025-03-11 17:36:07,119 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 17:36:07,125 - discord - INFO - Tool selected: search_meme
+2025-03-11 17:36:07,126 - discord - INFO - Tool parameters: {
+  "query": "chickens"
+}
+2025-03-11 17:36:07,539 - discord - INFO - Executing search_meme with provided parameters
+2025-03-11 17:36:07,540 - tools.search - INFO - Searching for memes based on chat history with query: chickens
+2025-03-11 17:36:08,789 - discord - INFO - Sending embed response to arjunj4528
+2025-03-11 17:36:09,278 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 17:36:57,839 - discord - INFO - Message from arjunj4528: search for a meme about chickens
+2025-03-11 17:36:57,841 - discord - INFO - Processing message from arjunj4528: 'search for a meme about chickens'
+2025-03-11 17:36:57,842 - discord - INFO - Using chat history context with 6 messages
+2025-03-11 17:36:57,843 - discord - INFO - Sending request to Mistral API
+2025-03-11 17:36:58,740 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 17:36:58,746 - discord - INFO - Tool selected: search_meme
+2025-03-11 17:36:58,747 - discord - INFO - Tool parameters: {
+  "query": "chickens"
+}
+2025-03-11 17:36:59,059 - discord - INFO - Executing search_meme with provided parameters
+2025-03-11 17:36:59,061 - tools.search - INFO - Searching for memes based on chat history with query: chickens
+2025-03-11 17:37:00,237 - discord - INFO - Sending embed response to arjunj4528
+2025-03-11 17:37:00,718 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 17:43:52,066 - discord.client - WARNING - PyNaCl is not installed, voice will NOT be supported
+2025-03-11 17:43:52,605 - discord.client - INFO - logging in using static token
+2025-03-11 17:43:53,520 - discord.gateway - INFO - Shard ID None has connected to Gateway (Session ID: c1de885815e0eb1e1a9f1611d241db75).
+2025-03-11 17:43:55,578 - discord - INFO - -------------------
+2025-03-11 17:43:55,581 - discord - INFO - Logged in as darlucas-bot#2086
+2025-03-11 17:43:55,583 - discord - INFO - Discord.py API version: 2.5.0
+2025-03-11 17:43:55,584 - discord - INFO - Python version: 3.13.2
+2025-03-11 17:43:55,586 - discord - INFO - Running on: Windows 11 (nt)
+2025-03-11 17:43:55,587 - discord - INFO - -------------------
+2025-03-11 17:44:24,550 - discord - INFO - Message from arjunj4528: generate me a meme about being hungry
+2025-03-11 17:44:24,552 - discord - INFO - Processing message from arjunj4528: 'generate me a meme about being hungry'
+2025-03-11 17:44:24,554 - discord - INFO - Using chat history context with 2 messages
+2025-03-11 17:44:24,555 - discord - INFO - Sending request to Mistral API
+2025-03-11 17:44:25,878 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 17:44:25,883 - discord - INFO - Tool selected: generate_meme
+2025-03-11 17:44:25,885 - discord - INFO - Tool parameters: {
+  "caption": "when your stomach rumbles like a distant thunder",
+  "image_description": "anime guy with stomach rumbling like thunder"
+}
+2025-03-11 17:44:26,146 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 17:44:26,147 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: anime guy with stomach rumbling like thunder
+
+I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 17:44:41,823 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 17:44:43,018 - discord - INFO - Sending response with file and embed to arjunj4528
+2025-03-11 17:44:44,125 - discord - INFO - Successfully processed request from arjunj4528
+2025-03-11 17:45:06,087 - discord - INFO - Message from arjunj4528: generate me a meme with a ur mom joke
+2025-03-11 17:45:06,090 - discord - INFO - Processing message from arjunj4528: 'generate me a meme with a ur mom joke'
+2025-03-11 17:45:06,091 - discord - INFO - Using chat history context with 4 messages
+2025-03-11 17:45:06,093 - discord - INFO - Sending request to Mistral API
+2025-03-11 17:45:07,442 - httpx - INFO - HTTP Request: POST https://api.mistral.ai/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-11 17:45:07,448 - discord - INFO - Tool selected: generate_meme
+2025-03-11 17:45:07,450 - discord - INFO - Tool parameters: {
+  "caption": "Yo mama so old",
+  "image_description": "dinosaur using a walker"
+}
+2025-03-11 17:45:07,825 - discord - INFO - Executing generate_meme with provided parameters
+2025-03-11 17:45:07,827 - tools.generate - INFO - DALL-E Prompt: Create a meme image given this description: dinosaur using a walker
+
+I NEED a simple, clean image with NO TEXT whatsoever....
+2025-03-11 17:45:23,196 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/images/generations "HTTP/1.1 200 OK"
+2025-03-11 17:45:24,486 - discord - INFO - Sending response with file and embed to arjunj4528
+2025-03-11 17:45:25,519 - discord - INFO - Successfully processed request from arjunj4528

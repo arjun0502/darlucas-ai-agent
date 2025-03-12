@@ -44,8 +44,6 @@ async def search_meme(query: str) -> str:
     
     Args:
         query: The search query/keywords from the user
-        number: Number of memes to fetch (default: 10)
-        exclude_nsfw: Whether to exclude NSFW content (default: True)
         
     Returns:
         A Discord embed with the meme or an error message string
@@ -88,35 +86,10 @@ async def search_meme(query: str) -> str:
     # Randomly select one meme from the results
     selected_meme = random.choice(memes)
     
-    # Get the description (or use a default if not available)
-    description = selected_meme.get("description", "No description available")
+    # Create a simple embed with just the image
+    embed = discord.Embed(color=discord.Color.purple())
     
-    # Create an embed to display the meme
-    embed = discord.Embed(
-        title=f"Random Meme for '{query}'", 
-        description=f"**{description}**\n\nFound {data.get('available', 0)} memes. Showing a random one:", 
-        color=discord.Color.purple()
-    )
-    
-    # Add the meme as the main image
+    # Add the meme as the main image without any title or description
     embed.set_image(url=selected_meme["url"])
-    
-    # Add additional meme details if available
-    if selected_meme.get("width") and selected_meme.get("height"):
-        embed.add_field(
-            name="Dimensions", 
-            value=f"{selected_meme['width']}×{selected_meme['height']}", 
-            inline=True
-        )
-    
-    if selected_meme.get("type"):
-        embed.add_field(
-            name="Type", 
-            value=selected_meme["type"].replace("image/", "") if "image/" in selected_meme["type"] else selected_meme["type"], 
-            inline=True
-        )
-    
-    # Add footer with search info
-    embed.set_footer(text=f"Search: {query} • Type !search {query} again for a different meme")
     
     return embed

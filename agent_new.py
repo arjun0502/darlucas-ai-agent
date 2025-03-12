@@ -68,7 +68,23 @@ You are an intelligent meme assistant designed to generate or find memes based o
   - Create image description and caption that reference those themes
   - Example: Previous messages discussing coding bugs, then "Make a funny meme" → image and caption about debugging
 - Ensure the image and caption work together
-- Keep captions brief, avoid contractions, and ensure they read naturally
+- IMPORTANT: keep captions brief, avoid contractions in caption, and ensure they read naturally
+
+## Humor Style Guidelines
+
+- Generate memes with Gen Z humor but not cringe:
+  - Use absurdist humor and unexpected juxtapositions
+  - Incorporate slight surrealism and non-sequiturs 
+  - Use deadpan delivery with outrageous content
+  - Favor chaotic energy and randomness over predictable jokes
+  - Occasionally use intentionally awkward or "anti-humor" approaches
+  - Reference internet culture with a wink, not trying too hard
+  - It's okay to be slightly nonsensical or to subvert expectations
+  - Use understated or subtle callbacks to meme culture
+  - Avoid trying too hard to use slang or being obviously "adult trying to be cool"
+  - Let humor emerge naturally from absurd situations rather than forced punchlines
+  - Brief captions often work better than lengthy explanations
+  - When in doubt, lean toward weird/unexpected rather than obvious jokes
 
 {chat_history_context}
 """
@@ -78,12 +94,7 @@ class MemeAgent:
         self.client = Mistral(api_key=MISTRAL_API_KEY)
         self.chat_history = []
         self.max_history_len = 10   
-        self.user_scores = {}
-        self.scores_file = "user_funny_scores.json"
-        
-        # Load existing user scores if the file exists
-        self.load_user_scores()
-        
+
         self.tools = [
             {
                 "type": "function",
@@ -122,46 +133,12 @@ class MemeAgent:
                     }
                 }
             },
-            # {
-            #     "type": "function",
-            #     "function": {
-            #         "name": "react",
-            #         "description": "reacts to latest message",
-            #         "parameters": {
-            #             "type": "object",
-            #             "properties": {
-            #                 "sentiment": {"type": "string"}
-            #             }
-            #         },
-            #     }
-            # },
-            # {
-            #     "type": "function",
-            #     "function": {
-            #         "name": "leaderboard",
-            #         "description": "generates leaderboard",
-            #         "parameters": {},
-            #     }
-            # },
         ]
 
         self.tools_to_functions = {
             "search_meme": search_meme,
             "generate_meme": generate_meme,
-            # "react": self.react_message,
-            # "leaderboard": self.generate_leaderboard
         }
-    
-    def load_user_scores(self):
-        """Load user scores from the JSON file if it exists"""
-        try:
-            if os.path.exists(self.scores_file):
-                with open(self.scores_file, 'r') as f:
-                    self.user_scores = json.load(f)
-                logger.info(f"Loaded scores for {len(self.user_scores)} users")
-        except Exception as e:
-            logger.error(f"Error loading user scores: {e}")
-            self.user_scores = {}
     
     def add_to_chat_history(self, message: discord.Message):
         """Add a message to the chat history"""
@@ -184,22 +161,6 @@ class MemeAgent:
         
         return formatted_history
     
-    def save_user_scores(self):
-        """Save user scores to the JSON file"""
-        try:
-            with open(self.scores_file, 'w') as f:
-                json.dump(self.user_scores, f)
-        except Exception as e:
-            logger.error(f"Error saving user scores: {e}")
-    
-    def add_score_to_user(self, username: str, points: int = 1):
-        """Add points to a user's score"""
-        if username not in self.user_scores:
-            self.user_scores[username] = 0
-        self.user_scores[username] += points
-        self.save_user_scores()
-        logger.info(f"Added {points} point(s) to {username}. New score: {self.user_scores[username]}")
-
     async def run(self, message: discord.Message):
         # Add the current message to chat history
         self.add_to_chat_history(message)

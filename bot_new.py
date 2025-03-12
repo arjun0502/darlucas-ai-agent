@@ -58,7 +58,6 @@ class DiscordBot(commands.Bot):
 
         # Add message to chat history
         self.meme_agent.add_to_chat_history(message)
-        self.meme_agent.add_score_to_user(message.author.name)
         
         # Run the meme agent whenever the bot receives a message.
         await self.meme_agent.run(message)

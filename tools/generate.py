@@ -175,8 +175,8 @@ async def handle_error(error):
             # Send the modified image as a file
             file = discord.File(fp=image_with_text, filename="meme.png")
             
-            # Create an embed with the attached file
-            embed = discord.Embed(title="Oopsies", color=discord.Color.blue())
+            # Create a simple embed with just the image
+            embed = discord.Embed(color=discord.Color.blue())
             embed.set_image(url="attachment://meme.png")
             
             return embed, file
@@ -185,7 +185,7 @@ async def handle_error(error):
             logger.error(f"Error adding text to image: {str(e)}")
             
             # Fallback to returning the image without text overlay
-            embed = discord.Embed(title="Oopsies", color=discord.Color.blue())
+            embed = discord.Embed(color=discord.Color.blue())
             embed.set_image(url=image_url)
             
             # Add the caption as a field since we couldn't overlay it
@@ -197,68 +197,66 @@ async def handle_error(error):
         logger.error(f"Error generating humorous response: {e}")
         # Use a local file for the fallback image
         fallback_file = discord.File("/Users/danielguo/School/darlucas-ai-agent/fallback_error.png", filename="fallback.png")
-        embed = discord.Embed(title="Oopsies", color=discord.Color.blue())
+        embed = discord.Embed(color=discord.Color.blue())
         embed.set_image(url="attachment://fallback.png")
         
         return embed
 
 async def generate_meme(image_description, caption):
-        """
-        Generate a meme based on recent chat history
-        Returns image url without text and the text info separately
-        """
-        try:
-            # Modified prompt for generating image WITHOUT text
-            DALLE_PROMPT = f"""Create a meme image given this description: {image_description}
+    """
+    Generate a meme based on recent chat history
+    Returns image url without text and the text info separately
+    """
+    try:
+        # Modified prompt for generating image WITHOUT text
+        DALLE_PROMPT = f"""Create a meme image given this description: {image_description}
+
+I NEED a simple, clean image with NO TEXT whatsoever."""
+        
+        # Log the prompt
+        logger.info(f"DALL-E Prompt: {DALLE_PROMPT[:200]}...")
+        
+        # Generate the meme with DALL-E
+        image_response = client.images.generate(
+            model="dall-e-3",
+            prompt=DALLE_PROMPT,
+            size="1024x1024",
+            quality="standard",
+            n=1,
+        )
     
-    I NEED a simple, clean image with NO TEXT whatsoever."""
-            
-            # Log the prompt
-            logger.info(f"DALL-E Prompt: {DALLE_PROMPT[:200]}...")
-            
-            # Generate the meme with DALL-E
-            image_response = client.images.generate(
-                model="dall-e-3",
-                prompt=DALLE_PROMPT,
-                size="1024x1024",
-                quality="standard",
-                n=1,
-            )
+        # Extract image URL from result
+        image_url = image_response.data[0].url
         
-            # Extract image URL and text from result
-            image_url = image_response.data[0].url
+        # Check if we got a valid image URL
+        if not image_url:
+            logger.error(f"No image URL returned for meme")
+            return
+        
+        try:
+            # Add text to the image using Pillow
+            image_with_text = await add_caption_to_image(image_url, caption)
             
-            # Check if we got a valid image URL
-            if not image_url:
-                logger.error(f"No image URL returned for meme")
-                return
+            # Send the modified image as a file
+            file = discord.File(fp=image_with_text, filename="meme.png")
             
-            try:
-                # Add text to the image using Pillow
-                image_with_text = await add_caption_to_image(image_url, caption)
-                
-                # Send the modified image as a file
-                file = discord.File(fp=image_with_text, filename="meme.png")
-                
-                # Create an embed with the attached file
-                embed = discord.Embed(title="Generated Meme", color=discord.Color.blue())
-                embed.set_image(url="attachment://meme.png")
-                
-                return embed, file
-            except Exception as e:
-                logger.error(f"Error adding text to image: {str(e)}")
-                
-                # Fallback to returning the image without text overlay
-                embed = discord.Embed(title="Generated Meme", color=discord.Color.blue())
-                embed.set_image(url=image_url)
-                
-                # Add the caption as a field since we couldn't overlay it
-                embed.add_field(name="Caption", value=caption, inline=False)
-                
-                return embed, None
+            # Create a simple embed with just the image
+            embed = discord.Embed(color=discord.Color.blue())
+            embed.set_image(url="attachment://meme.png")
             
+            return embed, file
         except Exception as e:
-            logger.error(f"Error in generate_meme_from_concept: {str(e)}")
-            return await handle_error(e)
+            logger.error(f"Error adding text to image: {str(e)}")
+            
+            # Fallback to returning the image without text overlay
+            embed = discord.Embed(color=discord.Color.blue())
+            embed.set_image(url=image_url)
+            
+            # Add the caption as a field since we couldn't overlay it
+            embed.add_field(name="Caption", value=caption, inline=False)
+            
+            return embed, None
         
-        
+    except Exception as e:
+        logger.error(f"Error in generate_meme: {str(e)}")
+        return await handle_error(e)
